@@ -1,0 +1,32 @@
+# Dependencies and build output (GitHub Actions builds dist/ on every deploy)
+node_modules/
+dist/
+.astro/
+
+# Local environment files: never commit secrets. An .env.example may be
+# committed only if it holds placeholders, never real values.
+.env
+.env.*
+!.env.example
+
+# Logs and local tool output
+*.log
+.taste-skill/
+
+# Kept only on this computer: the previous site, the original CV (with an old
+# email typo) and the CV backups
+_legacy-static/
+
+# Working comparisons of the CV against earlier versions, and the editable
+# Spanish CV (the site publishes its PDF from public/cv/)
+docs/cv/comparison-*.png
+docs/cv/Luis_Pimentel_CV_ES.docx
+
+# Full-page captures of this site: heavy (about 6.5 MB), not used by the site,
+# and they can be taken again from the running site
+docs/screenshots/*-full.jpg
+
+# OS files (this folder lives in OneDrive)
+Thumbs.db
+desktop.ini
+.DS_Store

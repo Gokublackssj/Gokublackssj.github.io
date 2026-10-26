@@ -1,0 +1,105 @@
+---
+import { Picture, getImage } from "astro:assets";
+import ZoomBadge from "./ZoomBadge.astro";
+import type { Shot } from "../data/shots";
+import { dicts, type Lang } from "../i18n";
+
+interface Props {
+  lang: Lang;
+  /** Gallery group: every shot in it opens in the same viewer sequence. */
+  group: string;
+  /** Project name, shown as the title in the viewer. */
+  title: string;
+  desktop: Shot[];
+  mobile: Shot[];
+  /** [caption, alt] for each shot id. */
+  captions: Record<string, string[]>;
+  note?: string;
+}
+
+const { lang, group, title, desktop, mobile, captions, note } = Astro.props;
+const t = dicts[lang];
+
+// Full-size image for the viewer (and for the link when scripts are off).
+const full = async (s: Shot) => (await getImage({ src: s.src, width: s.src.width, format: "webp", quality: 88 })).src;
+const desk = await Promise.all(desktop.map(async (s) => ({ ...s, full: await full(s) })));
+const phone = await Promise.all(mobile.map(async (s) => ({ ...s, full: await full(s) })));
+---
+
+<div class="gallery">
+  <h4 data-reveal>{t.labels.gallery}</h4>
+  <ul class="shot-grid">
+    {
+      desk.map((s, i) => (
+        <li data-reveal>
+          <figure>
+            <a
+              class="shot"
+              href={s.full}
+              data-gallery={group}
+              data-title={title}
+              data-caption={captions[s.id]![0]}
+              data-alt={captions[s.id]![1]}
+              aria-label={`${t.a11y.galleryOpen}: ${captions[s.id]![1]}`}
+            >
+              <Picture
+                src={s.src}
+                formats={["avif", "webp"]}
+                fallbackFormat="webp"
+                widths={i === 0 ? [640, 960, 1440] : [480, 720, 960]}
+                sizes={i === 0 ? "(max-width: 760px) 100vw, 66vw" : "(max-width: 480px) 100vw, (max-width: 760px) 50vw, 33vw"}
+                alt={captions[s.id]![1]}
+                loading="lazy"
+                decoding="async"
+                quality={80}
+              />
+              <ZoomBadge />
+            </a>
+            <figcaption>{captions[s.id]![0]}</figcaption>
+          </figure>
+        </li>
+      ))
+    }
+  </ul>
+
+  {
+    phone.length > 0 && (
+      <div class="phone-wrap">
+        <h4 data-reveal>{t.labels.phone}</h4>
+        <ul class="phone-strip" aria-label={t.a11y.phoneStrip} tabindex="0">
+          {phone.map((s) => (
+            <li data-reveal>
+              <figure>
+                <a
+                  class="shot"
+                  href={s.full}
+                  data-gallery={group}
+              data-title={title}
+                  data-caption={captions[s.id]![0]}
+                  data-alt={captions[s.id]![1]}
+                  aria-label={`${t.a11y.galleryOpen}: ${captions[s.id]![1]}`}
+                >
+                  <Picture
+                    src={s.src}
+                    formats={["avif", "webp"]}
+                    fallbackFormat="webp"
+                    widths={[390, 520, 780]}
+                    sizes="260px"
+                    alt={captions[s.id]![1]}
+                    loading="lazy"
+                    decoding="async"
+                    quality={80}
+                  />
+                  <ZoomBadge />
+                </a>
+                <figcaption>{captions[s.id]![0]}</figcaption>
+              </figure>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )
+  }
+
+  {note && <p class="shots-note small muted">{note}</p>}
+</div>

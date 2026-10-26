@@ -1,0 +1,69 @@
+---
+import { dicts, langNames, paths, type Lang } from "../i18n";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = dicts[lang];
+const home = paths[lang];
+const links = [
+  ["#projects", t.nav.projects],
+  ["#stack", t.nav.stack],
+  ["#services", t.nav.services],
+  ["#about", t.nav.about],
+  ["#contact", t.nav.contact],
+] as const;
+const langs = Object.keys(paths) as Lang[];
+---
+
+<header class="site-header" id="top">
+  <div class="container header-inner">
+    <a class="wordmark" href={home} aria-label={t.a11y.home}>luisdataworks</a>
+
+    <nav class="nav-desktop" aria-label={t.a11y.mainNav}>
+      {links.map(([href, label]) => <a href={href}>{label}</a>)}
+    </nav>
+
+    <div class="header-actions">
+      <nav class="lang-switch" aria-label={t.a11y.langLabel}>
+        {
+          langs.map((l) => (
+            <a
+              href={paths[l]}
+              hreflang={l}
+              lang={l}
+              aria-current={l === lang ? "true" : undefined}
+            >
+              {l.toUpperCase()}<span class="visually-hidden"> ({langNames[l]})</span>
+            </a>
+          ))
+        }
+      </nav>
+      <a class="button header-cta" href="#contact">{t.nav.cta}</a>
+      <details class="menu">
+        <summary>{t.a11y.menu}</summary>
+        <nav class="menu-panel" aria-label={t.a11y.menu}>
+          {links.map(([href, label]) => <a href={href}>{label}</a>)}
+        </nav>
+      </details>
+    </div>
+  </div>
+</header>
+
+<script>
+  // Close the phone menu after choosing a link or pressing Escape.
+  const menu = document.querySelector<HTMLDetailsElement>(".menu");
+  if (menu) {
+    menu.addEventListener("click", (event) => {
+      if ((event.target as HTMLElement).closest("a")) menu.open = false;
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && menu.open) {
+        menu.open = false;
+        menu.querySelector("summary")?.focus();
+      }
+    });
+  }
+</script>

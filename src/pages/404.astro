@@ -1,0 +1,33 @@
+---
+import Base from "../layouts/Base.astro";
+---
+
+<Base lang="en" title="Page not found · luisdataworks" noindex>
+  <main id="main" class="container not-found">
+    <h1 class="display">Page not found</h1>
+    <p class="lead">This page doesn't exist. <span lang="es">Esta página no existe.</span></p>
+    <p>
+      <a class="button" href="/">Go to the portfolio</a>
+      <a class="button button--silver" href="/es/" lang="es">Ir al portafolio</a>
+    </p>
+  </main>
+</Base>
+
+<style>
+  .not-found {
+    display: grid;
+    gap: 1.5rem;
+    align-content: center;
+    min-height: 100svh;
+  }
+
+  h1 {
+    font-size: var(--step-display);
+  }
+
+  p:last-child {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+</style>

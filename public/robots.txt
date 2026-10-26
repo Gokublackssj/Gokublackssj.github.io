@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://gokublackssj.github.io/sitemap.xml

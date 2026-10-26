@@ -1,0 +1,41 @@
+---
+import { dicts, type Lang } from "../i18n";
+
+interface Props {
+  lang: Lang;
+}
+
+const t = dicts[Astro.props.lang];
+// The counter text is built in the script from this template.
+const counterTemplate = t.a11y.counter(0, 0).replace("0", "{i}").replace("0", "{n}");
+---
+
+<dialog class="lightbox" aria-label={t.a11y.dialogLabel} data-counter={counterTemplate}>
+  <div class="lightbox-bar">
+    <button class="icon-button lightbox-close" type="button" data-lightbox-close>
+      {t.a11y.close}
+      <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="2" /></svg>
+    </button>
+  </div>
+  <div class="lightbox-panel">
+    <figure class="lightbox-stage">
+      <img alt="" data-lightbox-img />
+    </figure>
+    <div class="lightbox-info">
+      <p class="lightbox-title">
+        <span data-lightbox-title></span>
+        <span class="lightbox-counter" data-lightbox-counter aria-live="polite"></span>
+      </p>
+      <div class="lightbox-nav">
+        <button class="icon-button" type="button" data-lightbox-prev aria-label={t.a11y.prev}><span aria-hidden="true">←</span></button>
+        <button class="icon-button" type="button" data-lightbox-next aria-label={t.a11y.next}><span aria-hidden="true">→</span></button>
+      </div>
+      <p class="lightbox-caption" data-lightbox-caption></p>
+    </div>
+  </div>
+</dialog>
+
+<script>
+  import { initLightbox } from "../scripts/lightbox";
+  initLightbox();
+</script>

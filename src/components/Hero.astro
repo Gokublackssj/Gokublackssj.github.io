@@ -1,0 +1,41 @@
+---
+import { dicts, type Lang } from "../i18n";
+
+interface Props {
+  lang: Lang;
+}
+
+const t = dicts[Astro.props.lang];
+const lines = t.hero.lines;
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero-field"></div>
+
+  <!-- One heading over both fields. Blended by difference, it reads silver on
+       graphite above the waterline and near-black on silver below it. -->
+  <div class="hero-copy">
+    <h1 id="hero-title" class="hero-title display">
+      {
+        lines.map((line) => (
+          <span class="line">
+            <span class="line-inner">{line}</span>
+          </span>
+        ))
+      }
+    </h1>
+  </div>
+
+  <div class="hero-base">
+    <div class="container hero-base-inner">
+      <div>
+        <p class="hero-lead">{t.hero.lead}</p>
+        <p class="hero-availability">{t.hero.availability}</p>
+      </div>
+      <div class="hero-actions">
+        <a class="button button--ink" href="#projects">{t.hero.primary} <span class="arrow" aria-hidden="true">↓</span></a>
+        <a class="button" href="#contact">{t.hero.secondary} <span class="arrow" aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </div>
+</section>
