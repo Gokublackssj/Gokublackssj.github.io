@@ -28,7 +28,8 @@ export function start() {
   if (mm) return;
   mm = gsap.matchMedia();
 
-  // One of the two always matches; a resize across the breakpoint rebuilds.
+  // One of phone and wide always matches; a resize across either breakpoint
+  // rebuilds.
   mm.add({ phone: "(max-width: 760px)", wide: "(min-width: 761px)" }, (context) => {
     const { phone } = context.conditions!;
     const waiting = gsap.utils.toArray<HTMLElement>("[data-reveal]:not(.is-in)");
@@ -39,39 +40,76 @@ export function start() {
     settle(past);
     const pending = waiting.filter((el) => !past.includes(el));
 
-    // Each case study opens as one sequence: name, kind and facts rise in
-    // order, then the lead screenshot surfaces from the bottom edge up, the
-    // way the hero's waterline moves.
-    const inCaseHeads = new Set<HTMLElement>();
+    // Elements given their own move below are left out of the shared batch.
+    const handled = new Set<HTMLElement>();
+    const mine = (el: HTMLElement | null): el is HTMLElement => !!el && pending.includes(el) && !handled.has(el);
+
+    // Each case study opens as one sequence: its name, what it is and its
+    // status rise in reading order.
     gsap.utils.toArray<HTMLElement>(".case").forEach((article) => {
-      const words = [".case-title h3", ".case-title .lead", ".case-meta"]
+      const words = [".case-head h4", ".case-head .case-kind", ".case-head .case-useful", ".case-head .case-status"]
         .map((s) => article.querySelector<HTMLElement>(s))
-        .filter((el): el is HTMLElement => !!el && pending.includes(el));
-      const shot = article.querySelector<HTMLElement>(".case-lead-shot");
-      const parts = shot && pending.includes(shot) ? [...words, shot] : words;
-      if (!parts.length) return;
-      parts.forEach((el) => inCaseHeads.add(el));
-      const timeline = gsap.timeline({
-        defaults: { ease: EASE },
-        scrollTrigger: { trigger: article, start: "top 85%", once: true },
-        onComplete: () => settle(parts),
-      });
-      if (words.length) {
-        timeline.fromTo(words, { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: phone ? 0.5 : 0.65, stagger: 0.08 });
-      }
-      if (parts.includes(shot!)) {
-        timeline.fromTo(
-          shot,
-          { autoAlpha: 1, clipPath: "inset(100% 0% 0% 0%)" },
-          { clipPath: "inset(0% 0% 0% 0%)", duration: phone ? 0.7 : 0.9, clearProps: "clipPath" },
-          words.length ? "-=0.35" : 0,
-        );
-      }
+        .filter(mine);
+      if (!words.length) return;
+      words.forEach((el) => handled.add(el));
+      gsap.fromTo(
+        words,
+        { autoAlpha: 0, y: 24 },
+        {
+          autoAlpha: 1,
+          y: 0,
+          ease: EASE,
+          duration: phone ? 0.5 : 0.65,
+          stagger: 0.08,
+          scrollTrigger: { trigger: article, start: "top 85%", once: true },
+          onComplete: () => settle(words),
+        },
+      );
+    });
+
+    // A main screenshot (a case's, or a website's) surfaces from its bottom
+    // edge up when it arrives.
+    gsap.utils.toArray<HTMLElement>(".case-lead-shot, .site-shot").filter(mine).forEach((shot) => {
+      handled.add(shot);
+      gsap.fromTo(
+        shot,
+        { autoAlpha: 1, clipPath: "inset(100% 0% 0% 0%)" },
+        {
+          clipPath: "inset(0% 0% 0% 0%)",
+          ease: EASE,
+          duration: phone ? 0.8 : 1.05,
+          scrollTrigger: { trigger: shot, start: "top 88%", once: true },
+          onComplete: () => settle([shot]),
+        },
+      );
+    });
+
+    // Secondary screenshots open one after another: the first, then the
+    // second, then the third, each from its own mask, so the row reads in
+    // order instead of landing at once. Every one is readable within about a
+    // second of the row arriving.
+    gsap.utils.toArray<HTMLElement>(".shot-grid, .phone-strip").forEach((list) => {
+      const items = gsap.utils.toArray<HTMLElement>(":scope > li", list).filter(mine);
+      if (!items.length) return;
+      items.forEach((el) => handled.add(el));
+      gsap.fromTo(
+        items,
+        { autoAlpha: 1, y: 28, clipPath: "inset(100% 0% 0% 0%)" },
+        {
+          y: 0,
+          clipPath: "inset(0% 0% 0% 0%)",
+          ease: EASE,
+          duration: phone ? 0.7 : 0.9,
+          stagger: phone ? 0.1 : 0.14,
+          scrollTrigger: { trigger: list, start: "top 85%", once: true },
+          onComplete: () => settle(items),
+        },
+      );
     });
 
     // Everything else: elements that reach the viewport together rise in turn.
     ScrollTrigger.batch(
-      pending.filter((el) => !inCaseHeads.has(el)),
+      pending.filter((el) => !handled.has(el)),
       {
         start: "top 92%",
         once: true,
@@ -93,26 +131,6 @@ export function start() {
         },
       },
     );
-
-    // The waterline rises as the hero leaves: the silver field grows up from
-    // its seam while the headline falls behind the scroll, so the words sink
-    // from silver-on-graphite into graphite-on-silver.
-    // The heading itself moves, never a wrapper: a transformed wrapper would
-    // start a stacking context and cut the heading off from the field it
-    // blends with (difference), losing its contrast on the silver.
-    const hero = document.querySelector<HTMLElement>(".hero");
-    const field = hero?.querySelector<HTMLElement>(".hero-field");
-    const title = hero?.querySelector<HTMLElement>(".hero-title");
-    if (hero && field && title) {
-      const seamTo = phone ? 0.3 : 0.15;
-      gsap
-        .timeline({
-          scrollTrigger: { trigger: hero, start: "top top", end: "bottom top", scrub: 0.6, invalidateOnRefresh: true },
-        })
-        .to(field, { scaleY: () => (1 - seamTo) / (1 - field.offsetTop / hero.offsetHeight), transformOrigin: "50% 100%", ease: "none" }, 0)
-        // xPercent keeps the CSS centring (translateX(-50%)).
-        .fromTo(title, { xPercent: -50, x: 0, y: 0 }, { xPercent: -50, x: 0, y: () => hero.offsetHeight * (phone ? 0.12 : 0.2), ease: "none" }, 0);
-    }
 
     // Lead screenshots drift a little inside their frame while they cross
     // the viewport. The wrapper moves, so the image keeps its own hover zoom.
@@ -149,5 +167,5 @@ export function stop() {
   mm.revert();
   mm = null;
   settle(gsap.utils.toArray("[data-reveal]"));
-  gsap.set([".hero-field", ".hero-title", ".case-lead-shot .shot picture"], { clearProps: "transform,transformOrigin" });
+  gsap.set(".case-lead-shot .shot picture", { clearProps: "transform,transformOrigin" });
 }

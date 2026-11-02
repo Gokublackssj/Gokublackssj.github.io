@@ -1,0 +1,94 @@
+---
+import { Picture, getImage } from "astro:assets";
+import type { PublishedDemo } from "../data/demos";
+import { dicts, paths, type Lang } from "../i18n";
+
+interface Props {
+  lang: Lang;
+  demo: PublishedDemo;
+}
+
+// One published concept demo: its package and business, the "concept" label,
+// a short muted preview of the real site (desktop or mobile), the goal and
+// features, and the two actions.
+//
+// The preview is a video with a real screenshot as its poster. Scripts
+// (src/scripts/demo-preview.ts) play it only while it is on screen and motion
+// is on, pause it when it leaves, and switch between the desktop and mobile
+// recordings; nothing depends on hover. Without scripts, the screenshot shows
+// and the browser's own controls play the video on request.
+const { lang, demo } = Astro.props;
+const t = dicts[lang];
+const d = t.demos;
+const pkg = t.services.packages.items[demo.package].name;
+const copy = demo.copy[lang];
+const views = ["desktop", "mobile"] as const;
+const posters = Object.fromEntries(
+  await Promise.all(views.map(async (v) => [v, (await getImage({ src: demo.media[v].poster, width: 1280, format: "webp", quality: 80 })).src])),
+) as Record<(typeof views)[number], string>;
+---
+
+<article class="demo-card" aria-labelledby={`demo-${demo.id}`}>
+  <figure class="demo-preview" data-demo-preview data-view="desktop">
+    <div class="demo-frame">
+      {
+        views.map((v) => (
+          <video
+            class={`demo-video demo-video--${v}`}
+            data-view={v}
+            muted
+            loop
+            playsinline
+            controls
+            preload="none"
+            poster={posters[v]}
+            aria-label={copy.alt}
+            hidden={v === "mobile"}
+          >
+            <source src={demo.media[v].webm} type="video/webm" />
+            <source src={demo.media[v].mp4} type="video/mp4" />
+          </video>
+        ))
+      }
+      <!-- The static screenshot, for print and as a last resort. -->
+      <Picture class="demo-still" src={demo.media.desktop.poster} formats={["avif", "webp"]} widths={[640, 960, 1280]} sizes="(max-width: 1023px) 100vw, 640px" alt="" loading="lazy" decoding="async" />
+    </div>
+    <div class="demo-controls" data-demo-controls hidden>
+      <span class="segmented" role="group" aria-label={d.view}>
+        {
+          views.map((v) => (
+            <button type="button" data-demo-view={v} aria-pressed={v === "desktop" ? "true" : "false"}>
+              {v === "desktop" ? d.desktop : d.mobile}
+            </button>
+          ))
+        }
+      </span>
+      <button class="button button--ghost demo-toggle" type="button" data-demo-play data-label-play={d.play} data-label-pause={d.pause}>
+        {d.play}
+      </button>
+    </div>
+  </figure>
+
+  <div class="demo-body">
+    <p class="demo-package">{pkg}</p>
+    <h5 id={`demo-${demo.id}`} class="display">{copy.name}</h5>
+    <p class="demo-business">{d.business[demo.package]}</p>
+    <p class="demo-concept">{d.concept}</p>
+    <div>
+      <h6>{d.goal}</h6>
+      <p>{copy.goal}</p>
+    </div>
+    <div>
+      <h6>{d.features}</h6>
+      <ul class="check-list">{copy.features.map((f) => <li>{f}</li>)}</ul>
+    </div>
+    <div class="site-actions">
+      <a class="button button--ghost" href={demo.url} target="_blank" rel="noopener">
+        {d.open}<span class="visually-hidden"> {t.a11y.newTab}</span>
+      </a>
+      <a class="button" href={`${paths[lang]}?plan=${demo.package}#contact`} data-plan={demo.package}>
+        {t.services.packages.cta}<span class="visually-hidden">: {pkg}</span>
+      </a>
+    </div>
+  </div>
+</article>

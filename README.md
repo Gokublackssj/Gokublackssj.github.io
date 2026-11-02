@@ -7,7 +7,8 @@ services and contact details. Live at https://gokublackssj.github.io/.
 - Astro 7, static output, TypeScript for data and scripts
 - About 4 KB (brotli) of page JavaScript up front (screenshot viewer, phone menu, video play button, motion
   setting); GSAP + ScrollTrigger (about 40 KB brotli) load afterwards, only while animations are on (see Motion)
-- Fonts self-hosted through Fontsource: Big Shoulders 800 (display) and Public Sans (text)
+- Fonts self-hosted through Fontsource: Zilla Slab 600 (display, the only weight loaded) and Public Sans
+  variable (text and interface); both latin files are preloaded
 - Screenshots served as AVIF/WebP in several widths; full-size WebP in the viewer
 - No trackers, cookies, analytics or third-party requests. `localStorage` keeps one value: the visitor's
   animations choice, if they make one
@@ -26,20 +27,34 @@ npm run preview   # serve dist/
 ```text
 src/
   pages/              index.astro (en), es/index.astro, 404.astro, sitemap.xml.ts
-  components/         Page, Header, Hero, CaseStudy, Gallery, Lightbox, ZoomBadge
-  layouts/Base.astro  <head>: SEO, hreflang, Open Graph, JSON-LD, fonts
+  components/         Page (the order of the sections, and the projects in two categories:
+                      Web development and Python, data & automation), Header, Hero (headline and actions),
+                      WebProjects (websites and the package demos), WebsiteCard, DemoCard, CaseStudy,
+                      RunSteps, Gallery, Lightbox, ZoomBadge, Services (the offer only, with a link to
+                      each category),
+                      Process (how we work), About, Faq, Contact, Footer
+  layouts/Base.astro  <head>: SEO, hreflang, Open Graph, JSON-LD, fonts, and the inline script that sets the
+                      theme and the motion setting before the first paint
   i18n/               en.ts (source of truth for structure), es.ts, index.ts
-  data/               shots.ts (screenshot list), links.ts (email, GitHub, CV, repos)
-  scripts/            reveal.ts (loads motion.ts, video), motion.ts (GSAP), lightbox.ts,
-                      motion-preference.ts (the animations setting), motion-control.ts (footer control)
-  styles/global.css   tokens and all styles
-  assets/shots/       original PNG screenshots (optimized at build time)
+  data/               shots.ts (screenshots), projects.ts (finished websites, and the list of Python
+                      case studies the category count comes from),
+                      demos.ts (concept demos of the website packages: "planned" ones are listed as in progress,
+                      "published" ones get a card with a video preview, a screenshot poster and their link),
+                      commands.ts (how each project is run and tested, as its README gives it),
+                      links.ts (email, GitHub, CV, repos)
+  scripts/            reveal.ts (loads motion.ts, video), motion.ts (GSAP), lightbox.ts, theme.ts (theme switch),
+                      contact.ts (the form that prepares an email), demo-preview.ts (plays a demo preview only
+                      on screen and with motion on; Desktop / Mobile switch), motion-preference.ts (the animations
+                      setting), motion-control.ts (footer control)
+  styles/global.css   tokens (light and dark) and all styles
+  assets/shots/       original PNG screenshots (optimized at build time); site/ holds this site's own screenshots
+                      for the Websites card, retaken whenever the first screen changes
 public/
   cv/                 Luis_Pimentel_CV.pdf / .docx (English), Luis_Pimentel_CV_ES.pdf (Spanish, linked from /es/)
   media/              leadflow-flow.mp4 / .webm (13 s screen recording, plays only on request)
   favicon.svg, robots.txt, .nojekyll
-docs/screenshots/     captures of this site at 1440, 768 and 390 px (en and es); the full-page *-full.jpg
-                      captures are git-ignored and kept on the local machine only
+docs/screenshots/     captures of the previous design at 1440, 768 and 390 px (en and es); the full-page
+                      *-full.jpg captures are git-ignored and kept on the local machine only
 _legacy-static/       local only (git-ignored, not in the repository): previous HTML/CSS version,
                       original CV files and CV backups
 ```
@@ -47,43 +62,58 @@ _legacy-static/       local only (git-ignored, not in the repository): previous 
 Every visible string lives in `src/i18n/en.ts` and `src/i18n/es.ts`. The
 Spanish file is typed against the English one, so a missing key fails the build.
 
+**Concept demos.** Each website package (Essential, Professional, Signature) gets a concept demo for a
+fictional business, built in its own repository and published on its own. The portfolio only lists it in
+`src/data/demos.ts` (package, published address, a real screenshot in `src/assets/shots/demos/`, and the
+card's text in both languages); the Services section shows a card for each listed demo and none while the
+list is empty.
+
+**Contact.** The form prepares an email with the chosen service, or copies the same message; nothing is
+sent from the page and no form service is used. `?plan=essential|professional|signature` (from the
+package buttons and the demos) chooses the service. Without JavaScript it is a plain `mailto:` form.
+
 ## Motion
 
 CSS and GSAP each own their own properties, so the two never animate the same thing.
 
 | Animation | Tool | Purpose | Ingredients |
 |---|---|---|---|
-| Hero entrance: headline lines rise from behind the waterline, then sentence, availability and buttons | CSS keyframes (runs on first paint) | Arrival | 700 ms lines (80 ms apart), 500 ms rest from 250 ms, `--ease-out`. The sentence (the LCP element) only rises and is never transparent, so it counts as painted on the first frame |
-| Hover and press on buttons, links, contact rows, CV links, thumbnails | CSS transitions | Feedback | 160 ms press to `scale(0.97)`; hover movement only with `(hover: hover) and (pointer: fine)` |
+| Hero entrance: headline lines rise inside their line boxes (the italic one a beat later), then sentence, availability, buttons and the proof line | CSS keyframes on `html.intro` (first paint only) | Arrival | 900 ms lines (140 ms apart), 600 ms rest from 320 ms, proof line from 600 ms, `--ease-out`. The sentence only rises and is never transparent. `.intro` goes when the proof line has arrived (or after 4 s), and on any change of the setting, so the entrance never replays |
+| Hover and press on buttons, links, the category index, thumbnails, the settings | CSS transitions | Feedback | 160 ms press to `scale(0.97)`; hover movement only with `(hover: hover) and (pointer: fine)` |
 | Section entrances | GSAP `ScrollTrigger.batch` | Prevent content popping in | `autoAlpha` + 16 px, 0.55 s (0.45 s phones), 60 ms stagger, once |
-| Case study head: name, kind, facts, then the lead screenshot surfacing from below | GSAP timeline + ScrollTrigger | Explain hierarchy | 0.65 s words, 0.9 s `clip-path` reveal, once |
-| Hero waterline: the silver field rises and the headline lags as the hero leaves | GSAP ScrollTrigger `scrub: 0.6` | Spatial continuity | `scaleY` on the field, `y` on the heading (never a wrapper: a transformed wrapper breaks the `mix-blend-mode` contrast) |
+| Case study head: name, kind, status in reading order | GSAP + ScrollTrigger | Explain hierarchy | 0.65 s, 80 ms stagger, once |
+| Main screenshots (cases, the website card) surface from their bottom edge | GSAP + ScrollTrigger | Reveal | `clip-path`, 1.05 s (0.8 s phones), once |
+| Secondary screenshots open one after another | GSAP + ScrollTrigger | Reading order | `clip-path` and 28 px, 0.9 s, 140 ms between screenshots, once |
 | Lead screenshot drift (desktop) | GSAP ScrollTrigger `scrub: 0.3` | Depth | ±1.5 % on the `<picture>` wrapper, so the `<img>` keeps its hover zoom |
-| Viewer: screenshot travels from its thumbnail and back; next/previous slide | GSAP (FLIP), one `gsap.context()` per viewing | Spatial continuity | 0.4 s open, 0.3 s close, 0.28 s slide; CSS fade is the fallback |
+| Technical details settle in when opened | CSS keyframes | State | 320 ms fade and rise |
+| Theme switch | View Transition (where supported) | Continuity | 260 ms crossfade of the page; instant when motion is reduced |
+| Viewer: screenshot travels from its thumbnail and back; next/previous slide | GSAP (FLIP), one `gsap.context()` per viewing | Spatial continuity | 0.4 s open, 0.3 s close, 0.28 s slide; CSS fade is the fallback; the ground is the theme's `--canvas` |
 
 `expo.out` in GSAP is the same curve as `--ease-out`.
 
-**The visitor's setting.** The footer has an "Animations" control (On / Reduced; "Animaciones":
-Activadas / Reducidas). Until the visitor chooses, the site follows `prefers-reduced-motion`, also when it
-changes while the page is open. A choice is kept in `localStorage` (`luisdataworks:motion`) and wins over
-the system setting on later visits. The note under the control says which one applies.
+**The visitor's setting.** The footer has an "Animations" control with three options: Device, On and
+Reduced ("Animaciones": Dispositivo, Activadas, Reducidas). Under it, one sentence says what applies and
+why, for example "Animations reduced, following your device setting." or "Animations on, your choice,
+saved in this browser." Device follows `prefers-reduced-motion`, also when it changes while the page is
+open; On and Reduced are explicit choices, kept in `localStorage` (`luisdataworks:motion`), that win over
+the device on later visits. Choosing Device again removes the stored choice.
 
 - An inline script in `Base.astro` sets `<html data-motion="on|off">` before the first paint. All motion CSS
   hangs on that attribute through `:where([data-motion="on"])`, so selector specificity is unchanged.
   Without JavaScript there is no attribute: nothing moves, nothing is hidden, and the control stays hidden.
 - `motion-preference.ts` reads and changes the setting and fires a `motionchange` event.
 - Switching to Reduced calls `stop()` in `motion.ts`: one `gsap.matchMedia().revert()` removes every tween
-  and ScrollTrigger, inline styles are cleared and every element is shown. Switching to On calls `start()`,
-  which never runs twice; what is still below the viewport waits again so it can enter. GSAP is fetched at
-  most once per page, whatever the visitor switches.
-- The viewer reads the setting on every opening.
+  and ScrollTrigger, inline styles are cleared and every element is shown, also mid-reveal. Switching to On
+  calls `start()`, which never runs twice; what is still below the viewport waits again so it can enter.
+  GSAP is fetched at most once per page, whatever the visitor switches.
+- The viewer and the theme switch read the setting on every use.
 
 **Loading.** `reveal.ts` imports `motion.ts` (GSAP + ScrollTrigger) once the page is idle, only while
 animations are on (and not on data saver unless the visitor chose On). If the module fails, everything is
 shown at once; if it takes over 4 s, the same.
 
 **Not done on purpose.** No pinning, no smooth-scroll hijacking, no animated counters on the test figures,
-no footer animation (it would compete with the footer's call to action).
+no footer animation.
 
 ## Content sources (checked on 2026-10-24)
 
@@ -99,6 +129,8 @@ cannot be checked in the repositories.
 | LeadFlow: 148 backend tests | `pytest --collect-only` on the local clone |
 | LeadFlow: 17 end-to-end tests | count of `test(` in `frontend/e2e/*.spec.ts` |
 | Book Data Extractor Pro | previous portfolio text, verified against the repository on 2026-10-24 |
+| How each project is installed, run and tested (`src/data/commands.ts`), its requirements | `README.md` of each repository, checked on 2026-10-29 (QuoteFlow on GitHub; LeadFlow and Book Data Extractor Pro on their local clones, identical to GitHub) |
+| Each case study's problem and "what you can do" | written from its summary and features above; to be confirmed by Luis |
 | Personal details | the CV |
 
 If a project changes, update the numbers and the text in both language files.
@@ -132,6 +164,15 @@ projects").
   the site is published).
 
 ## Checks run before handing over
+
+These are the checks of the version published on 2026-10-25, before the editorial redesign (the blended
+hero heading they mention no longer exists). Repeat them for the redesign before it is published.
+
+Testing motion: headless Chrome inherits the operating system's animation setting. On a machine with
+animations turned off it reports `prefers-reduced-motion: reduce`, the site correctly stays still and GSAP is
+never loaded, so a motion test there says nothing about the animations. Emulate
+`prefers-reduced-motion: no-preference` (or store the footer's choice, `luisdataworks:motion` = `on`) for the
+motion runs, and keep a separate run with `reduce`.
 
 - `astro check`: 0 errors. Static build: 3 pages, no console errors.
 - Design inspector (tasteskill) at 1440, 768 and 390 px, both languages: 0 FAIL.

@@ -1,29 +1,31 @@
-// The "Animations" control in the footer: two buttons (on, reduced) and a note
-// saying whether the setting follows the device or the visitor's saved
-// choice. It stays hidden until this script runs, so there is never a button
-// that does nothing.
+// The "Animations" control in the footer: three buttons (Device, On, Reduced)
+// and a sentence with the setting in effect and where it comes from, for
+// example "Animations reduced, following your device setting." It stays
+// hidden until this script runs, so there is never a button that does nothing.
 
-import { chooseMotion, currentMotion, onMotionChange, storedChoice, type Motion } from "./motion-preference";
+import { chooseMotion, currentMotion, onMotionSettingChange, storedChoice, type MotionChoice } from "./motion-preference";
 
 export function initMotionControl() {
   const group = document.querySelector<HTMLElement>("[data-motion-control]");
   if (!group) return;
   const buttons = group.querySelectorAll<HTMLButtonElement>("[data-motion-value]");
-  const note = group.querySelector<HTMLElement>("[data-motion-note]");
+  const state = group.querySelector<HTMLElement>("[data-motion-state]");
+  const d = group.dataset;
 
   const render = () => {
-    const now = currentMotion();
-    buttons.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.motionValue === now)));
-    if (note) note.textContent = (storedChoice() ? group.dataset.noteSaved : group.dataset.noteSystem) ?? "";
+    const choice = storedChoice();
+    const selected: MotionChoice = choice ?? "system";
+    buttons.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.motionValue === selected)));
+    if (state) {
+      const effect = currentMotion() === "on" ? d.stateOn : d.stateOff;
+      state.textContent = `${effect}, ${choice ? d.fromChoice : d.fromSystem}.`;
+    }
   };
 
   buttons.forEach((button) =>
-    button.addEventListener("click", () => {
-      chooseMotion(button.dataset.motionValue as Motion);
-      render();
-    }),
+    button.addEventListener("click", () => chooseMotion(button.dataset.motionValue as MotionChoice)),
   );
-  onMotionChange(render);
+  onMotionSettingChange(render);
   render();
   group.hidden = false;
 }

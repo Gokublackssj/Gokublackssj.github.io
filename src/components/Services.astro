@@ -1,0 +1,129 @@
+---
+import { packageIds, type PackageId } from "../data/demos";
+import { dicts, paths, type Lang } from "../i18n";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = dicts[lang];
+const s = t.services;
+const pk = s.packages;
+// The rows the packages are compared on, in reading order; price comes last.
+const rows = ["best", "size", "design", "interactions", "motion", "contact"] as const;
+// "I want a site like this": the contact form with the package already chosen.
+const planHref = (id: PackageId) => `${paths[lang]}?plan=${id}#contact`;
+---
+
+<section class="section" id="services" aria-labelledby="services-title">
+  <div class="container">
+    <div class="section-head">
+      <h2 id="services-title" class="display" data-reveal>{s.heading}</h2>
+      <p data-reveal>{s.text}</p>
+    </div>
+
+    <!-- Block A: the three website packages, compared on the same rows. -->
+    <section class="plans" aria-labelledby="plans-title">
+      <div class="family-head">
+        <h3 id="plans-title" class="display" data-reveal>{pk.heading}</h3>
+        <p data-reveal>{pk.text}</p>
+      </div>
+
+      <!-- Wide screens: one table, a column per package. -->
+      <div class="plans-table-wrap" data-reveal>
+        <table class="plans-table">
+          <caption class="visually-hidden">{pk.caption}</caption>
+          <thead>
+            <tr>
+              <td></td>
+              {packageIds.map((id) => <th scope="col">{pk.items[id].name}</th>)}
+            </tr>
+          </thead>
+          <tbody>
+            {
+              rows.map((row) => (
+                <tr>
+                  <th scope="row">{pk.rows[row]}</th>
+                  {packageIds.map((id) => <td>{pk.items[id][row]}</td>)}
+                </tr>
+              ))
+            }
+            <tr class="plans-price">
+              <th scope="row">{pk.rows.price}</th>
+              {packageIds.map(() => <td>{pk.price}</td>)}
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td></td>
+              {
+                packageIds.map((id) => (
+                  <td>
+                    <a class="button" href={planHref(id)} data-plan={id}>
+                      {pk.cta}<span class="visually-hidden">: {pk.items[id].name}</span>
+                    </a>
+                  </td>
+                ))
+              }
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <!-- Phones: the same content, one block per package. -->
+      <ul class="plans-stack">
+        {
+          packageIds.map((id) => (
+            <li data-reveal>
+              <h4 class="display">{pk.items[id].name}</h4>
+              <dl>
+                {rows.map((row) => (
+                  <div>
+                    <dt>{pk.rows[row]}</dt>
+                    <dd>{pk.items[id][row]}</dd>
+                  </div>
+                ))}
+                <div>
+                  <dt>{pk.rows.price}</dt>
+                  <dd>{pk.price}</dd>
+                </div>
+              </dl>
+              <a class="button" href={planHref(id)} data-plan={id}>
+                {pk.cta}<span class="visually-hidden">: {pk.items[id].name}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="plans-notes" data-reveal>
+        <p>{pk.included}</p>
+        <p>{pk.excluded}</p>
+      </div>
+
+      <!-- The work itself (my site and the package demos) is in Projects. -->
+      <a class="text-link category-link" href="#web" data-reveal>{pk.see}</a>
+    </section>
+
+    <!-- Block B: Python, data and automation work, separate from the website
+         packages. The projects themselves are in Projects. -->
+    <section class="data-services" aria-labelledby="data-services-title">
+      <div class="family-head">
+        <h3 id="data-services-title" class="display" data-reveal>{s.data.heading}</h3>
+        <p data-reveal>{s.data.text}</p>
+      </div>
+      <ul class="data-list">
+        {
+          s.data.items.map(([title, text]) => (
+            <li data-reveal>
+              <h4>{title}</h4>
+              <p>{text}</p>
+            </li>
+          ))
+        }
+      </ul>
+      <a class="text-link category-link" href="#python" data-reveal>{s.data.see}</a>
+    </section>
+  </div>
+</section>

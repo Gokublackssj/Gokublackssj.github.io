@@ -27,10 +27,10 @@ const phone = await Promise.all(mobile.map(async (s) => ({ ...s, full: await ful
 ---
 
 <div class="gallery">
-  <h4 data-reveal>{t.labels.gallery}</h4>
+  <h5 data-reveal>{t.labels.gallery}</h5>
   <ul class="shot-grid">
     {
-      desk.map((s, i) => (
+      desk.map((s) => (
         <li data-reveal>
           <figure>
             <a
@@ -46,8 +46,8 @@ const phone = await Promise.all(mobile.map(async (s) => ({ ...s, full: await ful
                 src={s.src}
                 formats={["avif", "webp"]}
                 fallbackFormat="webp"
-                widths={i === 0 ? [640, 960, 1440] : [480, 720, 960]}
-                sizes={i === 0 ? "(max-width: 760px) 100vw, 66vw" : "(max-width: 480px) 100vw, (max-width: 760px) 50vw, 33vw"}
+                widths={[480, 720, 960]}
+                sizes="(max-width: 480px) 100vw, (max-width: 1023px) 50vw, 420px"
                 alt={captions[s.id]![1]}
                 loading="lazy"
                 decoding="async"
@@ -65,7 +65,7 @@ const phone = await Promise.all(mobile.map(async (s) => ({ ...s, full: await ful
   {
     phone.length > 0 && (
       <div class="phone-wrap">
-        <h4 data-reveal>{t.labels.phone}</h4>
+        <h5 data-reveal>{t.labels.phone}</h5>
         <ul class="phone-strip" aria-label={t.a11y.phoneStrip} tabindex="0">
           {phone.map((s) => (
             <li data-reveal>

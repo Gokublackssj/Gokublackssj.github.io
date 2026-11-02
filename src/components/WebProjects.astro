@@ -1,0 +1,69 @@
+---
+import WebsiteCard from "./WebsiteCard.astro";
+import DemoCard from "./DemoCard.astro";
+import { websites } from "../data/projects";
+import { demos, isPublished, type PlannedDemo } from "../data/demos";
+import { dicts, type Lang } from "../i18n";
+
+interface Props {
+  lang: Lang;
+}
+
+// The Web development category: finished websites (src/data/projects.ts),
+// then the concept demo of each website package (src/data/demos.ts). A
+// published demo gets its card and preview; one still being built is listed
+// as in progress, with no picture or link, so nothing looks available before
+// it is.
+const { lang } = Astro.props;
+const t = dicts[lang];
+const f = t.families.websites;
+const d = t.demos;
+const packages = t.services.packages.items;
+const published = demos.filter(isPublished);
+const planned = demos.filter((demo): demo is PlannedDemo => demo.status === "planned");
+---
+
+<section class="family" id="web" aria-labelledby="web-title">
+  <div class="family-head">
+    <h3 id="web-title" class="display" data-reveal>{f.heading}</h3>
+    <p data-reveal>{f.text}</p>
+  </div>
+  <div class:list={["site-list", `site-list--${websites.length}`]}>
+    {websites.map((site) => <WebsiteCard lang={lang} site={site} />)}
+  </div>
+
+  <section class="demos" aria-labelledby="demos-title">
+    <div class="demos-head">
+      <h4 id="demos-title" class="display" data-reveal>{d.heading}</h4>
+      <p data-reveal>{d.text}</p>
+    </div>
+    {
+      published.length > 0 && (
+        <div class="demo-list">
+          {published.map((demo) => <DemoCard lang={lang} demo={demo} />)}
+        </div>
+      )
+    }
+    {
+      planned.length > 0 && (
+        <ul class="demo-coming">
+          {planned.map((demo) => (
+            <li data-reveal>
+              <p class="demo-coming-package">{packages[demo.package].name}</p>
+              <p class="demo-coming-business">{d.business[demo.package]}</p>
+              <p class="demo-coming-state">
+                <span class="state-tag">{d.inProgress}</span> {d.comingText}
+              </p>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </section>
+</section>
+
+<script>
+  import { initDemoPreviews } from "../scripts/demo-preview";
+
+  initDemoPreviews();
+</script>

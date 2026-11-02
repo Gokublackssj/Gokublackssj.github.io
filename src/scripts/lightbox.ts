@@ -15,8 +15,15 @@ type Gsap = typeof import("gsap").gsap;
 const FADE_MS = 200;
 // GSAP's expo.out is cubic-bezier(0.16, 1, 0.3, 1), the --ease-out token.
 const EASE = "expo.out";
-const GROUND = "rgba(8, 10, 11, 1)";
-const CLEAR = "rgba(8, 10, 11, 0)";
+// The viewer's ground is the page's --canvas token in the current theme, the
+// colour its title, caption and controls are set against. GSAP fades the
+// dialog from that colour at zero alpha to the colour itself.
+function canvas(alpha: number): string {
+  const hex = getComputedStyle(document.documentElement).getPropertyValue("--canvas").trim();
+  const m = /^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(hex);
+  const [r, g, b] = m ? m.slice(1).map((h) => parseInt(h, 16)) : [255, 255, 255];
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
 
 export function initLightbox() {
   const dialog = document.querySelector<HTMLDialogElement>("dialog.lightbox");
@@ -127,7 +134,7 @@ export function initLightbox() {
     const g = gsap!;
     const token = ++shown;
     animate(() => {
-      g.fromTo(dialog, { backgroundColor: CLEAR }, { backgroundColor: GROUND, duration: 0.25, ease: "power1.out" });
+      g.fromTo(dialog, { backgroundColor: canvas(0) }, { backgroundColor: canvas(1), duration: 0.25, ease: "power1.out" });
       // opacity, not autoAlpha: hiding the bar with visibility would take the
       // focus off its Close button.
       g.fromTo(chrome, { opacity: 0 }, { opacity: 1, duration: 0.25, delay: 0.12, ease: "power1.out" });
@@ -164,7 +171,7 @@ export function initLightbox() {
       const timeline = g.timeline({ onComplete: () => dialog!.close() });
       timeline
         .to(chrome, { opacity: 0, duration: 0.15, ease: "power1.out" }, 0)
-        .to(dialog, { backgroundColor: CLEAR, duration: 0.28, ease: "power1.out" }, 0);
+        .to(dialog, { backgroundColor: canvas(0), duration: 0.28, ease: "power1.out" }, 0);
       if (back) timeline.to(img, { ...overThumbnail(thumb, full), duration: 0.3, ease: EASE }, 0);
       else timeline.to(img, { autoAlpha: 0, scale: 0.97, duration: 0.2, ease: EASE }, 0);
     });

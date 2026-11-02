@@ -58,6 +58,15 @@ if (motionAllowed() && !(saveData && !storedChoice())) enable(true);
 else showAll();
 
 onMotionChange((motion) => (motion === "on" ? enable(false) : disable()));
+
+// The hero's first-paint entrance ends with the proof line under the buttons
+// (about 1.2 s). Then the .intro class goes, so no later switch of the setting
+// can play it a second time; the timer covers an entrance that never ran.
+const endIntro = () => root.classList.remove("intro");
+document.addEventListener("animationend", (event) => {
+  if (event.animationName === "fade-up" && (event.target as Element).classList.contains("hero-proof")) endIntro();
+});
+window.setTimeout(endIntro, 4000);
 initMotionControl();
 
 // Screen recordings play only on request: a play button over the poster, then

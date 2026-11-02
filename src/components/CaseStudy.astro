@@ -3,14 +3,16 @@ import { Picture, getImage } from "astro:assets";
 import type { ImageMetadata } from "astro";
 import Gallery from "./Gallery.astro";
 import ZoomBadge from "./ZoomBadge.astro";
+import RunSteps from "./RunSteps.astro";
 import type { ProjectShots } from "../data/shots";
+import { testCommands } from "../data/commands";
 import { dicts, type Dict, type Lang } from "../i18n";
 
 type Project = Dict["quoteflow"] | Dict["leadflow"];
 
 interface Props {
   lang: Lang;
-  id: string;
+  id: "quoteflow" | "leadflow";
   project: Project;
   shots: ProjectShots;
   repo: string;
@@ -30,69 +32,68 @@ const note = "shotsNote" in p ? p.shotsNote : undefined;
 const videoText = "video" in p ? p.video : undefined;
 const poster = video ? (await getImage({ src: video.poster, width: 1280, format: "webp", quality: 80 })).src : undefined;
 
-// Comments in the commands block are dimmed; everything else is code.
-const commandLines = p.commands.split("\n");
+// The test commands as the project's README gives them (src/data/commands.ts).
+const tests = testCommands[id];
 ---
 
+<!-- Read in the order a client asks: what was the problem, what did you build,
+     show me, what can I do with it. The technical detail stays one click away. -->
 <article class:list={["case", { "case--mirror": mirror }]} id={id} aria-labelledby={`${id}-title`}>
   <header class="case-head">
-    <div class="case-title">
-      <h3 id={`${id}-title`} class="display" data-reveal>{p.name}</h3>
-      <p class="lead" data-reveal>{p.kind}</p>
-    </div>
-    <dl class="case-meta" data-reveal>
-      <div>
-        <dt>{t.labels.status}</dt>
-        <dd>{p.status}</dd>
-      </div>
-      <div>
-        <dt>{t.labels.repo}</dt>
-        <dd>
-          <a href={repo} target="_blank" rel="noopener">
-            {repo.replace("https://", "")}<span class="visually-hidden"> {t.a11y.newTab}</span>
-          </a>
-        </dd>
-      </div>
-      <div>
-        <dt>{t.labels.demo}</dt>
-        <dd>{p.demo}</dd>
-      </div>
-      {
-        p.license && (
-          <div>
-            <dt>{t.labels.license}</dt>
-            <dd>{p.license}</dd>
-          </div>
-        )
-      }
-    </dl>
+    <h4 id={`${id}-title`} class="display" data-reveal>{p.name}</h4>
+    <p class="case-kind" data-reveal>{p.kind}</p>
+    <p class="case-useful" data-reveal><strong>{t.labels.usefulIf}</strong> {p.usefulIf}</p>
+    <p class="case-status" data-reveal>{p.status}</p>
   </header>
 
-  <figure class="case-lead-shot" data-reveal>
-    <a
-      class="shot"
-      href={leadFull}
-      data-gallery={id}
-      data-title={p.name}
-      data-caption={leadCaption}
-      data-alt={leadAlt}
-      aria-label={`${t.a11y.galleryOpen}: ${leadAlt}`}
-    >
-      <Picture
-        src={lead.src}
-        formats={["avif", "webp"]}
-        fallbackFormat="webp"
-        widths={[640, 960, 1280, 1440]}
-        sizes="(max-width: 1360px) 100vw, 1320px"
-        alt={leadAlt!}
-        loading="lazy"
-        decoding="async"
-        quality={82}
-      />
-      <ZoomBadge />
-    </a>
-    <figcaption class="small muted">{leadCaption}</figcaption>
-  </figure>
+  <div class="case-story">
+    <div class="case-problem" data-reveal>
+      <h5>{t.labels.problem}</h5>
+      <p>{p.problem}</p>
+    </div>
+    <div class="case-solution" data-reveal>
+      <h5>{t.labels.solution}</h5>
+      <p>{p.summary}</p>
+    </div>
+  </div>
+
+  <div class="case-visual">
+    <figure class="case-lead-shot" data-reveal>
+      <a
+        class="shot"
+        href={leadFull}
+        data-gallery={id}
+        data-title={p.name}
+        data-caption={leadCaption}
+        data-alt={leadAlt}
+        aria-label={`${t.a11y.galleryOpen}: ${leadAlt}`}
+      >
+        <Picture
+          src={lead.src}
+          formats={["avif", "webp"]}
+          fallbackFormat="webp"
+          widths={[640, 960, 1280, 1440]}
+          sizes="(max-width: 1023px) 100vw, 760px"
+          alt={leadAlt!}
+          loading="lazy"
+          decoding="async"
+          quality={82}
+        />
+        <ZoomBadge />
+      </a>
+      <figcaption class="small muted">{leadCaption}</figcaption>
+    </figure>
+
+    <div class="case-cando" data-reveal>
+      <h5>{t.labels.canDo}</h5>
+      <ul class="check-list">
+        {p.canDo.map((item) => <li>{item}</li>)}
+      </ul>
+      <a class="button button--ghost" href={repo} target="_blank" rel="noopener">
+        {t.labels.repo}<span class="visually-hidden"> {t.a11y.newTab}</span>
+      </a>
+    </div>
+  </div>
 
   {
     video && videoText && (
@@ -116,74 +117,98 @@ const commandLines = p.commands.split("\n");
     )
   }
 
-  <div class="case-body">
-    <div class="case-summary" data-reveal>
-      <h4>{t.labels.whatItDoes}</h4>
-      <p class="lead">{p.summary}</p>
-    </div>
-    <div class="case-features">
-      <h4 class="visually-hidden">{t.labels.features}</h4>
-      <ul class="feature-rows">
-        {
-          p.features.map(([title, text]) => (
-            <li data-reveal>
-              <strong>{title}</strong>
-              <span>{text}</span>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-  </div>
-
-  <div class:list={["decisions", { "decisions--dark": mirror }]}>
-    <h4 data-reveal>{t.labels.decisions}</h4>
-    <ul>
-      {
-        p.decisions.map(([claim, why]) => (
-          <li data-reveal>
-            <p>{claim}</p>
-            <p>{why}</p>
-          </li>
-        ))
-      }
-    </ul>
-  </div>
-
-  <div class="tests">
-    <div class="tests-side">
-      <h4 data-reveal>{t.labels.tests}</h4>
-      <p class="tests-note" data-reveal>{p.testsNote}</p>
-      <pre class="code" tabindex="0" data-reveal><code>{commandLines.map((line, i) => (
-        <Fragment>{line.startsWith("#") ? <span class="c">{line}</span> : line}{i < commandLines.length - 1 && "\n"}</Fragment>
-      ))}</code></pre>
-    </div>
-    <div class="figure-row">
-      {
-        p.tests.map(([num, label, detail]) => (
-          <div data-reveal>
-            <p class="figure-num">{num}</p>
-            <p class="figure-label">{label}</p>
-            <p class="figure-detail small">{detail}</p>
-          </div>
-        ))
-      }
-    </div>
-  </div>
-
   <Gallery lang={lang} group={id} title={p.name} desktop={shots.desktop} mobile={shots.mobile} captions={captions} note={note} />
 
-  <div class="case-foot">
-    <div class="case-limits" data-reveal>
-      <h4>{t.labels.limits}</h4>
-      <ul>{p.limits.map((l) => <li>{l}</li>)}</ul>
+  <!-- Everything a developer would check, closed by default. Nothing in here
+       waits for a scroll animation, so it is complete the moment it opens. -->
+  <details class="case-details">
+    <summary>
+      <span class="case-details-title">{t.labels.details}</span>
+      <span class="case-details-hint">{t.labels.detailsHint}</span>
+      <svg class="case-details-chevron" aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path d="M5 7.5 10 12.5 15 7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </summary>
+    <div class="case-details-body">
+      <dl class="case-meta">
+        <div>
+          <dt>{t.labels.repo}</dt>
+          <dd>
+            <a href={repo} target="_blank" rel="noopener">
+              {repo.replace("https://", "")}<span class="visually-hidden"> {t.a11y.newTab}</span>
+            </a>
+          </dd>
+        </div>
+        <div>
+          <dt>{t.labels.demo}</dt>
+          <dd>{p.demo}</dd>
+        </div>
+        {
+          p.license && (
+            <div>
+              <dt>{t.labels.license}</dt>
+              <dd>{p.license}</dd>
+            </div>
+          )
+        }
+      </dl>
+
+      <div class="case-block">
+        <h5>{t.labels.builtWith}</h5>
+        <p>{p.stack}</p>
+      </div>
+
+      <div class="case-block">
+        <h5>{t.labels.features}</h5>
+        <ul class="feature-rows">
+          {
+            p.features.map(([title, text]) => (
+              <li>
+                <strong>{title}</strong>
+                <span>{text}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="case-block">
+        <h5>{t.labels.decisions}</h5>
+        <ul class="decision-list">
+          {
+            p.decisions.map(([claim, why]) => (
+              <li>
+                <p>{claim}</p>
+                <p>{why}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <RunSteps lang={lang} id={id} />
+
+      <div class="case-block case-tests">
+        <h5>{t.labels.tests}</h5>
+        <div class="figure-row">
+          {
+            p.tests.map(([num, label, detail]) => (
+              <div>
+                <p class="figure-num">{num}</p>
+                <p class="figure-label">{label}</p>
+                <p class="figure-detail small">{detail}</p>
+              </div>
+            ))
+          }
+        </div>
+        <p class="tests-note">{p.testsNote}</p>
+        <pre class="code" tabindex="0"><code>{tests}</code></pre>
+      </div>
+
+      <div class="case-block">
+        <h5>{t.labels.limits}</h5>
+        <ul class="case-limits">{p.limits.map((l) => <li>{l}</li>)}</ul>
+      </div>
     </div>
-    <div class="case-built" data-reveal>
-      <h4>{t.labels.builtWith}</h4>
-      <p>{p.stack}</p>
-      <a class="button button--silver" href={repo} target="_blank" rel="noopener">
-        {t.labels.repo} <span class="arrow" aria-hidden="true">↗</span><span class="visually-hidden"> {t.a11y.newTab}</span>
-      </a>
-    </div>
-  </div>
+  </details>
 </article>

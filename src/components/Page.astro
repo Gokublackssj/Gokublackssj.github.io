@@ -3,11 +3,22 @@ import Base from "../layouts/Base.astro";
 import Header from "./Header.astro";
 import Hero from "./Hero.astro";
 import CaseStudy from "./CaseStudy.astro";
+import WebProjects from "./WebProjects.astro";
+import RunSteps from "./RunSteps.astro";
+import { websites, pythonProjects } from "../data/projects";
+import { demos, isPublished } from "../data/demos";
+import { runCommands, testCommands } from "../data/commands";
 import Lightbox from "./Lightbox.astro";
+import Services from "./Services.astro";
+import Process from "./Process.astro";
+import Faq from "./Faq.astro";
+import About from "./About.astro";
+import Contact from "./Contact.astro";
+import Footer from "./Footer.astro";
 import { shots } from "../data/shots";
 import videoPoster from "../assets/shots/leadflow/video-poster.png";
-import { contact, repos } from "../data/links";
-import { dicts, langNames, paths, type Lang } from "../i18n";
+import { repos } from "../data/links";
+import { dicts, type Lang } from "../i18n";
 
 interface Props {
   lang: Lang;
@@ -16,15 +27,16 @@ interface Props {
 const { lang } = Astro.props;
 const t = dicts[lang];
 const b = t.bookExtractor;
-const mailto = `mailto:${contact.email}?subject=${encodeURIComponent(t.contact.mailSubject)}`;
-// The footer links the CV in the page's own language.
-const footerCv = lang === "es" ? contact.cvPdfEs : contact.cvPdf;
-const serviceTargets: Record<string, string> = {
-  QuoteFlow: "#quoteflow",
-  LeadFlow: "#leadflow",
-  "Book Data Extractor Pro": "#book-extractor",
-};
-const servicesHead = t.services.heading.split(" ");
+const ix = t.projectsIntro.index;
+const categories = [
+  {
+    id: "web",
+    name: t.families.websites.heading,
+    text: t.families.websites.index,
+    count: ix.web(websites.length, demos.filter(isPublished).length, demos.filter((d) => !isPublished(d)).length),
+  },
+  { id: "python", name: t.families.software.heading, text: t.families.software.index, count: ix.python(pythonProjects.length) },
+];
 ---
 
 <Base lang={lang}>
@@ -40,214 +52,112 @@ const servicesHead = t.services.heading.split(" ");
           <p data-reveal>{t.projectsIntro.text}</p>
         </div>
 
-        <CaseStudy lang={lang} id="quoteflow" project={t.quoteflow} shots={shots.quoteflow} repo={repos.quoteflow} />
-        <CaseStudy lang={lang} id="leadflow" project={t.leadflow} shots={shots.leadflow} repo={repos.leadflow} mirror video={{ base: "/media/leadflow-flow", poster: videoPoster }} />
-
-        <article class="compact" id="book-extractor" aria-labelledby="book-extractor-title">
-          <div class="compact-text">
-            <h3 id="book-extractor-title" class="display" data-reveal>{b.name}</h3>
-            <p class="kind lead" data-reveal>{b.kind}</p>
-            <p data-reveal class="compact-summary">{b.summary}</p>
-            <ul class="compact-list">
-              {b.features.map((f) => <li data-reveal>{f}</li>)}
-            </ul>
-          </div>
-          <div class="compact-side">
-            <pre class="code" tabindex="0" data-reveal><code>{b.commands}</code></pre>
-            <p class="small muted" data-reveal>{b.limits}</p>
-            <p class="small" data-reveal><strong>{t.labels.builtWith}:</strong> {b.stack}</p>
-            <div data-reveal>
-              <a class="button button--silver" href={repos.bookExtractor} target="_blank" rel="noopener">
-                {t.labels.repo} <span class="arrow" aria-hidden="true">↗</span><span class="visually-hidden"> {t.a11y.newTab}</span>
+        <!-- The two categories, side by side: what each holds and how many,
+             counted from src/data. Each link leads to its category below. -->
+        <nav class="project-index" aria-label={t.projectsIntro.index.label}>
+          {
+            categories.map((c) => (
+              <a class="project-index-link" href={`#${c.id}`} data-reveal>
+                <span class="project-index-name display">{c.name}</span>
+                <span class="project-index-text">{c.text}</span>
+                <span class="project-index-count">{c.count}</span>
+                <svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M10 4v12M5 11l5 5 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
               </a>
+            ))
+          }
+        </nav>
+
+        <!-- Category 1: web development. Websites and the package demos. -->
+        <WebProjects lang={lang} />
+
+        <!-- Category 2: Python, data and automation, as case studies, in the
+             order of pythonProjects (src/data/projects.ts). -->
+        <section class="family" id="python" aria-labelledby="python-title">
+          <div class="family-head">
+            <h3 id="python-title" class="display" data-reveal>{t.families.software.heading}</h3>
+            <p data-reveal>{t.families.software.text}</p>
+          </div>
+
+          <CaseStudy lang={lang} id="quoteflow" project={t.quoteflow} shots={shots.quoteflow} repo={repos.quoteflow} />
+          <CaseStudy lang={lang} id="leadflow" project={t.leadflow} shots={shots.leadflow} repo={repos.leadflow} mirror video={{ base: "/media/leadflow-flow", poster: videoPoster }} />
+
+          <!-- The same order as the other cases. It has no screenshots, so its
+               picture is the real command that runs it. -->
+          <article class="case case--compact" id="book-extractor" aria-labelledby="book-extractor-title">
+            <header class="case-head">
+              <h4 id="book-extractor-title" class="display" data-reveal>{b.name}</h4>
+              <p class="case-kind" data-reveal>{b.kind}</p>
+              <p class="case-useful" data-reveal><strong>{t.labels.usefulIf}</strong> {b.usefulIf}</p>
+              <p class="case-status" data-reveal>{b.status}</p>
+            </header>
+            <div class="case-story">
+              <div class="case-problem" data-reveal>
+                <h5>{t.labels.problem}</h5>
+                <p>{b.problem}</p>
+              </div>
+              <div class="case-solution" data-reveal>
+                <h5>{t.labels.solution}</h5>
+                <p>{b.summary}</p>
+              </div>
             </div>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <section class="section" id="stack" aria-labelledby="stack-title">
-      <div class="container">
-        <div class="section-head">
-          <h2 id="stack-title" class="display" data-reveal>{t.stack.heading}</h2>
-          <p data-reveal>{t.stack.text}</p>
-        </div>
-        <ul class="stack-rows">
-          {
-            t.stack.groups.map((g) => (
-              <li data-reveal>
-                <h3>{g.name}</h3>
-                <ul class="stack-inline">
-                  {g.items.map(([name, where]) => (
-                    <li>
-                      {name}
-                      <span class="where">{where}</span>
-                    </li>
-                  ))}
+            <div class="case-visual">
+              <figure class="case-run" data-reveal>
+                <h5>{t.labels.run}</h5>
+                <pre class="code" tabindex="0"><code>{runCommands.bookExtractor.slice(1).join("\n")}</code></pre>
+              </figure>
+              <div class="case-cando" data-reveal>
+                <h5>{t.labels.canDo}</h5>
+                <ul class="check-list">
+                  {b.canDo.map((item) => <li>{item}</li>)}
                 </ul>
-              </li>
-            ))
-          }
-        </ul>
-        <p class="stack-legend small muted" data-reveal>{t.stack.legend}</p>
-      </div>
-    </section>
-
-    <section id="services" aria-labelledby="services-title">
-      <div class="container services">
-        <div class="services-cell" data-reveal>
-          <h2 id="services-title" class="display">
-            <span class="line">{servicesHead[0]}</span>
-            <span class="line line--right">{servicesHead[1]}</span>
-          </h2>
-          <div class="services-cell-foot">
-            <p>{t.services.text}</p>
-            <div><a class="button button--ink" href="#contact">{t.nav.cta} <span class="arrow" aria-hidden="true">→</span></a></div>
-          </div>
-        </div>
-        <ul class="service-rows">
-          {
-            t.services.items.map(([title, text, evidence]) => (
-              <li data-reveal>
-                <h3>{title}</h3>
-                <div>
-                  <p>{text}</p>
-                  <a class="evidence" href={serviceTargets[evidence!]}>
-                    {t.services.evidence} {evidence}
-                  </a>
+                <a class="button button--ghost" href={repos.bookExtractor} target="_blank" rel="noopener">
+                  {t.labels.repo}<span class="visually-hidden"> {t.a11y.newTab}</span>
+                </a>
+              </div>
+            </div>
+            <details class="case-details">
+              <summary>
+                <span class="case-details-title">{t.labels.details}</span>
+                <span class="case-details-hint">{t.labels.detailsHint}</span>
+                <svg class="case-details-chevron" aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M5 7.5 10 12.5 15 7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </summary>
+              <div class="case-details-body">
+                <div class="case-block">
+                  <h5>{t.labels.builtWith}</h5>
+                  <p>{b.stack}</p>
                 </div>
-              </li>
-            ))
-          }
-        </ul>
+                <div class="case-block">
+                  <h5>{t.labels.features}</h5>
+                  <ul class="case-limits">{b.features.map((f) => <li>{f}</li>)}</ul>
+                </div>
+                <RunSteps lang={lang} id="bookExtractor" />
+                <div class="case-block">
+                  <h5>{t.labels.tests}</h5>
+                  <pre class="code" tabindex="0"><code>{testCommands.bookExtractor}</code></pre>
+                </div>
+                <div class="case-block">
+                  <h5>{t.labels.limits}</h5>
+                  <p>{b.limits}</p>
+                </div>
+              </div>
+            </details>
+          </article>
+        </section>
       </div>
     </section>
 
-    <section class="section" id="about" aria-labelledby="about-title">
-      <div class="container">
-        <h2 id="about-title" class="visually-hidden">{t.about.heading}</h2>
-        <p class="about-text" data-reveal>
-          {
-            t.about.body.map(([text, mark], i) =>
-              mark ? <mark class:list={{ name: i === 1 }}>{text}</mark> : <Fragment>{text}</Fragment>,
-            )
-          }
-        </p>
-        <div class="about-cta" data-reveal>
-          <a class="button" href="#contact">{t.about.cta} <span class="arrow" aria-hidden="true">→</span></a>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="contact" aria-labelledby="contact-title">
-      <div class="container">
-        <div class="contact-intro">
-          <h2 id="contact-title" class="display" data-reveal>{t.contact.heading}</h2>
-          <div data-reveal>
-            <p class="contact-availability">{t.contact.availability}</p>
-            <p>{t.contact.text}</p>
-          </div>
-        </div>
-        <ul class="contact-rows">
-          <li data-reveal>
-            <a href={mailto}>
-              <span class="row-label">{t.contact.email}</span>
-              <span class="row-value is-email">{contact.email}</span>
-              <span class="row-arrow" aria-hidden="true">↗</span>
-            </a>
-          </li>
-          <li data-reveal>
-            <a href={contact.github} target="_blank" rel="noopener me">
-              <span class="row-label">{t.contact.github}</span>
-              <span class="row-value">Gokublackssj<span class="visually-hidden"> {t.a11y.newTab}</span></span>
-              <span class="row-arrow" aria-hidden="true">↗</span>
-            </a>
-          </li>
-          <li data-reveal>
-            <a href={contact.upwork} target="_blank" rel="noopener me">
-              <span class="row-label">{t.contact.upworkLabel}</span>
-              <span class="row-value">{t.contact.upworkValue}<span class="visually-hidden"> {t.a11y.newTab}</span></span>
-              <span class="row-arrow" aria-hidden="true">↗</span>
-            </a>
-          </li>
-          <li class="contact-cv" data-reveal>
-            <span class="row-label">{t.contact.cv}</span>
-            <span class="cv-links">
-              {
-                t.contact.cvFiles.map(([label, name, file]) => {
-                  const href = contact[file as "cvPdf" | "cvDocx" | "cvPdfEs"];
-                  return file === "cvDocx" ? (
-                    <a href={href} download aria-label={name}>
-                      {label} <span aria-hidden="true">↓</span>
-                    </a>
-                  ) : (
-                    <a href={href} target="_blank" rel="noopener" aria-label={`${name}, ${t.a11y.newTab}`}>
-                      {label} <span aria-hidden="true">↗</span>
-                    </a>
-                  );
-                })
-              }
-            </span>
-          </li>
-        </ul>
-        <div class="contact-notes small muted">
-          <p data-reveal>{t.contact.privacy}</p>
-          <p data-reveal>{t.contact.upworkNote}</p>
-        </div>
-      </div>
-    </section>
+    <Services lang={lang} />
+    <Process lang={lang} />
+    <About lang={lang} />
+    <Faq lang={lang} />
+    <Contact lang={lang} />
   </main>
 
-  <footer class="site-footer">
-    <div class="container">
-      <div class="footer-top">
-        <div class="footer-invite">
-          <p class="display">{t.footer.invite[0]}<br />{t.footer.invite[1]}</p>
-          <a class="button button--ink" href={mailto}>{t.footer.cta} <span class="arrow" aria-hidden="true">→</span></a>
-        </div>
-        <nav class="footer-links" aria-label={t.nav.contact}>
-          <a href={contact.github} target="_blank" rel="noopener">GitHub<span class="visually-hidden"> {t.a11y.newTab}</span></a>
-          <a href={footerCv} target="_blank" rel="noopener">{t.contact.cvPdf}<span class="visually-hidden"> {t.a11y.newTab}</span></a>
-          <a href="#top">{t.footer.top}</a>
-        </nav>
-      </div>
-      <div class="footer-prefs">
-        <!-- A group, not a second "Language" landmark: the header holds that one. -->
-        <div class="lang-switch footer-lang" role="group" aria-label={t.a11y.langLabel}>
-          {
-            (Object.keys(paths) as Lang[]).map((l) => (
-              <a href={paths[l]} hreflang={l} lang={l} aria-current={l === lang ? "true" : undefined}>
-                {l.toUpperCase()}<span class="visually-hidden"> ({langNames[l]})</span>
-              </a>
-            ))
-          }
-        </div>
-        <!-- Shown by src/scripts/motion-control.ts; without scripts there is nothing to switch. -->
-        <div
-          class="motion-control"
-          role="group"
-          aria-labelledby="motion-label"
-          aria-describedby="motion-note"
-          data-motion-control
-          data-note-system={t.footer.motion.system}
-          data-note-saved={t.footer.motion.saved}
-          hidden
-        >
-          <span id="motion-label" class="motion-label">{t.footer.motion.label}</span>
-          <span class="lang-switch motion-options">
-            <button type="button" data-motion-value="on" aria-pressed="false">{t.footer.motion.on}</button>
-            <button type="button" data-motion-value="off" aria-pressed="false">{t.footer.motion.off}</button>
-          </span>
-          <span id="motion-note" class="motion-note" data-motion-note aria-live="polite"></span>
-        </div>
-      </div>
-      <div class="footer-legal">
-        <p>&copy; 2026 Luis Alvaro Pimentel Tacuri</p>
-        <p>{t.footer.note}</p>
-      </div>
-    </div>
-    <p class="footer-name" aria-hidden="true">luisdataworks</p>
-  </footer>
+  <Footer lang={lang} />
 
   <Lightbox lang={lang} />
 </Base>

@@ -1,0 +1,136 @@
+---
+import { contact } from "../data/links";
+import { dicts, type Lang } from "../i18n";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = dicts[lang];
+const c = t.contact;
+const f = c.form;
+const mailto = `mailto:${contact.email}?subject=${encodeURIComponent(c.mailSubject)}`;
+---
+
+<section class="section" id="contact" aria-labelledby="contact-title">
+  <div class="container contact-grid">
+    <div class="contact-head">
+      <h2 id="contact-title" class="display" data-reveal>{c.heading}</h2>
+      <p data-reveal>{c.text}</p>
+      <p class="contact-availability" data-reveal>{c.availability}</p>
+    </div>
+
+    <!-- The form prepares an email; nothing is sent from the page. With scripts
+         (src/scripts/contact.ts) it writes the subject and body with the chosen
+         service, and can copy the message instead. Without them it is a plain
+         mailto form: the subject is the service and the body the message. -->
+    <form
+      class="composer"
+      action={`mailto:${contact.email}`}
+      method="get"
+      data-composer
+      data-email={contact.email}
+      data-subject={f.subject}
+      data-body-service={f.bodyService}
+      data-body-name={f.bodyName}
+      data-opened={f.opened}
+      data-copied={f.copied}
+      data-copy-failed={f.copyFailed}
+      data-reveal
+    >
+      <div class="field">
+        <label for="composer-service">{f.service}</label>
+        <select id="composer-service" name="subject">
+          {f.services.map(([id, label]) => <option value={label} data-plan={id}>{label}</option>)}
+        </select>
+      </div>
+      <div class="field">
+        <label for="composer-name">{f.name} <span class="field-optional">({f.optional})</span></label>
+        <input id="composer-name" type="text" autocomplete="name" />
+      </div>
+      <div class="field">
+        <label for="composer-message">{f.message}</label>
+        <p id="composer-message-hint" class="field-hint">{f.messageHint}</p>
+        <textarea id="composer-message" name="body" rows="6" required aria-describedby="composer-message-hint composer-message-error"></textarea>
+        <p id="composer-message-error" class="field-error" hidden>{f.messageError}</p>
+      </div>
+      <div class="composer-actions">
+        <button class="button" type="submit">{f.prepare}</button>
+        <button class="button button--ghost" type="button" data-copy hidden>{f.copy}</button>
+      </div>
+      <p class="composer-status" data-status role="status"></p>
+      <!-- Shown only when the browser does not let the page copy. -->
+      <div class="composer-preview" data-preview-wrap hidden>
+        <label for="composer-preview">{f.preview}</label>
+        <textarea id="composer-preview" rows="8" readonly data-preview></textarea>
+      </div>
+      <p class="composer-how">{f.how}</p>
+    </form>
+
+    <div class="contact-direct">
+      <!-- What happens after the email is prepared: the visitor sends it, and
+           the reply comes within the time Luis confirmed. -->
+      <div class="contact-next" data-reveal>
+        <h3 class="contact-direct-title">{c.next.heading}</h3>
+        <ol class="next-steps">
+          {c.next.steps.map((step) => <li>{step}</li>)}
+        </ol>
+        <p class="contact-meta">{c.language} {c.timezone}</p>
+      </div>
+
+      <h3 class="contact-direct-title" data-reveal>{c.directly}</h3>
+      <dl class="contact-list">
+        <div data-reveal>
+          <dt>{c.email}</dt>
+          <dd><a href={mailto}>{contact.email}</a></dd>
+        </div>
+        <div data-reveal>
+          <dt>{c.github}</dt>
+          <dd>
+            <a href={contact.github} target="_blank" rel="noopener me">
+              Gokublackssj<span class="visually-hidden"> {t.a11y.newTab}</span>
+            </a>
+          </dd>
+        </div>
+        <div data-reveal>
+          <dt>{c.upworkLabel}</dt>
+          <dd>
+            <a href={contact.upwork} target="_blank" rel="noopener me">
+              {c.upworkValue}<span class="visually-hidden"> {t.a11y.newTab}</span>
+            </a>
+          </dd>
+        </div>
+        <div data-reveal>
+          <dt>{c.cv}</dt>
+          <dd class="cv-links">
+            {
+              c.cvFiles.map(([label, name, file]) => {
+                const href = contact[file as "cvPdf" | "cvDocx" | "cvPdfEs"];
+                return file === "cvDocx" ? (
+                  <a href={href} download aria-label={name}>
+                    {label}
+                  </a>
+                ) : (
+                  <a href={href} target="_blank" rel="noopener" aria-label={`${name}, ${t.a11y.newTab}`}>
+                    {label}
+                  </a>
+                );
+              })
+            }
+          </dd>
+        </div>
+      </dl>
+      <div class="contact-notes">
+        <p data-reveal>{c.privacy}</p>
+        <p data-reveal>{c.upworkNote}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { initContact } from "../scripts/contact";
+
+  initContact();
+</script>

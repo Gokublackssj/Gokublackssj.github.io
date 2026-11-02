@@ -26,9 +26,9 @@ export type ProjectShots = { lead: Shot; desktop: Shot[]; mobile: Shot[] };
 // Ids match the caption keys in src/i18n. Order is the gallery order.
 export const shots: Record<"quoteflow" | "leadflow", ProjectShots> = {
   quoteflow: {
-    lead: { id: "correction", src: qfCorrection },
+    lead: { id: "review", src: qfReview },
     desktop: [
-      { id: "review", src: qfReview },
+      { id: "correction", src: qfCorrection },
       { id: "confirm", src: qfConfirm },
       { id: "rejected", src: qfRejected },
       { id: "imports", src: qfImports },

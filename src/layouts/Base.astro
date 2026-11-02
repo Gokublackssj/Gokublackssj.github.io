@@ -1,14 +1,17 @@
 ---
-import "@fontsource/big-shoulders/latin-800.css";
+import "@fontsource-variable/source-serif-4/wght.css";
+import "@fontsource-variable/source-serif-4/wght-italic.css";
 import "@fontsource-variable/public-sans/wght.css";
 import "../styles/global.css";
 
 import { getImage } from "astro:assets";
 import { dicts, paths, type Lang } from "../i18n";
 import ogSource from "../assets/shots/quoteflow/correction-highlighted.png";
-// The two latin fonts the first screen uses, preloaded so the hero text does
-// not reflow (and shift) when they arrive.
-import displayFont from "@fontsource/big-shoulders/files/big-shoulders-latin-800-normal.woff2?url";
+// The latin fonts the first screen uses (the headline is set in both the
+// upright and the italic serif), preloaded so the hero text does not reflow
+// (and shift) when they arrive.
+import displayFont from "@fontsource-variable/source-serif-4/files/source-serif-4-latin-wght-normal.woff2?url";
+import displayItalicFont from "@fontsource-variable/source-serif-4/files/source-serif-4-latin-wght-italic.woff2?url";
 import textFont from "@fontsource-variable/public-sans/files/public-sans-latin-wght-normal.woff2?url";
 
 interface Props {
@@ -47,11 +50,15 @@ const person = {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="color-scheme" content="dark" />
-    <meta name="theme-color" content="#0e1113" />
+    <meta name="color-scheme" content="light dark" />
+    <!-- Both values match --canvas in global.css; the inline script below keeps
+         the one in use when the visitor has chosen a theme. -->
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#16181b" media="(prefers-color-scheme: dark)" />
     {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonical} />
     <link rel="preload" href={displayFont} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={displayItalicFont} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={textFont} as="font" type="font/woff2" crossorigin />
     {
       !noindex &&
@@ -87,6 +94,30 @@ const person = {
           m = window.matchMedia("(prefers-reduced-motion: no-preference)").matches ? "on" : "off";
         }
         document.documentElement.setAttribute("data-motion", m);
+        // The hero's entrance plays on this first paint only (global.css reads
+        // .intro). Turning animations on later never replays it: the class is
+        // removed after the entrance and on any change of the setting.
+        if (m === "on") document.documentElement.classList.add("intro");
+      })();
+      // Theme before the first paint, the same way: the visitor's choice from
+      // the header switch (localStorage, key shared with src/scripts/theme.ts),
+      // or else their prefers-color-scheme. The CSS reads data-theme, so the
+      // page never flashes the other theme on load or between languages.
+      (function () {
+        var t;
+        try {
+          t = localStorage.getItem("luisdataworks:theme");
+        } catch (e) {}
+        var chosen = t === "light" || t === "dark";
+        if (!chosen) t = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        document.documentElement.setAttribute("data-theme", t);
+        // A chosen theme overrides the system one in the browser's own chrome too.
+        if (chosen) {
+          document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) {
+            m.setAttribute("content", t === "dark" ? "#16181b" : "#ffffff");
+            m.removeAttribute("media");
+          });
+        }
       })();
       // Hides content for the entrance animation. If the page script never runs,
       // the class is removed again so nothing stays hidden.

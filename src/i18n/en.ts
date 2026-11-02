@@ -24,6 +24,8 @@ export const en = {
     next: "Next screenshot",
     counter: (i: number, n: number) => `${i} of ${n}`,
     phoneStrip: "Phone screenshots, scroll sideways",
+    // Label of the header's theme switch; aria-pressed says whether it is on.
+    themeDark: "Dark theme",
   },
   nav: {
     projects: "Projects",
@@ -33,20 +35,80 @@ export const en = {
     contact: "Contact",
     cta: "Get in touch",
   },
+  // The offer first (what a client gets), then who I am. The second line is
+  // set in italic. primary is the contact action, secondary the projects.
   hero: {
-    lines: ["Python for", "messy data"],
+    lines: ["I turn manual tasks into", "web tools that save time"],
     lead:
-      "I'm Luis Pimentel, a junior Python developer in Potosí, Bolivia. I build web apps that import, check and review data before it is saved, plus web scrapers and small APIs.",
-    primary: "See the projects",
-    secondary: "Get in touch",
-    availability: "Open to freelance work, remote.",
+      "I build websites, APIs and Python automations that organize data, simplify processes and cut down repetitive work.",
+    primary: "Get in touch",
+    secondary: "See the projects",
+    availability: "I'm Luis Pimentel, a Python developer in Potosí, Bolivia, open to remote freelance work.",
+    // Proof under the actions: something a visitor can check, not a promise.
+    proof: "The code of my projects is public on GitHub, with automated tests you can run yourself.",
   },
   projectsIntro: {
     heading: "Selected projects",
     text:
-      "Three personal projects with public code. The features, decisions and test counts below come from each repository, not from memory. None of them is deployed: they run on your own machine.",
+      "Two kinds of work, each in its own place: websites, and Python tools that handle data. Everything here has public code, and every feature, decision and test count comes from its repository, not from memory.",
+    // The two categories, side by side at the top of the section. The counts
+    // are computed from src/data (projects.ts and demos.ts).
+    index: {
+      label: "Project categories",
+      web: (sites: number, demos: number, planned: number) =>
+        [
+          `${sites} ${sites === 1 ? "website" : "websites"}`,
+          demos > 0 ? `${demos} concept ${demos === 1 ? "demo" : "demos"}` : "",
+          planned > 0 ? `${planned} ${planned === 1 ? "demo" : "demos"} in progress` : "",
+        ]
+          .filter(Boolean)
+          .join(", "),
+      python: (projects: number) => `${projects} ${projects === 1 ? "project" : "projects"}`,
+    },
+  },
+  // The two categories of work, named the same in Projects and Services.
+  // Web development lists websites (src/data/projects.ts) and the concept
+  // demos (src/data/demos.ts); the Python category is the case studies.
+  families: {
+    websites: {
+      heading: "Web development",
+      text: "Sites for a person, a business or a product: the design, the content and the publishing. Here are my own site and a concept demo for each website package.",
+      index: "Websites for a person, a business or a product, and a concept demo for each package.",
+      purpose: "Purpose",
+      features: "What it has",
+      live: "View the site",
+      shotNote: "Screenshot of the site.",
+    },
+    software: {
+      heading: "Python, data & automation",
+      text: "Personal projects, not client work: tools that import, check and move data. Each one runs on your own machine, and its code is public on GitHub.",
+      index: "Tools that import, check and move data: web apps, APIs, scraping and Excel or CSV exports.",
+    },
+  },
+  websites: {
+    portfolio: {
+      name: "luisdataworks (this site)",
+      purpose: "My bilingual portfolio: it presents my projects and services and makes it easy to get in touch.",
+      features: [
+        "English and Spanish versions, each with its own address",
+        "Light and dark themes that remember the visitor's choice",
+        "Animations that follow the reduced-motion setting",
+        "No trackers, cookies or analytics",
+        "Built with Astro and TypeScript, published by GitHub Actions on GitHub Pages",
+      ],
+      alt: "The first screen of this site: the headline, a short description and two buttons",
+      altDark: "The first screen of this site in the dark theme",
+    },
   },
   labels: {
+    problem: "The problem",
+    solution: "What I built",
+    canDo: "What you can do with it",
+    details: "Technical details",
+    detailsHint: "Features, decisions, tests and limitations",
+    run: "How it runs",
+    howToRun: "How to run it",
+    requirements: "Requirements",
     whatItDoes: "What it does",
     features: "Features",
     decisions: "Technical decisions",
@@ -58,14 +120,28 @@ export const en = {
     repo: "Code on GitHub",
     demo: "Live demo",
     status: "Status",
+    usefulIf: "Useful if",
     license: "License",
   },
   quoteflow: {
     name: "QuoteFlow",
     kind: "Import quotes from CSV, Excel and PDF, with human review",
-    status: "Runs locally. Not deployed. Interface in Spanish.",
+    status: "Personal project with public code. It runs on your own machine; there is no public demo. Its interface is in Spanish.",
+    // The business problem it answers, in one line, after "Useful if".
+    usefulIf: "your business receives quotes, price lists or orders as CSV, Excel or PDF files, and someone types them into a system by hand.",
     summary:
       "QuoteFlow imports quotes from CSV, XLSX and PDF files. Each file is parsed in an isolated process, validated and checked for duplicates, then held for review. Nothing is saved as a record until a person confirms it.",
+    // Problem and what a user can do: plain-language readings of the summary
+    // and features above, for visitors who are not developers.
+    problem:
+      "Quotes arrive as CSV, Excel and PDF files. Typing them into a system by hand is slow, and a wrong value or a repeated row is easy to miss and hard to undo once it is saved.",
+    canDo: [
+      "Upload a CSV, Excel or PDF file and see every row checked before anything is saved",
+      "Filter the rows by status and decision, then accept, exclude or correct them, one by one or in bulk",
+      "See each corrected value highlighted, with the original value struck through",
+      "Confirm the import after a summary of how many rows will be saved and how many excluded",
+      "Browse the records each confirmed import saved",
+    ],
     features: [
       ["Import pipeline", "Upload, isolated parsing with size, row and time limits, validation, and duplicate detection against the user's own records."],
       ["Human review", "Filter rows by status and decision, accept or exclude them one by one or in bulk, and correct cells. A corrected cell stays highlighted, with the original value struck through."],
@@ -87,7 +163,18 @@ export const en = {
       ["46", "frontend tests", "node:test, against the production build with a fake API"],
     ],
     testsNote: "Also checked with Ruff (lint and format), ESLint and the TypeScript compiler.",
-    commands: "# backend\npython -m pytest\nruff check .\n\n# frontend\nnpm run build\nnpm test",
+    // How to run it: one label per command block in src/data/commands.ts.
+    requirements: "Docker with Compose, Python 3.12 or later (developed and tested on CPython 3.14), Node.js 24 and npm.",
+    runNote: "A fresh install on Windows PowerShell, as the project's README gives it. The README also covers an existing database, macOS and Linux.",
+    runSteps: [
+      "Settings: copy the example, then replace every “change-me” value",
+      "Check that no database exists yet: this command must fail with “no such volume”",
+      "Start PostgreSQL, with the main and the test database",
+      "Backend: virtual environment and the exact versions the tests passed with",
+      "Databases: the test one, then the main one (“alembic current” must print no revision)",
+      "Development admin user, then the API on port 8000",
+      "Frontend, in a second terminal; then open http://localhost:3000",
+    ],
     limits: [
       "The interface is in Spanish only, and times are always shown in the America/La_Paz time zone.",
       "Saved records can be browsed per import; there is no search across imports yet.",
@@ -113,9 +200,19 @@ export const en = {
   leadflow: {
     name: "LeadFlow",
     kind: "Lead capture form and a small CRM",
-    status: "Runs locally. Not deployed. No user authentication.",
+    status: "Personal project with public code. It runs on your own machine and has no user accounts, so it is meant for local use.",
+    usefulIf: "enquiries reach you through a form on your website and you need to follow up each one, without duplicates and without losing track.",
     summary:
       "LeadFlow captures leads from a web form, stores them in PostgreSQL without duplicates, and tracks each lead's status, follow-up notes and history in a simple CRM panel.",
+    problem:
+      "Enquiries from a website form tend to end up in an inbox or a spreadsheet. The same person can be saved twice, and it becomes hard to see who was contacted, what was said and what comes next.",
+    canDo: [
+      "Send a lead through a form that points out each error next to its field",
+      "Send the same lead twice and get the existing record back instead of a duplicate",
+      "Search the leads by name or email and filter them by status",
+      "Change a lead's status with an optional reason",
+      "Add follow-up notes and read each lead's history",
+    ],
     features: [
       ["Validated form", "Checks run in the browser and on the server; server errors appear next to the field they belong to."],
       ["Idempotent submissions", "Each submission carries an event_id, so a retried submission never creates a second row."],
@@ -133,7 +230,14 @@ export const en = {
       ["17", "end-to-end tests", "Playwright in Chromium, with the API simulated in the browser"],
     ],
     testsNote: "Code checked with Ruff.",
-    commands: "# backend\npytest\nruff check .\n\n# frontend\nnpx playwright test",
+    requirements: "Node.js 20 or later (tested with 24), Python 3.11 or later (tested with 3.14) and PostgreSQL 18, with Docker Desktop or a local install.",
+    runNote: "Windows PowerShell, as the project's README gives it.",
+    runSteps: [
+      "Settings: both files are ignored by Git; the example values work as they are with Docker",
+      "Database: wait until it shows “healthy”",
+      "Backend, terminal 1; the API documentation is at http://localhost:8000/docs",
+      "Frontend, terminal 2: the form at http://localhost:3000 and the CRM at /crm",
+    ],
     limits: [
       "No authentication: anyone with access can read and change every lead, so it is meant for local use only.",
       "No migrations: tables are created if missing, but changes to existing tables are not applied.",
@@ -163,8 +267,18 @@ export const en = {
   bookExtractor: {
     name: "Book Data Extractor Pro",
     kind: "Python web scraper with Excel and CSV export",
+    status: "Personal project with public code. It runs on your own machine; its tests run on GitHub Actions.",
+    usefulIf: "you need the data from a public online catalogue in a spreadsheet, without copying it page by page.",
     summary:
       "Extracts title, price, currency, availability and URL from a paginated book catalog with Playwright, cleans the data, removes duplicates and exports Excel and CSV files. Built for scraping-practice sites such as books.toscrape.com.",
+    problem:
+      "Copying product data from an online catalog, page after page, into a spreadsheet is slow, and it leaves inconsistent prices, missing fields and repeated rows.",
+    canDo: [
+      "Run one command and get the title, price, currency, availability and link of each product",
+      "Open the result as a formatted Excel file or an Excel-compatible CSV",
+      "See missing fields flagged instead of silently dropped",
+      "Point it at another catalog by writing a small site profile, without changing the code",
+    ],
     features: [
       "Selectors live in JSON site profiles, separate from the scraping engine",
       "Prices parsed with Decimal; missing fields flagged instead of dropped",
@@ -173,12 +287,18 @@ export const en = {
       "Offline pytest unit tests run on GitHub Actions",
     ],
     limits: "Works on catalogs whose products are in the page HTML and paginate with links. No logins, captchas or infinite scroll.",
-    commands: "python main.py --limit 50\npython main.py --profile my_site.json --limit 20",
+    requirements: "Python 3.11, 3.12 or 3.13, and an internet connection.",
+    runNote: "Windows PowerShell, as the project's README gives it; the README also covers macOS and Linux.",
+    runSteps: [
+      "Virtual environment, dependencies and the Chromium browser for Playwright",
+      "Collect the first 50 books",
+      "Another catalog, with your own site profile",
+    ],
     stack: "Python, Playwright, openpyxl, pytest, GitHub Actions",
   },
   stack: {
-    heading: "Stack",
-    text: "Only what these projects actually use. Next to each tool, the projects where you can see it.",
+    heading: "Tools I use",
+    text: "Only what these projects actually use, and where you can see each tool.",
     groups: [
       { name: "Languages", items: [["Python", "QF · LF · BDE"], ["TypeScript", "QF · LF"], ["JavaScript", "QF"]] },
       { name: "Frameworks and libraries", items: [["FastAPI", "QF · LF"], ["Pydantic 2", "QF · LF"], ["SQLAlchemy 2", "QF · LF"], ["Alembic", "QF"], ["Next.js 16 and React 19", "QF · LF"], ["Playwright (scraping)", "BDE"], ["openpyxl", "QF · BDE"], ["pypdf", "QF"]] },
@@ -187,38 +307,146 @@ export const en = {
     ],
     legend: "QF QuoteFlow · LF LeadFlow · BDE Book Data Extractor Pro",
   },
-  services: {
-    heading: "Freelance services",
-    text: "Freelance work in the same areas as the projects above. Each service points to the code where you can check the approach.",
-    items: [
-      ["Data import and review tools", "Upload CSV, Excel or PDF files, validate every row, flag duplicates and let a person approve the result before it is saved.", "QuoteFlow"],
-      ["Web scraping to Excel or CSV", "Collect specific fields from pages you are allowed to scrape and deliver clean, deduplicated spreadsheets.", "Book Data Extractor Pro"],
-      ["APIs and small web apps", "FastAPI and PostgreSQL backends with input validation and duplicate protection, connected to a Next.js interface.", "LeadFlow"],
-      ["Data cleaning and spreadsheet automation", "Turn repeated manual steps into a script: exact number parsing, normalized values and formatted Excel output.", "Book Data Extractor Pro"],
-    ],
-    evidence: "See it in",
+  // Concept demos, one per package, each its own site (src/data/demos.ts),
+  // shown in Web development. Only published demos get a preview; the others
+  // are listed as in progress.
+  demos: {
+    heading: "What each package looks like",
+    text: "One concept demo per package, each a separate site for a fictional business. A demo appears here once it is built and published.",
+    concept: "Concept demo: a fictional business",
+    inProgress: "In progress",
+    comingText: "Not published yet. Its preview and link will appear here when it is.",
+    goal: "Goal",
+    features: "What it shows",
+    open: "Open the demo",
+    view: "Preview size",
+    desktop: "Desktop",
+    mobile: "Mobile",
+    play: "Play the preview",
+    pause: "Pause the preview",
+    // The fictional business each package's demo is designed for.
+    business: {
+      essential: "Café",
+      professional: "Boutique hotel",
+      signature: "Contemporary silversmith's workshop, inspired by Potosí",
+    },
   },
+  // Services: the offer only. The website packages first, then the Python,
+  // data and automation work; each block links to its category in Projects.
+  services: {
+    heading: "Services",
+    text: "Two kinds of work: websites in three packages, and Python tools that handle data. Prices depend on the scope, so each project starts with a short conversation.",
+    packages: {
+      heading: "Web development",
+      // Leads to the Web development category in Projects.
+      see: "See my site and the concept demos in Web development",
+      text: "Three packages that differ in scope, design and interaction, not only in size. None of them needs a backend.",
+      caption: "What each website package includes",
+      rows: {
+        best: "Best for",
+        size: "Pages and sections",
+        design: "Design",
+        interactions: "Interactions",
+        motion: "Animation",
+        contact: "Contact",
+        price: "Price",
+      },
+      items: {
+        essential: {
+          name: "Essential",
+          best: "A café, a shop or a professional who needs a clear presence and an easy way to be contacted",
+          size: "One page with up to six sections",
+          design: "A clean layout adapted to your brand colours, fonts and photos",
+          interactions: "Links to call, write or find you on a map",
+          motion: "Subtle entrances as the page scrolls",
+          contact: "A link to your email or WhatsApp",
+        },
+        professional: {
+          name: "Professional",
+          best: "A hotel, a clinic or a business with several services that need their own space",
+          size: "Up to five pages, or one long page with up to ten sections",
+          design: "A custom design for your brand, with its own components",
+          interactions: "An image gallery with a full-screen viewer, and pages for each service",
+          motion: "Coordinated scroll and section animations",
+          contact: "A contact form; an external form service, if you want one, is a separate cost",
+        },
+        signature: {
+          name: "Signature",
+          best: "A brand that wants its website to be part of how people remember it",
+          size: "One main experience page, plus up to four supporting pages",
+          design: "Original art direction: a visual concept created for your brand",
+          interactions: "Interactions designed for your content, such as a story told as the page scrolls",
+          motion: "Elaborate scroll-driven animation and custom micro-interactions, with a reduced-motion version",
+          contact: "As in Professional",
+        },
+      },
+      price: "Based on project scope",
+      included: "Every package includes a responsive design, basic SEO, accessibility and a site ready to publish as static files.",
+      excluded: "Not included unless agreed separately: a backend, an online shop, a content management system or user accounts.",
+      cta: "I want a site like this",
+    },
+    data: {
+      heading: "Python, data & automation",
+      text: "Freelance work in the same areas as my Python projects: tools for your data and your process.",
+      see: "See the projects in Python, data & automation",
+      items: [
+        ["Data import and review tools", "Upload CSV, Excel or PDF files, validate every row, flag duplicates and let a person approve the result before it is saved."],
+        ["Web scraping to Excel or CSV", "Collect specific fields from pages you are allowed to scrape and deliver clean, deduplicated spreadsheets."],
+        ["APIs and small web apps", "FastAPI and PostgreSQL backends with input validation and duplicate protection, connected to a Next.js interface."],
+        ["Data cleaning and spreadsheet automation", "Turn repeated manual steps into a script: exact number parsing, normalized values and formatted Excel output."],
+      ],
+    },
+  },
+  // How a project goes, from the first message to the delivery.
+  process: {
+    heading: "How we work",
+    text: "Four steps, from your first message to the delivery.",
+    steps: [
+      ["A first conversation", "You tell me what takes your team time, or what your website needs to do. I ask what I need to understand the problem before suggesting anything."],
+      ["A written proposal", "Before I start, you receive in writing what I will deliver, what is included and what is not."],
+      ["Work you can review", "While I work, I share progress you can open and check, so you can see that it is going in the right direction."],
+      ["Delivery", "You receive the code and the documentation agreed in the proposal."],
+    ],
+  },
+  // Questions a client asks before writing. Entries marked pending wait for a
+  // decision (maintenance, ownership, payments, revisions) and are not shown.
+  faq: {
+    heading: "Frequently asked questions",
+    items: [
+      {
+        q: "Who registers the domain, and where is the site published?",
+        a: "We agree on both in the written proposal, before I start. The websites I build are static files, so they can be published on many hosts, including free static hosting such as GitHub Pages.",
+        pending: false,
+      },
+      {
+        q: "What do I need to provide?",
+        a: "For a website: your texts, your logo, the photos you want to use and your business details, such as what you offer, your hours, where you are and how to contact you. For a data tool: example files with the real data removed or replaced, and a short description of what you do with them today. Please don't send passwords or sensitive personal data.",
+        pending: false,
+      },
+      {
+        q: "How quickly do you reply, and in which language?",
+        a: "I reply within 24 hours. I work in Spanish; in English, our communication will be mainly written.",
+        pending: false,
+      },
+      { q: "Is maintenance included?", a: "", pending: true },
+      { q: "Who owns the code?", a: "", pending: true },
+      { q: "How are payments made?", a: "", pending: true },
+      { q: "How many rounds of changes are included?", a: "", pending: true },
+    ],
+  },
+  // About, written for a client: the problem first, then who I am.
   about: {
     heading: "About",
-    // Segments: [text, highlighted?]
     body: [
-      ["I'm ", false],
-      ["Luis Alvaro Pimentel Tacuri", true],
-      [", a junior Python developer based in ", false],
-      ["Potosí, Bolivia", true],
-      [", and a first-year Computer Engineering student at the ", false],
-      ["Universidad Autónoma Tomás Frías", true],
-      [". I work mostly with ", false],
-      ["Python, FastAPI and PostgreSQL", true],
-      [", and I use Next.js when a project needs an interface. What I care about is predictable data: input is validated, duplicates are handled on purpose, nothing is saved or deleted silently, and ", false],
-      ["every claim on this page can be checked in the code", true],
-      [". I speak Spanish natively and basic English.", false],
-    ] as [string, boolean][],
+      "If someone in your business copies data from Excel or PDF files into another system, checks it by hand and mistakes still get through, I can automate that work. I build tools that check the information, keep the process in order and let you review the data before it is saved.",
+      "I also build professional websites, so your customers understand what you offer and how to reach you.",
+      "I'm Luis Pimentel, a junior Python developer working remotely from Potosí, Bolivia, with Python, FastAPI and PostgreSQL, and with frontend tools such as Next.js when a project needs an interface. I work in Spanish; in English, our communication will be mainly written.",
+    ],
     cta: "Tell me about your project",
   },
   contact: {
     heading: "Contact",
-    text: "Tell me where the data comes from, its format and the result you need.",
+    text: "Tell me what you need. The form prepares an email for you; nothing is sent from this page.",
     availability: "Available for freelance projects, remote.",
     email: "Email",
     github: "GitHub",
@@ -235,18 +463,64 @@ export const en = {
     mailSubject: "Project enquiry from your portfolio",
     privacy: "Please don't include passwords, credentials or sensitive personal data in your first message.",
     upworkNote: "Found me on Upwork? Please keep all communication in Upwork Messages until a contract is in place, as Upwork's terms require.",
+    // The form that prepares the email. Its options' ids are the `?plan=`
+    // values the package buttons and the demos link to.
+    form: {
+      service: "What do you need?",
+      // The first option is the one selected when no package was chosen.
+      services: [
+        ["other", "I'm not sure yet"],
+        ["essential", "Website: Essential"],
+        ["professional", "Website: Professional"],
+        ["signature", "Website: Signature"],
+        ["import-tool", "Data import and review tool"],
+        ["scraping", "Web scraping to Excel or CSV"],
+        ["api", "API or small web app"],
+        ["automation", "Data cleaning and spreadsheet automation"],
+      ],
+      name: "Your name",
+      optional: "optional",
+      message: "Your message",
+      messageHint: "A few lines about your business or your data are enough.",
+      messageError: "Write a few lines so I know what you need.",
+      prepare: "Prepare the email",
+      copy: "Copy the message",
+      copied: "Message copied. Paste it into an email to the address below.",
+      copyFailed: "This browser did not let the page copy. Select the message below and copy it.",
+      opened: "Your email app should open with the message ready. It is not sent until you send it from there. If the app does not open, copy the message instead.",
+      how: "Nothing is sent from this page: your email app opens with the message ready, or you can copy it.",
+      subject: "Project enquiry",
+      bodyService: "Service",
+      bodyName: "Name",
+      preview: "The message",
+    },
+    directly: "Or write directly",
+    // What happens after the email is prepared, and what to expect.
+    next: {
+      heading: "What happens next",
+      steps: [
+        "Your email app opens with the message ready, or you copy it.",
+        "You send it from your own email; nothing is sent from this page.",
+        "I reply within 24 hours to ask what I need and plan a first conversation.",
+      ],
+    },
+    language: "I work in Spanish; in English, our communication will be mainly written.",
+    timezone: "I'm in Potosí, Bolivia (UTC−4).",
   },
   footer: {
-    invite: ["Have messy data?", "Let's talk."],
-    cta: "Write to me",
+    line: "Websites and Python tools, from Potosí, Bolivia.",
     note: "Built with Astro. No trackers, cookies or analytics.",
     top: "Back to top",
+    // The animations setting: follow the device, or the visitor's own choice.
     motion: {
       label: "Animations",
+      system: "Device",
       on: "On",
       off: "Reduced",
-      system: "Following your device setting.",
-      saved: "Saved in this browser.",
+      stateOn: "Animations on",
+      stateOff: "Animations reduced",
+      fromSystem: "following your device setting",
+      fromChoice: "your choice, saved in this browser",
     },
   },
 };

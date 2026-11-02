@@ -1,0 +1,75 @@
+---
+import { contact } from "../data/links";
+import { dicts, langNames, paths, type Lang } from "../i18n";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = dicts[lang];
+const f = t.footer;
+const m = f.motion;
+// The footer links the CV in the page's own language.
+const cv = lang === "es" ? contact.cvPdfEs : contact.cvPdf;
+---
+
+<!-- A quiet close: what this is, a few links, the settings, the name. -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-top">
+      <p class="footer-line">
+        <a class="wordmark" href={paths[lang]}>luisdataworks</a>
+        <span>{f.line}</span>
+      </p>
+      <nav class="footer-links" aria-label={t.nav.contact}>
+        <a href={contact.github} target="_blank" rel="noopener">GitHub<span class="visually-hidden"> {t.a11y.newTab}</span></a>
+        <a href={cv} target="_blank" rel="noopener">{t.contact.cvPdf}<span class="visually-hidden"> {t.a11y.newTab}</span></a>
+        <a href="#top">{f.top}</a>
+      </nav>
+    </div>
+
+    <div class="footer-prefs">
+      <!-- A group, not a second "Language" landmark: the header holds that one. -->
+      <div class="lang-switch footer-lang" role="group" aria-label={t.a11y.langLabel}>
+        {
+          (Object.keys(paths) as Lang[]).map((l) => (
+            <a href={paths[l]} hreflang={l} lang={l} aria-current={l === lang ? "true" : undefined}>
+              {l.toUpperCase()}<span class="visually-hidden"> ({langNames[l]})</span>
+            </a>
+          ))
+        }
+      </div>
+
+      <!-- The animations setting: follow the device, or force on or reduced.
+           The sentence under it says which applies and why. Shown by
+           src/scripts/motion-control.ts; without scripts nothing moves. -->
+      <div
+        class="motion-control"
+        role="group"
+        aria-labelledby="motion-label"
+        aria-describedby="motion-state"
+        data-motion-control
+        data-state-on={m.stateOn}
+        data-state-off={m.stateOff}
+        data-from-system={m.fromSystem}
+        data-from-choice={m.fromChoice}
+        hidden
+      >
+        <span id="motion-label" class="motion-label">{m.label}</span>
+        <span class="segmented">
+          <button type="button" data-motion-value="system" aria-pressed="false">{m.system}</button>
+          <button type="button" data-motion-value="on" aria-pressed="false">{m.on}</button>
+          <button type="button" data-motion-value="off" aria-pressed="false">{m.off}</button>
+        </span>
+        <p id="motion-state" class="motion-state" data-motion-state aria-live="polite"></p>
+      </div>
+    </div>
+
+    <div class="footer-legal">
+      <p>&copy; 2026 Luis Alvaro Pimentel Tacuri</p>
+      <p>{f.note}</p>
+    </div>
+  </div>
+  <p class="footer-name" aria-hidden="true">luisdataworks</p>
+</footer>

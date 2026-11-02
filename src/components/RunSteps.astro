@@ -1,0 +1,32 @@
+---
+import { runCommands, type ProjectId } from "../data/commands";
+import { dicts, type Lang } from "../i18n";
+
+interface Props {
+  lang: Lang;
+  id: ProjectId;
+}
+
+// How to run a project, inside its technical details: what it needs, then each
+// step's explanation over its commands, numbered because the order matters.
+const { lang, id } = Astro.props;
+const t = dicts[lang];
+const p = t[id];
+const commands = runCommands[id];
+---
+
+<div class="case-block run-steps">
+  <h5>{t.labels.howToRun}</h5>
+  <p><strong>{t.labels.requirements}:</strong> {p.requirements}</p>
+  <p class="run-note">{p.runNote}</p>
+  <ol class="run-list">
+    {
+      commands.map((code, i) => (
+        <li>
+          <p>{p.runSteps[i]}</p>
+          <pre class="code" tabindex="0"><code>{code}</code></pre>
+        </li>
+      ))
+    }
+  </ol>
+</div>

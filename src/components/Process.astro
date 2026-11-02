@@ -1,0 +1,30 @@
+---
+import { dicts, type Lang } from "../i18n";
+
+interface Props {
+  lang: Lang;
+}
+
+const t = dicts[Astro.props.lang];
+const p = t.process;
+---
+
+<!-- How a project goes. A real ordered list: the order is the point. -->
+<section class="section" id="process" aria-labelledby="process-title">
+  <div class="container">
+    <div class="section-head">
+      <h2 id="process-title" class="display" data-reveal>{p.heading}</h2>
+      <p data-reveal>{p.text}</p>
+    </div>
+    <ol class="process-steps">
+      {
+        p.steps.map(([title, text]) => (
+          <li data-reveal>
+            <h3>{title}</h3>
+            <p>{text}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
