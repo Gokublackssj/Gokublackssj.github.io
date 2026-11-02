@@ -314,8 +314,9 @@ export const en = {
     heading: "What each package looks like",
     text: "One concept demo per package, each a separate site for a fictional business. A demo appears here once it is built and published.",
     concept: "Concept demo: a fictional business",
-    inProgress: "In progress",
-    comingText: "Not published yet. Its preview and link will appear here when it is.",
+    // Only demos that have not been built yet stay here (today, Signature).
+    inProgress: "Future project",
+    comingText: "Not built yet: there is no demo to open. Its preview and link will appear here once it is published.",
     goal: "Goal",
     features: "What it shows",
     open: "Open the demo",

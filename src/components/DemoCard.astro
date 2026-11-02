@@ -12,19 +12,23 @@ interface Props {
 // a short muted preview of the real site (desktop or mobile), the goal and
 // features, and the two actions.
 //
-// The preview is a video with a real screenshot as its poster. Scripts
+// The preview is a real screenshot of the published site, desktop or mobile.
+// With a recording, the screenshot is its poster: scripts
 // (src/scripts/demo-preview.ts) play it only while it is on screen and motion
-// is on, pause it when it leaves, and switch between the desktop and mobile
-// recordings; nothing depends on hover. Without scripts, the screenshot shows
-// and the browser's own controls play the video on request.
+// is on and pause it when it leaves. Either way the Desktop / Mobile buttons
+// switch views; nothing depends on hover. Without scripts, the desktop view
+// shows (and a recording keeps the browser's own controls).
 const { lang, demo } = Astro.props;
 const t = dicts[lang];
 const d = t.demos;
 const pkg = t.services.packages.items[demo.package].name;
 const copy = demo.copy[lang];
 const views = ["desktop", "mobile"] as const;
+const recorded = views.every((v) => demo.media[v].webm && demo.media[v].mp4);
 const posters = Object.fromEntries(
-  await Promise.all(views.map(async (v) => [v, (await getImage({ src: demo.media[v].poster, width: 1280, format: "webp", quality: 80 })).src])),
+  await Promise.all(
+    views.map(async (v) => [v, (await getImage({ src: demo.media[v].poster, width: Math.min(1280, demo.media[v].poster.width), format: "webp", quality: 80 })).src]),
+  ),
 ) as Record<(typeof views)[number], string>;
 ---
 
@@ -32,23 +36,37 @@ const posters = Object.fromEntries(
   <figure class="demo-preview" data-demo-preview data-view="desktop">
     <div class="demo-frame">
       {
-        views.map((v) => (
-          <video
-            class={`demo-video demo-video--${v}`}
-            data-view={v}
-            muted
-            loop
-            playsinline
-            controls
-            preload="none"
-            poster={posters[v]}
-            aria-label={copy.alt}
-            hidden={v === "mobile"}
-          >
-            <source src={demo.media[v].webm} type="video/webm" />
-            <source src={demo.media[v].mp4} type="video/mp4" />
-          </video>
-        ))
+        views.map((v) =>
+          recorded ? (
+            <video
+              class={`demo-video demo-video--${v}`}
+              data-view={v}
+              muted
+              loop
+              playsinline
+              controls
+              preload="none"
+              poster={posters[v]}
+              aria-label={copy.alt}
+              hidden={v === "mobile"}
+            >
+              <source src={demo.media[v].webm} type="video/webm" />
+              <source src={demo.media[v].mp4} type="video/mp4" />
+            </video>
+          ) : (
+            <img
+              class={`demo-video demo-video--${v}`}
+              data-view={v}
+              src={posters[v]}
+              alt={copy.alt}
+              width={demo.media[v].poster.width}
+              height={demo.media[v].poster.height}
+              loading="lazy"
+              decoding="async"
+              hidden={v === "mobile"}
+            />
+          ),
+        )
       }
       <!-- The static screenshot, for print and as a last resort. -->
       <Picture class="demo-still" src={demo.media.desktop.poster} formats={["avif", "webp"]} widths={[640, 960, 1280]} sizes="(max-width: 1023px) 100vw, 640px" alt="" loading="lazy" decoding="async" />
@@ -63,9 +81,13 @@ const posters = Object.fromEntries(
           ))
         }
       </span>
-      <button class="button button--ghost demo-toggle" type="button" data-demo-play data-label-play={d.play} data-label-pause={d.pause}>
-        {d.play}
-      </button>
+      {
+        recorded && (
+          <button class="button button--ghost demo-toggle" type="button" data-demo-play data-label-play={d.play} data-label-pause={d.pause}>
+            {d.play}
+          </button>
+        )
+      }
     </div>
   </figure>
 
