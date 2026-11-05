@@ -1,6 +1,7 @@
 ---
 import { packageIds, type PackageId } from "../data/demos";
 import { dicts, paths, type Lang } from "../i18n";
+import { cvByLanguage } from "../data/links";
 
 interface Props {
   lang: Lang;
@@ -9,6 +10,7 @@ interface Props {
 const { lang } = Astro.props;
 const t = dicts[lang];
 const s = t.services;
+const cv = cvByLanguage[lang];
 const pk = s.packages;
 // The rows the packages are compared on, in reading order; price comes last.
 const rows = ["best", "size", "design", "interactions", "motion", "contact"] as const;
@@ -20,7 +22,10 @@ const planHref = (id: PackageId) => `${paths[lang]}?plan=${id}#contact`;
   <div class="container">
     <div class="section-head">
       <h2 id="services-title" class="display" data-reveal>{s.heading}</h2>
-      <p data-reveal>{s.text}</p>
+      <p data-reveal>
+        {s.text}<br />
+        <a class="text-link category-link" href={cv.freelance} download data-cv="freelance">{t.contact.cvFreelanceDownload}</a>
+      </p>
     </div>
 
     <!-- Block A: the three website packages, compared on the same rows. -->
@@ -115,10 +120,13 @@ const planHref = (id: PackageId) => `${paths[lang]}?plan=${id}#contact`;
       </div>
       <ul class="data-list">
         {
-          s.data.items.map(([title, text]) => (
-            <li data-reveal>
-              <h4>{title}</h4>
-              <p>{text}</p>
+          s.data.items.map((item) => (
+            <li id={`service-${item.id}`} data-reveal>
+              <h4>{item.title}</h4>
+              <p>{item.problem}</p>
+              <p class="service-delivery"><strong>{s.data.delivery}</strong> {item.delivery}</p>
+              <a class="text-link service-evidence" href={item.evidence}>{item.proof}</a>
+              <a class="text-link service-contact" href={`${paths[lang]}?plan=${item.id}#contact`} data-plan={item.id}>{s.data.cta}<span class="visually-hidden">: {item.title}</span></a>
             </li>
           ))
         }

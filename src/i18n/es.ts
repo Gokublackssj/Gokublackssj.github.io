@@ -6,9 +6,9 @@ export const es: Dict = {
   lang: "es",
   locale: "es_BO",
   meta: {
-    title: "Luis Pimentel · Desarrollador Python para aplicaciones con datos",
+    title: "Luis Pimentel · Webs, Python y automatización",
     description:
-      "Desarrollador Python junior en Potosí, Bolivia. Aplicaciones web que importan, validan y revisan datos, scrapers web y APIs pequeñas con FastAPI y PostgreSQL. Disponible para trabajos freelance.",
+      "Sitios web, herramientas de datos y APIs en Python por Luis Pimentel, en Bolivia. Proyectos personales y demos conceptuales. Disponible para proyectos freelance y puestos junior.",
     ogAlt: "Pantalla de revisión de QuoteFlow con una celda corregida resaltada",
   },
   a11y: {
@@ -36,25 +36,26 @@ export const es: Dict = {
     cta: "Escríbeme",
   },
   hero: {
-    lines: ["Convierto tareas manuales en", "herramientas web que ahorran tiempo"],
+    lines: ["Web y automatización", "para tu negocio"],
     lead:
-      "Desarrollo páginas web, APIs y automatizaciones en Python para organizar datos, simplificar procesos y reducir trabajo repetitivo.",
-    primary: "Escríbeme",
-    secondary: "Ver los proyectos",
-    availability: "Soy Luis Pimentel, desarrollador Python en Potosí, Bolivia, disponible para trabajos freelance en remoto.",
-    proof: "El código de mis proyectos es público en GitHub, con pruebas automáticas que puedes ejecutar tú mismo.",
+      "Soy Luis Pimentel. Desarrollo sitios web, herramientas en Python y APIs para organizar datos y reducir tareas repetitivas.",
+    primary: "Hablemos de tu proyecto",
+    secondary: "Explorar proyectos",
+    availability: "Disponible para proyectos freelance y puestos junior · Bolivia (UTC−4)",
+    proof: "Proyectos personales y demos conceptuales con código público.",
+    resources: "Servicios y enlaces profesionales",
   },
   projectsIntro: {
     heading: "Proyectos destacados",
     text:
-      "Dos tipos de trabajo, cada uno en su sitio: sitios web y herramientas en Python que manejan datos. Todo tiene código público, y cada función, decisión y cifra de pruebas sale de su repositorio, no de memoria.",
+      "Conoce el problema, lo que construí y cómo probarlo. Las herramientas Python son proyectos personales; las webs de la cafetería y el hotel son conceptos para negocios ficticios.",
     index: {
       label: "Categorías de proyectos",
       web: (sites: number, demos: number, planned: number) =>
         [
           `${sites} ${sites === 1 ? "sitio web" : "sitios web"}`,
           demos > 0 ? `${demos} ${demos === 1 ? "demo conceptual" : "demos conceptuales"}` : "",
-          planned > 0 ? `${planned} ${planned === 1 ? "demo en preparación" : "demos en preparación"}` : "",
+          planned > 0 ? `${planned} ${planned === 1 ? "demo prevista" : "demos previstas"}` : "",
         ]
           .filter(Boolean)
           .join(", "),
@@ -64,7 +65,7 @@ export const es: Dict = {
   families: {
     websites: {
       heading: "Desarrollo web",
-      text: "Sitios para una persona, un negocio o un producto: el diseño, el contenido y la publicación. Aquí están mi propio sitio y una demo conceptual de cada paquete web.",
+      text: "Mi portafolio y dos sitios conceptuales publicados muestran el diseño y las interacciones que puedo construir. La cafetería y el hotel son negocios ficticios, no trabajos para clientes.",
       index: "Sitios web para una persona, un negocio o un producto, y una demo conceptual de cada paquete.",
       purpose: "Propósito",
       features: "Qué incluye",
@@ -117,15 +118,15 @@ export const es: Dict = {
   },
   quoteflow: {
     name: "QuoteFlow",
-    kind: "Importa presupuestos desde CSV, Excel y PDF, con revisión humana",
+    kind: "Revisa importaciones antes de guardar registros",
     status: "Proyecto personal con código público. Se ejecuta en tu propio equipo; no tiene demo pública. Su interfaz está en español.",
-    usefulIf: "tu negocio recibe presupuestos, listas de precios o pedidos en archivos CSV, Excel o PDF, y alguien los pasa a mano a un sistema.",
+    usefulIf: "alguien copia registros de archivos a otro sistema y necesita detectar errores antes de guardarlos.",
     summary:
-      "QuoteFlow importa presupuestos desde archivos CSV, XLSX y PDF. Cada archivo se analiza en un proceso aislado, se valida y se comprueba si tiene duplicados, y queda pendiente de revisión. Nada se guarda como registro hasta que una persona lo confirma.",
+      "Sube un archivo, revisa las filas señaladas, corrige valores y confirma qué guardar. CSV y Excel usan filas estructuradas; el soporte PDF extrae texto por página, sin OCR ni reconstrucción de tablas.",
     problem:
       "Los presupuestos llegan en archivos CSV, Excel y PDF. Pasarlos a mano a un sistema es lento, y un valor erróneo o una fila repetida se cuelan con facilidad y cuestan de deshacer una vez guardados.",
     canDo: [
-      "Subir un archivo CSV, Excel o PDF y ver cada fila comprobada antes de guardar nada",
+      "Subir un archivo compatible y revisar los datos extraídos antes de guardar registros",
       "Filtrar las filas por estado y decisión, y aceptarlas, excluirlas o corregirlas una a una o en bloque",
       "Ver cada valor corregido resaltado, con el valor original tachado",
       "Confirmar la importación tras un resumen de cuántas filas se guardarán y cuántas se excluirán",
@@ -164,6 +165,7 @@ export const es: Dict = {
       "Frontend, en una segunda terminal; después abre http://localhost:3000",
     ],
     limits: [
+      "El soporte PDF extrae texto por página; no reconstruye tablas ni lee documentos escaneados (sin OCR).",
       "La interfaz está solo en español y las horas se muestran siempre en la zona America/La_Paz.",
       "Los registros guardados se consultan por importación; todavía no hay búsqueda entre importaciones.",
       "Las revisiones caducadas se purgan con un comando que hay que programar aparte.",
@@ -254,6 +256,9 @@ export const es: Dict = {
   },
   bookExtractor: {
     name: "Book Data Extractor Pro",
+    preview: "Un resultado listo para Excel",
+    columns: ["Libro", "Precio", "Moneda"],
+    sample: "Ver el CSV completo del catálogo de práctica",
     kind: "Scraper web en Python con exportación a Excel y CSV",
     status: "Proyecto personal con código público. Se ejecuta en tu propio equipo; sus pruebas se ejecutan en GitHub Actions.",
     usefulIf: "necesitas los datos de un catálogo público en línea en una hoja de cálculo, sin copiarlos página por página.",
@@ -316,8 +321,8 @@ export const es: Dict = {
     },
   },
   services: {
-    heading: "Servicios",
-    text: "Dos tipos de trabajo: sitios web en tres paquetes y herramientas en Python que manejan datos. El precio depende del alcance, así que cada proyecto empieza con una conversación breve.",
+    heading: "Qué puedo resolver",
+    text: "Una web para presentar tu negocio o una herramienta para organizar sus datos. Acordamos una entrega concreta y su alcance antes de empezar.",
     packages: {
       heading: "Desarrollo web",
       see: "Ver mi sitio y las demos conceptuales en Desarrollo web",
@@ -367,14 +372,16 @@ export const es: Dict = {
       cta: "Quiero una web así",
     },
     data: {
-      heading: "Python, datos y automatización",
-      text: "Trabajos freelance en las mismas áreas que mis proyectos en Python: herramientas para tus datos y tu proceso.",
+      heading: "Datos, backend y automatización",
+      text: "Empezamos por la tarea que quieres mejorar. Estos proyectos personales muestran el enfoque; tus archivos, proceso y alcance requieren una evaluación propia.",
       see: "Ver los proyectos en Python, datos y automatización",
+      delivery: "Entrega:",
+      cta: "Consultar esta tarea",
       items: [
-        ["Herramientas de importación y revisión de datos", "Subir archivos CSV, Excel o PDF, validar cada fila, marcar duplicados y que una persona apruebe el resultado antes de guardarlo."],
-        ["Scraping web a Excel o CSV", "Recoger campos concretos de páginas que se pueden consultar y entregar hojas de cálculo limpias y sin duplicados."],
-        ["APIs y aplicaciones web pequeñas", "Backends con FastAPI y PostgreSQL que validan la entrada y evitan duplicados, conectados a una interfaz en Next.js."],
-        ["Limpieza de datos y automatización de hojas de cálculo", "Convertir pasos manuales repetidos en un script: números leídos con exactitud, valores normalizados y Excel con formato."],
+        { id: "import-tool", title: "Revisar archivos antes de importar", problem: "Al copiar registros a mano se pueden colar errores y filas duplicadas.", delivery: "Una herramienta con validación, detección de duplicados y revisión. El soporte PDF depende de la estructura del archivo.", evidence: "#quoteflow", proof: "Ver el flujo de revisión en QuoteFlow" },
+        { id: "scraping", title: "Pasar un catálogo a una hoja de cálculo", problem: "La información que necesitas está repartida en páginas de productos.", delivery: "Un script y archivos Excel o CSV para un catálogo acordado, con un reporte de campos ausentes o que no se pudieron leer.", evidence: "#book-extractor", proof: "Ver la muestra de Book Data Extractor" },
+        { id: "api", title: "Centralizar consultas y seguimiento", problem: "Los formularios y su seguimiento acaban repartidos entre correos y hojas de cálculo.", delivery: "Una API pequeña y una herramienta para registrar, validar y consultar datos. El despliegue y los controles de acceso se acuerdan por separado.", evidence: "#leadflow", proof: "Ver el formulario y CRM de LeadFlow" },
+        { id: "automation", title: "Automatizar la preparación de hojas", problem: "Repites la misma limpieza y formato antes de poder usar un archivo.", delivery: "Un script Python con las reglas acordadas, ejemplos de entrada y salida, e instrucciones para volver a ejecutarlo.", evidence: "#book-extractor", proof: "Ver normalización y exportación en el extractor" },
       ],
     },
   },
@@ -417,14 +424,17 @@ export const es: Dict = {
     body: [
       "Si en tu negocio alguien copia datos de un Excel o un PDF a otro sistema, los revisa a mano y aun así se cuelan errores, puedo automatizar ese trabajo. Desarrollo herramientas que comprueban la información, ordenan el proceso y te dejan revisar los datos antes de guardarlos.",
       "También hago páginas web profesionales, para que tus clientes entiendan qué ofreces y cómo contactarte.",
-      "Soy Luis Pimentel, desarrollador Python junior. Trabajo en remoto desde Potosí, Bolivia, con Python, FastAPI y PostgreSQL, y con tecnologías frontend como Next.js cuando el proyecto necesita interfaz. Hablo español como lengua materna.",
+      "Soy Luis Pimentel, desarrollador Python junior. Trabajo en remoto desde Potosí, Bolivia, con Python, FastAPI y PostgreSQL, y con Next.js cuando el proyecto necesita interfaz. Trabajo en español; en inglés, la comunicación será principalmente por escrito.",
     ],
     cta: "Cuéntame tu proyecto",
+    opportunityHeading: "Para equipos que buscan un junior",
+    opportunityText: "También busco oportunidades junior en Python, backend o automatización. Mis repositorios públicos muestran lo que construí; puedo explicar el código y sus limitaciones.",
+    opportunityCta: "Proponer una oportunidad",
   },
   contact: {
     heading: "Contacto",
     text: "Cuéntame qué necesitas. El formulario te prepara un correo; desde esta página no se envía nada.",
-    availability: "Disponible para proyectos freelance, en remoto.",
+    availability: "Disponible para proyectos freelance en remoto y oportunidades como desarrollador junior.",
     email: "Correo",
     github: "GitHub",
     upworkLabel: "Upwork",
@@ -432,12 +442,11 @@ export const es: Dict = {
     cv: "CV",
     cvPdf: "CV (PDF)",
     cvDocx: "CV (Word)",
-    cvFiles: [
-      ["PDF (español)", "CV en español (PDF)", "cvPdfEs"],
-      ["PDF (inglés)", "CV en inglés (PDF)", "cvPdf"],
-      ["Word (inglés)", "CV en inglés (Word)", "cvDocx"],
-    ],
-    mailSubject: "Consulta de proyecto desde tu portafolio",
+    cvDeveloperDownload: "Descargar CV de desarrollador",
+    cvFreelanceDownload: "Descargar CV freelance",
+    cvWordDownload: "CV de desarrollador (Word)",
+    cvGuide: "Para puestos, elige el CV de desarrollador. Para proyectos con clientes, elige el freelance.",
+    mailSubject: "Consulta de proyecto o puesto desde tu portafolio",
     privacy: "Por favor, no incluyas contraseñas, credenciales ni datos personales sensibles en tu primer mensaje.",
     upworkNote: "¿Me encontraste en Upwork? Mantén toda la comunicación en los mensajes de Upwork hasta que haya un contrato, como exigen sus condiciones.",
     form: {
@@ -451,11 +460,12 @@ export const es: Dict = {
         ["scraping", "Scraping web a Excel o CSV"],
         ["api", "API o aplicación web pequeña"],
         ["automation", "Limpieza de datos y automatización de hojas de cálculo"],
+        ["opportunity", "Puesto junior o colaboración con un equipo"],
       ],
       name: "Tu nombre",
       optional: "opcional",
       message: "Tu mensaje",
-      messageHint: "Con unas líneas sobre tu negocio o tus datos es suficiente.",
+      messageHint: "Describe la tarea, el resultado que necesitas y tu plazo. Para un puesto, indica el rol y el equipo.",
       messageError: "Escribe unas líneas para que sepa qué necesitas.",
       prepare: "Preparar el correo",
       copy: "Copiar el mensaje",
@@ -463,8 +473,8 @@ export const es: Dict = {
       copyFailed: "Este navegador no permitió copiar. Selecciona el mensaje de abajo y cópialo.",
       opened: "Tu aplicación de correo debería abrirse con el mensaje listo. No se envía hasta que lo envíes desde ahí. Si no se abre, copia el mensaje.",
       how: "Desde esta página no se envía nada: tu aplicación de correo se abre con el mensaje listo, o puedes copiarlo.",
-      subject: "Consulta de proyecto",
-      bodyService: "Servicio",
+      subject: "Consulta desde el portafolio",
+      bodyService: "Consulta",
       bodyName: "Nombre",
       preview: "El mensaje",
     },

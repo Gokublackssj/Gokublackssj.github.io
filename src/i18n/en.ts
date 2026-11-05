@@ -5,9 +5,9 @@ export const en = {
   lang: "en",
   locale: "en_US",
   meta: {
-    title: "Luis Pimentel · Python developer for data-heavy web apps",
+    title: "Luis Pimentel · Websites, Python & automation",
     description:
-      "Junior Python developer in Potosí, Bolivia. Web apps that import, validate and review data, web scrapers and small APIs with FastAPI and PostgreSQL. Open to freelance work.",
+      "Websites, data tools and Python APIs by Luis Pimentel in Bolivia. Explore personal projects and concept demos. Open to freelance projects and junior developer roles.",
     ogAlt: "QuoteFlow review screen with a corrected cell highlighted",
   },
   a11y: {
@@ -38,19 +38,20 @@ export const en = {
   // The offer first (what a client gets), then who I am. The second line is
   // set in italic. primary is the contact action, secondary the projects.
   hero: {
-    lines: ["I turn manual tasks into", "web tools that save time"],
+    lines: ["Web & automation", "for your business"],
     lead:
-      "I build websites, APIs and Python automations that organize data, simplify processes and cut down repetitive work.",
-    primary: "Get in touch",
-    secondary: "See the projects",
-    availability: "I'm Luis Pimentel, a Python developer in Potosí, Bolivia, open to remote freelance work.",
+      "I'm Luis Pimentel. I build websites, Python tools and APIs to organize data and reduce repetitive work.",
+    primary: "Discuss your project",
+    secondary: "Explore my work",
+    availability: "Open to freelance projects and junior roles · Bolivia (UTC−4)",
     // Proof under the actions: something a visitor can check, not a promise.
-    proof: "The code of my projects is public on GitHub, with automated tests you can run yourself.",
+    proof: "Personal projects and concept demos, with public code.",
+    resources: "Services and professional links",
   },
   projectsIntro: {
     heading: "Selected projects",
     text:
-      "Two kinds of work, each in its own place: websites, and Python tools that handle data. Everything here has public code, and every feature, decision and test count comes from its repository, not from memory.",
+      "See the problem, what I built and how to try it. The Python tools are personal projects; the café and hotel websites are concepts for fictional businesses.",
     // The two categories, side by side at the top of the section. The counts
     // are computed from src/data (projects.ts and demos.ts).
     index: {
@@ -59,7 +60,7 @@ export const en = {
         [
           `${sites} ${sites === 1 ? "website" : "websites"}`,
           demos > 0 ? `${demos} concept ${demos === 1 ? "demo" : "demos"}` : "",
-          planned > 0 ? `${planned} ${planned === 1 ? "demo" : "demos"} in progress` : "",
+          planned > 0 ? `${planned} ${planned === 1 ? "demo" : "demos"} planned` : "",
         ]
           .filter(Boolean)
           .join(", "),
@@ -72,7 +73,7 @@ export const en = {
   families: {
     websites: {
       heading: "Web development",
-      text: "Sites for a person, a business or a product: the design, the content and the publishing. Here are my own site and a concept demo for each website package.",
+      text: "My own portfolio and two live concept sites show the design and interactions I can build. The café and hotel are fictional businesses, not client projects.",
       index: "Websites for a person, a business or a product, and a concept demo for each package.",
       purpose: "Purpose",
       features: "What it has",
@@ -125,18 +126,18 @@ export const en = {
   },
   quoteflow: {
     name: "QuoteFlow",
-    kind: "Import quotes from CSV, Excel and PDF, with human review",
+    kind: "Review file imports before saving records",
     status: "Personal project with public code. It runs on your own machine; there is no public demo. Its interface is in Spanish.",
     // The business problem it answers, in one line, after "Useful if".
-    usefulIf: "your business receives quotes, price lists or orders as CSV, Excel or PDF files, and someone types them into a system by hand.",
+    usefulIf: "someone copies records from files into another system and needs to catch errors before saving them.",
     summary:
-      "QuoteFlow imports quotes from CSV, XLSX and PDF files. Each file is parsed in an isolated process, validated and checked for duplicates, then held for review. Nothing is saved as a record until a person confirms it.",
+      "Upload a file, review flagged rows, correct values and confirm what to save. CSV and Excel use structured rows; PDF support extracts text by page, without OCR or table reconstruction.",
     // Problem and what a user can do: plain-language readings of the summary
     // and features above, for visitors who are not developers.
     problem:
       "Quotes arrive as CSV, Excel and PDF files. Typing them into a system by hand is slow, and a wrong value or a repeated row is easy to miss and hard to undo once it is saved.",
     canDo: [
-      "Upload a CSV, Excel or PDF file and see every row checked before anything is saved",
+      "Upload a supported file and review the extracted data before saving records",
       "Filter the rows by status and decision, then accept, exclude or correct them, one by one or in bulk",
       "See each corrected value highlighted, with the original value struck through",
       "Confirm the import after a summary of how many rows will be saved and how many excluded",
@@ -176,6 +177,7 @@ export const en = {
       "Frontend, in a second terminal; then open http://localhost:3000",
     ],
     limits: [
+      "PDF support extracts text by page; it does not reconstruct tables or read scanned documents (no OCR).",
       "The interface is in Spanish only, and times are always shown in the America/La_Paz time zone.",
       "Saved records can be browsed per import; there is no search across imports yet.",
       "Expired reviews are purged by a command that has to be scheduled separately.",
@@ -266,6 +268,9 @@ export const en = {
   },
   bookExtractor: {
     name: "Book Data Extractor Pro",
+    preview: "A spreadsheet-ready result",
+    columns: ["Book", "Price", "Currency"],
+    sample: "View the full sample CSV from the practice catalogue",
     kind: "Python web scraper with Excel and CSV export",
     status: "Personal project with public code. It runs on your own machine; its tests run on GitHub Actions.",
     usefulIf: "you need the data from a public online catalogue in a spreadsheet, without copying it page by page.",
@@ -335,8 +340,8 @@ export const en = {
   // Services: the offer only. The website packages first, then the Python,
   // data and automation work; each block links to its category in Projects.
   services: {
-    heading: "Services",
-    text: "Two kinds of work: websites in three packages, and Python tools that handle data. Prices depend on the scope, so each project starts with a short conversation.",
+    heading: "What I can help with",
+    text: "A website to present your business, or a tool to organize its data. We agree on a concrete deliverable and scope before work starts.",
     packages: {
       heading: "Web development",
       // Leads to the Web development category in Projects.
@@ -387,14 +392,16 @@ export const en = {
       cta: "I want a site like this",
     },
     data: {
-      heading: "Python, data & automation",
-      text: "Freelance work in the same areas as my Python projects: tools for your data and your process.",
+      heading: "Data, backend & automation",
+      text: "Start with the task you want to improve. These personal projects show the approach; your files, workflow and scope need their own assessment.",
       see: "See the projects in Python, data & automation",
+      delivery: "Deliverable:",
+      cta: "Discuss this task",
       items: [
-        ["Data import and review tools", "Upload CSV, Excel or PDF files, validate every row, flag duplicates and let a person approve the result before it is saved."],
-        ["Web scraping to Excel or CSV", "Collect specific fields from pages you are allowed to scrape and deliver clean, deduplicated spreadsheets."],
-        ["APIs and small web apps", "FastAPI and PostgreSQL backends with input validation and duplicate protection, connected to a Next.js interface."],
-        ["Data cleaning and spreadsheet automation", "Turn repeated manual steps into a script: exact number parsing, normalized values and formatted Excel output."],
+        { id: "import-tool", title: "Review files before importing", problem: "Copying records by hand lets typos and duplicate rows slip through.", delivery: "An import tool with validation, duplicate checks and a review step. PDF support depends on the file's structure.", evidence: "#quoteflow", proof: "See the review workflow in QuoteFlow" },
+        { id: "scraping", title: "Turn a catalogue into a spreadsheet", problem: "The information you need is spread across product pages.", delivery: "A script and Excel or CSV output for an agreed catalogue, with a report of missing or unreadable fields.", evidence: "#book-extractor", proof: "See the Book Data Extractor sample" },
+        { id: "api", title: "Keep enquiries in one place", problem: "Form submissions and follow-up get scattered across email and spreadsheets.", delivery: "A small API and data tool to capture, validate and track records. Deployment and access controls are scoped separately.", evidence: "#leadflow", proof: "See LeadFlow's form and CRM" },
+        { id: "automation", title: "Automate spreadsheet preparation", problem: "You repeat the same cleanup and formatting before a file is useful.", delivery: "A Python script for the agreed rules, sample input and output, and instructions to run it again.", evidence: "#book-extractor", proof: "See normalization and export in the extractor" },
       ],
     },
   },
@@ -444,11 +451,14 @@ export const en = {
       "I'm Luis Pimentel, a junior Python developer working remotely from Potosí, Bolivia, with Python, FastAPI and PostgreSQL, and with frontend tools such as Next.js when a project needs an interface. I work in Spanish; in English, our communication will be mainly written.",
     ],
     cta: "Tell me about your project",
+    opportunityHeading: "For teams hiring a junior",
+    opportunityText: "I'm also looking for junior Python, backend or automation opportunities. My public repositories show what I've built; I'm happy to discuss the code and its limitations.",
+    opportunityCta: "Discuss an opportunity",
   },
   contact: {
     heading: "Contact",
     text: "Tell me what you need. The form prepares an email for you; nothing is sent from this page.",
-    availability: "Available for freelance projects, remote.",
+    availability: "Open to remote freelance projects and junior developer opportunities.",
     email: "Email",
     github: "GitHub",
     upworkLabel: "Upwork",
@@ -456,12 +466,11 @@ export const en = {
     cv: "CV",
     cvPdf: "CV (PDF)",
     cvDocx: "CV (Word)",
-    // CV files in the contact section: [visible label, accessible name, file].
-    cvFiles: [
-      ["PDF", "CV (PDF)", "cvPdf"],
-      ["Word", "CV (Word)", "cvDocx"],
-    ],
-    mailSubject: "Project enquiry from your portfolio",
+    cvDeveloperDownload: "Download Developer CV",
+    cvFreelanceDownload: "Download Freelance CV",
+    cvWordDownload: "Developer CV (Word)",
+    cvGuide: "For roles, choose the developer CV. For client projects, choose the freelance CV.",
+    mailSubject: "Project or role enquiry from your portfolio",
     privacy: "Please don't include passwords, credentials or sensitive personal data in your first message.",
     upworkNote: "Found me on Upwork? Please keep all communication in Upwork Messages until a contract is in place, as Upwork's terms require.",
     // The form that prepares the email. Its options' ids are the `?plan=`
@@ -478,11 +487,12 @@ export const en = {
         ["scraping", "Web scraping to Excel or CSV"],
         ["api", "API or small web app"],
         ["automation", "Data cleaning and spreadsheet automation"],
+        ["opportunity", "Junior role or team collaboration"],
       ],
       name: "Your name",
       optional: "optional",
       message: "Your message",
-      messageHint: "A few lines about your business or your data are enough.",
+      messageHint: "Describe the task, the result you need and your timeline. For a role, share the position and team.",
       messageError: "Write a few lines so I know what you need.",
       prepare: "Prepare the email",
       copy: "Copy the message",
@@ -490,8 +500,8 @@ export const en = {
       copyFailed: "This browser did not let the page copy. Select the message below and copy it.",
       opened: "Your email app should open with the message ready. It is not sent until you send it from there. If the app does not open, copy the message instead.",
       how: "Nothing is sent from this page: your email app opens with the message ready, or you can copy it.",
-      subject: "Project enquiry",
-      bodyService: "Service",
+      subject: "Portfolio enquiry",
+      bodyService: "Enquiry",
       bodyName: "Name",
       preview: "The message",
     },

@@ -1,5 +1,5 @@
 ---
-import { contact } from "../data/links";
+import { contact, cvByLanguage } from "../data/links";
 import { dicts, type Lang } from "../i18n";
 
 interface Props {
@@ -10,6 +10,12 @@ const { lang } = Astro.props;
 const t = dicts[lang];
 const c = t.contact;
 const f = c.form;
+const cv = cvByLanguage[lang];
+const cvFiles = [
+  { href: cv.developer, label: c.cvDeveloperDownload, kind: "developer" },
+  { href: cv.freelance, label: c.cvFreelanceDownload, kind: "freelance" },
+  ...(cv.developerWord ? [{ href: cv.developerWord, label: c.cvWordDownload, kind: "developer-word" }] : []),
+];
 const mailto = `mailto:${contact.email}?subject=${encodeURIComponent(c.mailSubject)}`;
 ---
 
@@ -104,19 +110,11 @@ const mailto = `mailto:${contact.email}?subject=${encodeURIComponent(c.mailSubje
         <div data-reveal>
           <dt>{c.cv}</dt>
           <dd class="cv-links">
+            <p class="cv-guide small muted">{c.cvGuide}</p>
             {
-              c.cvFiles.map(([label, name, file]) => {
-                const href = contact[file as "cvPdf" | "cvDocx" | "cvPdfEs"];
-                return file === "cvDocx" ? (
-                  <a href={href} download aria-label={name}>
-                    {label}
-                  </a>
-                ) : (
-                  <a href={href} target="_blank" rel="noopener" aria-label={`${name}, ${t.a11y.newTab}`}>
-                    {label}
-                  </a>
-                );
-              })
+              cvFiles.map(({ href, label, kind }) => (
+                <a href={href} download data-cv={kind}>{label}</a>
+              ))
             }
           </dd>
         </div>

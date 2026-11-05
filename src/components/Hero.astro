@@ -1,11 +1,13 @@
 ---
 import { dicts, type Lang } from "../i18n";
+import { contact, cvByLanguage } from "../data/links";
 
 interface Props {
   lang: Lang;
 }
 
 const t = dicts[Astro.props.lang];
+const cv = cvByLanguage[Astro.props.lang];
 const [first, second] = t.hero.lines;
 ---
 
@@ -20,9 +22,14 @@ const [first, second] = t.hero.lines;
     <p class="hero-lead">{t.hero.lead}</p>
     <p class="hero-availability">{t.hero.availability}</p>
     <div class="hero-actions">
-      <a class="button" href="#contact">{t.hero.primary}</a>
-      <a class="button button--ghost" href="#projects">{t.hero.secondary}</a>
+      <a class="button" href={cv.developer} download data-cv="developer">{t.contact.cvDeveloperDownload}</a>
+      <a class="button button--ghost" href="#contact">{t.hero.primary}</a>
     </div>
     <p class="hero-proof">{t.hero.proof}</p>
+    <nav class="hero-resources" aria-label={t.hero.resources}>
+      <a href="#projects">{t.hero.secondary}</a>
+      <a href="#services">{t.nav.services}</a>
+      <a href={contact.github} target="_blank" rel="noopener">GitHub<span class="visually-hidden"> {t.a11y.newTab}</span></a>
+    </nav>
   </div>
 </section>

@@ -7,7 +7,7 @@ import WebProjects from "./WebProjects.astro";
 import RunSteps from "./RunSteps.astro";
 import { websites, pythonProjects } from "../data/projects";
 import { demos, isPublished } from "../data/demos";
-import { runCommands, testCommands } from "../data/commands";
+import { testCommands } from "../data/commands";
 import Lightbox from "./Lightbox.astro";
 import Services from "./Services.astro";
 import Process from "./Process.astro";
@@ -29,13 +29,13 @@ const t = dicts[lang];
 const b = t.bookExtractor;
 const ix = t.projectsIntro.index;
 const categories = [
+  { id: "python", name: t.families.software.heading, text: t.families.software.index, count: ix.python(pythonProjects.length) },
   {
     id: "web",
     name: t.families.websites.heading,
     text: t.families.websites.index,
     count: ix.web(websites.length, demos.filter(isPublished).length, demos.filter((d) => !isPublished(d)).length),
   },
-  { id: "python", name: t.families.software.heading, text: t.families.software.index, count: ix.python(pythonProjects.length) },
 ];
 ---
 
@@ -69,11 +69,7 @@ const categories = [
           }
         </nav>
 
-        <!-- Category 1: web development. Websites and the package demos. -->
-        <WebProjects lang={lang} />
-
-        <!-- Category 2: Python, data and automation, as case studies, in the
-             order of pythonProjects (src/data/projects.ts). -->
+        <!-- Lead with Python tools in pythonProjects order; web demos remain below. -->
         <section class="family" id="python" aria-labelledby="python-title">
           <div class="family-head">
             <h3 id="python-title" class="display" data-reveal>{t.families.software.heading}</h3>
@@ -83,8 +79,7 @@ const categories = [
           <CaseStudy lang={lang} id="quoteflow" project={t.quoteflow} shots={shots.quoteflow} repo={repos.quoteflow} />
           <CaseStudy lang={lang} id="leadflow" project={t.leadflow} shots={shots.leadflow} repo={repos.leadflow} mirror video={{ base: "/media/leadflow-flow", poster: videoPoster }} />
 
-          <!-- The same order as the other cases. It has no screenshots, so its
-               picture is the real command that runs it. -->
+          <!-- Show the scraper's real sample output; run commands stay in details. -->
           <article class="case case--compact" id="book-extractor" aria-labelledby="book-extractor-title">
             <header class="case-head">
               <h4 id="book-extractor-title" class="display" data-reveal>{b.name}</h4>
@@ -104,8 +99,17 @@ const categories = [
             </div>
             <div class="case-visual">
               <figure class="case-run" data-reveal>
-                <h5>{t.labels.run}</h5>
-                <pre class="code" tabindex="0"><code>{runCommands.bookExtractor.slice(1).join("\n")}</code></pre>
+                <h5>{b.preview}</h5>
+                <table class="sample-output">
+                  <caption class="visually-hidden">{b.preview}</caption>
+                  <thead><tr>{b.columns.map((column) => <th scope="col">{column}</th>)}</tr></thead>
+                  <tbody>
+                    <tr><th scope="row">A Light in the Attic</th><td>51.77</td><td>£</td></tr>
+                    <tr><th scope="row">Tipping the Velvet</th><td>53.74</td><td>£</td></tr>
+                    <tr><th scope="row">Soumission</th><td>50.10</td><td>£</td></tr>
+                  </tbody>
+                </table>
+                <figcaption class="small muted"><a href={`${repos.bookExtractor}/blob/main/examples/sample_books.csv`} target="_blank" rel="noopener">{b.sample}<span class="visually-hidden"> {t.a11y.newTab}</span></a></figcaption>
               </figure>
               <div class="case-cando" data-reveal>
                 <h5>{t.labels.canDo}</h5>
@@ -147,6 +151,7 @@ const categories = [
             </details>
           </article>
         </section>
+        <WebProjects lang={lang} />
       </div>
     </section>
 

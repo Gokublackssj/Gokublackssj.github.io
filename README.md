@@ -2,21 +2,21 @@
 
 Bilingual portfolio (English by default at `/`, Spanish at `/es/`) presenting
 QuoteFlow, LeadFlow and Book Data Extractor Pro, the tools they use, freelance
-services and contact details. Live at https://gokublackssj.github.io/.
+services, junior-role availability and contact details. Public site: https://gokublackssj.github.io/.
 
 - Astro 7, static output, TypeScript for data and scripts
-- About 4 KB (brotli) of page JavaScript up front (screenshot viewer, phone menu, video play button, motion
-  setting); GSAP + ScrollTrigger (about 40 KB brotli) load afterwards, only while animations are on (see Motion)
-- Fonts self-hosted through Fontsource: Zilla Slab 600 (display, the only weight loaded) and Public Sans
-  variable (text and interface); both latin files are preloaded
+- Page JavaScript handles the screenshot viewer, phone menu, video, contact composer and preferences.
+  GSAP + ScrollTrigger load afterwards, only while animations are on (see Motion).
+- Fonts self-hosted through Fontsource: Source Serif 4 variable (upright and italic display) and Public Sans
+  variable (text and interface); the Latin files are preloaded
 - Screenshots served as AVIF/WebP in several widths; full-size WebP in the viewer
-- No trackers, cookies, analytics or third-party requests. `localStorage` keeps one value: the visitor's
-  animations choice, if they make one
+- No trackers, cookies, analytics or third-party requests. `localStorage` keeps the visitor's
+  animation and theme choices, if they make them
 
 ## Commands
 
 ```bash
-npm install
+npm ci            # use the existing lockfile
 npm run dev       # http://localhost:4321
 npm run build     # astro check + static build into dist/
 npm run preview   # serve dist/
@@ -28,10 +28,10 @@ npm run preview   # serve dist/
 src/
   pages/              index.astro (en), es/index.astro, 404.astro, sitemap.xml.ts
   components/         Page (the order of the sections, and the projects in two categories:
-                      Web development and Python, data & automation), Header, Hero (headline and actions),
+                      Python, data & automation first, then Web development), Header, Hero (headline and actions),
                       WebProjects (websites and the package demos), WebsiteCard, DemoCard, CaseStudy,
-                      RunSteps, Gallery, Lightbox, ZoomBadge, Services (the offer only, with a link to
-                      each category),
+                      RunSteps, Gallery, Lightbox, ZoomBadge, Services (deliverables, evidence links,
+                      website packages and service-specific contact actions),
                       Process (how we work), About, Faq, Contact, Footer
   layouts/Base.astro  <head>: SEO, hreflang, Open Graph, JSON-LD, fonts, and the inline script that sets the
                       theme and the motion setting before the first paint
@@ -148,20 +148,31 @@ caption and alt text under the same id in both language files.
 
 ## CV
 
-One page, in the original design (Calibri, same margins, colours, headings and bullets). The content was
-updated on 2026-10-25: QuoteFlow, LeadFlow and Book Data Extractor Pro, each described from its repository,
-and a conservative skills split (Core tools: Python, Playwright, openpyxl, pytest; the rest under "Also used in
-projects").
+Updated CVs supplied by Luis on 2026-11-04 are copied without changing their
+contents. Four PDFs are stored, by purpose and language:
 
-- English (main): `public/cv/Luis_Pimentel_CV.docx` is the editable source; the PDF is exported from it with Word.
-  Both are linked from `/` and `/es/`.
-- Spanish: the published file is `public/cv/Luis_Pimentel_CV_ES.pdf`, linked from `/es/` only. Its editable
-  source, `docs/cv/Luis_Pimentel_CV_ES.docx`, and the side-by-side comparisons with the previous version
-  (`docs/cv/comparison-*.png`) are git-ignored and kept on the local machine only.
-- Backups, local only (git-ignored, not in the repository): `_legacy-static/cv-original/` (the very first files,
-  with an old email typo) and `_legacy-static/cv-backup-2026-10-25/` (the version before this update).
-- Not in the CV: phone and Upwork (the website links the confirmed Upwork profile), and the portfolio URL (until
-  the site is published).
+- Developer English: `public/cv/Luis_Pimentel_CV_Developer_EN.pdf`
+- Developer Spanish: `public/cv/Luis_Pimentel_CV_Desarrollador_ES.pdf`
+- Freelance English: `public/cv/Luis_Pimentel_CV_Freelance_EN.pdf`
+- Freelance Spanish: `public/cv/Luis_Pimentel_CV_Freelance_ES.pdf`
+
+All rendered CV links use `cvByLanguage` in `src/data/links.ts`. Each page offers
+only its own developer and freelance PDFs. The hero's main action, About and
+footer download the developer CV; Services has one text link to the freelance
+CV. Contact repeats those two downloads. The existing English Word download is
+shown only on the English page; there is no Spanish Word link to an English file.
+The legacy addresses `Luis_Pimentel_CV.pdf` and `Luis_Pimentel_CV_ES.pdf` contain
+the same updated developer PDFs, so previous links keep working. The existing
+`Luis_Pimentel_CV.docx` download is updated to the supplied English developer Word
+file. Other editable Word versions remain outside the public directory.
+
+No proficiency level or professional experience was added. The source documents
+remain untouched. The public addresses are served by GitHub Pages after deployment.
+
+Final-document verification: Luis confirmed that the previously supplied Claude
+CV directory contains the final reviewed versions. All four PDFs match the
+integrated files and the production build byte for byte. No PDF or DOCX was
+replaced during the language-routing change.
 
 ## Checks run before handing over
 

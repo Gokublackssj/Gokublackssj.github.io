@@ -18,7 +18,7 @@ Their job on the site: decide in a few minutes whether Luis can do their data wo
 
 ## Product Purpose
 
-A bilingual (English at `/`, Spanish at `/es/`) portfolio that wins freelance work: websites for small businesses, and Python tools that turn manual data work into web tools. Success is a visitor who understands who Luis is and what he builds, sees real projects, and writes to him (email, GitHub, Upwork, CV).
+A bilingual (English at `/`, Spanish at `/es/`) portfolio for freelance work and junior developer opportunities: websites for small businesses, and Python tools that turn manual data work into web tools. Success is a visitor who understands the problem, deliverable, evidence and contact path. A separate contact option supports junior-role enquiries. Public claims remain bounded by personal projects and fictional-business demos.
 
 ## Positioning
 
@@ -34,7 +34,7 @@ Visitors arrive from Upwork, GitHub, the CV or a direct link, on phones and desk
 - Services: data import and review tools; web scraping to Excel/CSV; APIs and small web apps (FastAPI, PostgreSQL, Next.js); data cleaning and spreadsheet automation.
 - Website packages Essential, Professional and Signature (confirmed 2026-10-29), compared by deliverables and scope only; none needs a backend. Prices and delivery times are undecided: show "Based on scope" / "Según alcance" until they are defined. The data services (import tools, scraping, APIs, automation) stay a separate block.
 - Each package will get a concept demo for a fictional business, built and published as its own site in its own repository, one at a time, and only after approval: Essential, a café; Professional, a boutique hotel; Signature, a contemporary silversmith's workshop inspired by Potosí. The portfolio keeps only each demo's card (src/data/demos.ts); until a demo is published it is listed as in progress, with no picture or link. Previews are short muted WebM/MP4 recordings of the published demo with a real screenshot as poster, never GIFs.
-- Projects are shown in two categories, each project once: Web development (this site, and the package demos) and Python, data & automation (QuoteFlow, LeadFlow, Book Data Extractor Pro). Services holds only the offer and links to each category.
+- Projects are shown in two categories, each project once: Python, data & automation first (QuoteFlow, LeadFlow, Book Data Extractor Pro), then Web development (this site and the package demos). Services connects a problem, deliverable, project evidence and the appropriate contact option. Website packages remain available.
 - Contact: a form that prepares an email with the chosen service, or copies the message. No form provider or backend, no WhatsApp. It starts on "not sure yet". Approved commitments: first reply within 24 hours; English communication mainly written.
 - FAQ answers on maintenance, code ownership, payments and revision rounds are pending a decision and stay hidden until approved (src/i18n, faq.items with pending: true).
 - Static Astro site on GitHub Pages; no backend, no forms that submit anywhere, no trackers, cookies or analytics.
@@ -50,7 +50,7 @@ Visitors arrive from Upwork, GitHub, the CV or a direct link, on phones and desk
 - Three personal projects with public code: QuoteFlow, LeadFlow, Book Data Extractor Pro (repositories in `src/data/links.ts`).
 - Real test counts (QuoteFlow 512 backend + 46 frontend; LeadFlow 148 backend + 17 end-to-end), sourced in README.md "Content sources".
 - Screenshots in `src/assets/shots/` (QuoteFlow and LeadFlow, fictitious data) and a 13 s LeadFlow screen recording in `public/media/`.
-- CV in English (PDF, Word) and Spanish (PDF) in `public/cv/`.
+- Developer and freelance CVs in English and Spanish (four PDFs) in `public/cv/`, supplied on 2026-11-04. Existing developer PDF aliases and the English Word download remain current.
 - Absent, never to be fabricated: clients, testimonials, reviews, business results, metrics, deployments, public demos, prices, personal photographs.
 
 ## Product Principles
