@@ -1,0 +1,87 @@
+---
+import { Image } from "astro:assets";
+import { labProjects, copy } from "./projects";
+import type { Lang } from "../i18n";
+interface Props {
+  lang: Lang;
+  /** Liquid Glass on the category selector and arrows (editorial portfolio). */
+  glass?: boolean;
+}
+const { lang, glass = false } = Astro.props;
+const glassArrow = glass ? { "data-lg": "", "data-lg-depth": "8", "data-lg-bezel": "16" } : {};
+const t = copy[lang];
+const categories = labProjects(lang);
+---
+<section id="work" class="radial" data-radial aria-label={lang === "es" ? "Proyectos seleccionados" : "Selected projects"}>
+  <div class:list={["radial-categories", { "lg lg--host lg--clear": glass }]} role="group" aria-label={t.categories} hidden {...(glass ? { "data-lg": "", "data-lg-depth": "9", "data-lg-bezel": "18", "data-lg-flex": "" } : {})}>
+    {categories.map((category, index) => (
+      <button type="button" data-category={category.id} aria-pressed={index === 0 ? "true" : "false"} aria-controls={`category-${category.id}`}>
+        <span>{category.label}</span><span class="category-count">{category.projects.length}</span>
+      </button>
+    ))}
+  </div>
+  <div class="radial-composition" data-reveal data-reveal-step="1">
+    <div class="radial-gallery">
+      <div class="radial-viewport">
+        <div class="radial-stage" data-stage role="group" aria-label={t.scene} aria-describedby="radial-help">
+          {categories.map((category) => (
+            <section class="radial-category" id={`category-${category.id}`} data-panel={category.id} aria-label={category.label}>
+              <h2 class="fallback-heading">{category.label}</h2>
+              <ul class="radial-wheel">
+                {category.projects.map((project, index) => (
+                  <li class="radial-item" data-card data-project={project.id}>
+                    <article class:list={["radial-card", { "lg-rim": glass }]}>
+                      <div class="radial-cover">
+                        {project.image ? (
+                          <Image src={project.image} alt={project.alt} widths={[320, 480, 640]} sizes="(max-width: 600px) 230px, 340px" format="webp" quality={82} loading={category.id === "websites" && index === 0 ? "eager" : "lazy"} decoding="async" draggable="false" />
+                        ) : (
+                          <div class="radial-sample">
+                            <p>{t.sample}</p>
+                            <table><thead><tr><th scope="col">{t.book}</th><th scope="col">{t.price}</th></tr></thead><tbody>
+                              <tr><td>A Light in the Attic</td><td>£51.77</td></tr>
+                              <tr><td>Tipping the Velvet</td><td>£53.74</td></tr>
+                              <tr><td>Soumission</td><td>£50.10</td></tr>
+                            </tbody></table>
+                          </div>
+                        )}
+                      </div>
+                      <div class="radial-card-label"><h3>{project.name}</h3></div>
+                      <div class="fallback-details">
+                        <p>{project.kind}</p><p>{project.description}</p>
+                        <p>{project.technologies.join(" · ")}</p>
+                        <a href={project.href}>{project.action}</a>
+                        <a href={project.repo} target="_blank" rel="noopener">{t.code}<span class="lab-sr"> ({t.newTab})</span></a>
+                      </div>
+                    </article>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))}
+        </div>
+      </div>
+      <div class="radial-navigation" hidden>
+        <button class:list={["radial-arrow", { "lg lg--clear": glass }]} data-previous type="button" aria-label={t.previous} {...glassArrow}>
+          <svg aria-hidden="true" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m14 6-6 6 6 6" /></svg>
+        </button>
+        <span class="radial-position" data-position aria-hidden="true">01 / 02</span>
+        <button class:list={["radial-arrow", { "lg lg--clear": glass }]} data-next type="button" aria-label={t.next} {...glassArrow}>
+          <svg aria-hidden="true" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m10 6 6 6-6 6" /></svg>
+        </button>
+      </div>
+      <p class="radial-help" id="radial-help" hidden>{t.help}</p>
+    </div>
+    <div class="radial-detail" data-detail hidden>
+      <h2 data-name></h2>
+      <p class="radial-kind" data-kind></p>
+      <p class="radial-description" data-description></p>
+      <ul class="radial-technologies" data-technologies aria-label={lang === "es" ? "Tecnologías principales" : "Main technologies"}></ul>
+      <a class="radial-explore lg lg--clear pf-glass-cta" data-lg data-lg-depth="4" data-lg-bezel="10" data-explore target="_blank" rel="noopener"><span></span><span class="lab-sr"> ({t.newTab})</span><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 12h16m-6-6 6 6-6 6" /></svg></a>
+      <a class="radial-code" data-code target="_blank" rel="noopener">{t.code}<span class="lab-sr"> ({t.newTab})</span></a>
+    </div>
+  </div>
+  <p class="lab-sr" role="status" aria-live="polite" aria-atomic="true" data-announcement></p>
+  <p class="radial-reduced" data-reduced hidden>{t.reduced}</p>
+  <p class="radial-note">{t.note}</p>
+  <script type="application/json" data-project-data set:html={JSON.stringify({ categories: categories.map((c) => ({ ...c, projects: c.projects.map(({ image, alt, ...p }) => p) })), of: t.position }).replace(/</g, "\\u003c")} />
+</section>

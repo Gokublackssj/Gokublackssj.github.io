@@ -1,0 +1,20 @@
+/* Static declarations preserve the original masks, colours and stagger under CSP. */
+.tech-python { --icon: url("./assets/simple-icons/python.svg"); --brand: #3776AB; }
+.tech-typescript { --icon: url("./assets/simple-icons/typescript.svg"); --brand: #3178C6; }
+.tech-react { --icon: url("./assets/simple-icons/react.svg"); --brand: #61DAFB; }
+.tech-astro { --icon: url("./assets/simple-icons/astro.svg"); --brand: #BC52EE; }
+.tech-fastapi { --icon: url("./assets/simple-icons/fastapi.svg"); --brand: #009688; }
+.tech-postgresql { --icon: url("./assets/simple-icons/postgresql.svg"); --brand: #4169E1; }
+.tech-git { --icon: url("./assets/simple-icons/git.svg"); --brand: #F03C2E; }
+[data-reveal-step="1"] { --reveal-i: 1; }
+[data-reveal-step="2"] { --reveal-i: 2; }
+[data-reveal-step="3"] { --reveal-i: 3; }
+[data-reveal-step="4"] { --reveal-i: 4; }
+[data-reveal-step="5"] { --reveal-i: 5; }
+[data-reveal-step="6"] { --reveal-i: 6; }
+[data-reveal-step="7"] { --reveal-i: 7; }
+[data-reveal-step="8"] { --reveal-i: 8; }
+[data-reveal-step="9"] { --reveal-i: 9; }
+[data-reveal-step="10"] { --reveal-i: 10; }
+[data-reveal-step="11"] { --reveal-i: 11; }
+[data-reveal-step="12"] { --reveal-i: 12; }

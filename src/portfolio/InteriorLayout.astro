@@ -1,0 +1,28 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "./EditorialHeader.astro";
+import Footer from "./EditorialFooter.astro";
+import Scripts from "./EditorialScripts.astro";
+import {paths, type Lang} from "../i18n";
+import "./radial.css";
+import "./liquid-glass.css";
+import "./portfolio.css";
+import "./interior.css";
+interface Props {lang:Lang; title:string; description:string}
+const {lang,title,description}=Astro.props;
+---
+<Base lang={lang} title={`${title} · Luis Pimentel`} description={description} editorial>
+  <script is:inline slot="head">
+    document.documentElement.dataset.cards="glass";
+    if(document.documentElement.dataset.motion==="on"){document.documentElement.classList.add("pf-reveal");setTimeout(()=>{if(!window.__pfRevealReady)document.documentElement.classList.remove("pf-reveal")},2500)}
+  </script>
+  <Header lang={lang} inner />
+  <main id="main" class="interior pf-container"><slot /></main>
+  <aside class="interior-contact pf-container" aria-label={lang === "es" ? "Contacto" : "Contact"}>
+    <p>{lang === "es" ? "¿Tienes un proyecto en mente?" : "Have a project in mind?"}</p>
+    <a class="lg lg--clear pf-glass-cta" data-lg data-lg-depth="4" data-lg-bezel="10" href={`${paths[lang]}#contact`} data-lg-press>{lang === "es" ? "Conversemos" : "Let's talk"}<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a>
+  </aside>
+  <Footer lang={lang} inner />
+  <Scripts />
+  <script>import "./legacy-links";</script>
+</Base>

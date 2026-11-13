@@ -12,7 +12,7 @@ const counterTemplate = t.a11y.counter(0, 0).replace("0", "{i}").replace("0", "{
 
 <dialog class="lightbox" aria-label={t.a11y.dialogLabel} data-counter={counterTemplate}>
   <div class="lightbox-bar">
-    <button class="icon-button lightbox-close" type="button" data-lightbox-close>
+    <button class="lightbox-close lg lg--frost interior-button" data-lg-press type="button" data-lightbox-close>
       {t.a11y.close}
       <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="2" /></svg>
     </button>
@@ -27,8 +27,8 @@ const counterTemplate = t.a11y.counter(0, 0).replace("0", "{i}").replace("0", "{
         <span class="lightbox-counter" data-lightbox-counter aria-live="polite"></span>
       </p>
       <div class="lightbox-nav">
-        <button class="icon-button" type="button" data-lightbox-prev aria-label={t.a11y.prev}><span aria-hidden="true">←</span></button>
-        <button class="icon-button" type="button" data-lightbox-next aria-label={t.a11y.next}><span aria-hidden="true">→</span></button>
+        <button class="lg lg--clear lg-round" data-lg data-lg-depth="5" data-lg-bezel="9" type="button" data-lightbox-prev aria-label={t.a11y.prev}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m14 5-7 7 7 7"/></svg></button>
+        <button class="lg lg--clear lg-round" data-lg data-lg-depth="5" data-lg-bezel="9" type="button" data-lightbox-next aria-label={t.a11y.next}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m10 5 7 7-7 7"/></svg></button>
       </div>
       <p class="lightbox-caption" data-lightbox-caption></p>
     </div>

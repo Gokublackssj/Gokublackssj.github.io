@@ -1,0 +1,15 @@
+/* Original SVG colours, with a quiet plate chosen for the mark's contrast. */
+.lab-tech-mark.technology-icon { background:#f7faf9; border:1px solid var(--lab-edge); box-shadow:inset 0 1px 0 #fff,0 5px 12px -9px rgb(7 32 33 / .3); }
+.lab-tech-mark.technology-icon.icon-tone-dark { background:#0a1f24; }
+.technology-icon img { display:block; width:62%; height:62%; object-fit:contain; }
+.project-tech-icons .lab-tech-mark.technology-icon { width:34px; height:34px; border-radius:9px; }
+.pf-icon-credits { margin-top:22px; max-width:80ch; font-size:12px; color:var(--lab-muted); }
+.pf-icon-credits > summary { cursor:pointer; width:fit-content; min-height:44px; align-content:center; text-underline-offset:.25em; }
+.pf-icon-credits[open] > summary { color:var(--lab-ink); }
+.pf-icon-credits > div { border-top:1px solid var(--lab-edge); padding-block:12px; }
+.pf-icon-credits p { margin:0 0 10px; font-size:12px; }
+.pf-icon-credits a { text-underline-offset:.25em; }
+@media(forced-colors:active) {
+  .lab-tech-mark.technology-icon { forced-color-adjust:none; border:1px solid GrayText; }
+  .pf-icon-credits { color:CanvasText; }
+}

@@ -40,7 +40,10 @@ export function initContact() {
     if (!link || link.pathname !== location.pathname) return;
     if (!choose(link.dataset.plan ?? null)) return;
     event.preventDefault();
-    history.replaceState(null, "", `?plan=${link.dataset.plan}#contact`);
+    const url = new URL(location.href);
+    url.searchParams.set("plan", link.dataset.plan!);
+    url.hash = "contact";
+    history.replaceState(history.state, "", url);
     form.scrollIntoView({ behavior: motionAllowed() ? "smooth" : "auto", block: "start" });
     message.focus({ preventScroll: true });
   });

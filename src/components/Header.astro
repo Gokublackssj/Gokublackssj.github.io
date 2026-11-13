@@ -7,6 +7,7 @@ interface Props {
 
 const { lang } = Astro.props;
 const t = dicts[lang];
+const languagePaths = Astro.url.pathname.includes("/projects/") ? {en:"/projects/",es:"/es/projects/"} : paths;
 const home = paths[lang];
 const links = [
   ["#projects", t.nav.projects],
@@ -41,7 +42,7 @@ const langs = Object.keys(paths) as Lang[];
         {
           langs.map((l) => (
             <a
-              href={paths[l]}
+              href={languagePaths[l]}
               hreflang={l}
               lang={l}
               aria-current={l === lang ? "true" : undefined}
@@ -63,7 +64,7 @@ const langs = Object.keys(paths) as Lang[];
           <div class="lang-switch menu-lang" role="group" aria-label={t.a11y.langLabel}>
             {
               langs.map((l) => (
-                <a href={paths[l]} hreflang={l} lang={l} aria-current={l === lang ? "true" : undefined}>
+                <a href={languagePaths[l]} hreflang={l} lang={l} aria-current={l === lang ? "true" : undefined}>
                   {l.toUpperCase()}<span class="visually-hidden"> ({langNames[l]})</span>
                 </a>
               ))

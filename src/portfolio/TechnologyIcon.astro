@@ -1,0 +1,10 @@
+---
+import {technologyMark,markTitle} from "./icon-catalog";
+import type {Lang} from "../i18n";
+import "./icon-catalog.css";
+interface Props {name:string;lang:Lang}
+const {name,lang}=Astro.props,mark=technologyMark(name);
+---
+<span class:list={["lab-tech-mark","technology-icon",{"icon-tone-dark":mark.tone==="dark"}]} data-icon-kind={mark.kind} title={markTitle(name,lang)} aria-hidden="true">
+  <img src={mark.src} width="32" height="32" alt="" decoding="async" loading="lazy" />
+</span>

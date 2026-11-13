@@ -8,6 +8,7 @@
 // global.css run instead. The setting is read on every use, so a switch in
 // the footer applies to the next opening.
 
+import { refreshLiquidGlass } from "../portfolio/liquid-glass";
 import { motionAllowed, onMotionChange, storedChoice } from "./motion-preference";
 
 type Gsap = typeof import("gsap").gsap;
@@ -42,7 +43,7 @@ export function initLightbox() {
 
   let items: HTMLAnchorElement[] = [];
   let index = 0;
-  let opener: HTMLAnchorElement | null = null;
+  let opener: HTMLElement | null = null;
   let closing = 0;
   let shown = 0;
   let gsap: Gsap | null = null;
@@ -127,6 +128,7 @@ export function initLightbox() {
 
   // Without GSAP, each new screenshot fades in once it has loaded.
   img.addEventListener("load", () => {
+    refreshLiquidGlass();
     if (motionAllowed() && !flipping()) img.animate([{ opacity: 0 }, { opacity: 1 }], { duration: FADE_MS, easing: "ease-out" });
   });
 
@@ -176,17 +178,19 @@ export function initLightbox() {
       else timeline.to(img, { autoAlpha: 0, scale: 0.97, duration: 0.2, ease: EASE }, 0);
     });
     // Focus returns to the thumbnail the screenshot flew back to.
-    opener = link;
+    if (!opener?.hasAttribute("data-gallery-expand")) opener = link;
     closing = window.setTimeout(() => dialog!.close(), 600);
   }
 
   function open(link: HTMLAnchorElement) {
-    opener = link;
+    const focused = document.activeElement;
+    opener = focused instanceof HTMLButtonElement && focused.hasAttribute("data-gallery-expand") ? focused : link;
     items = Array.from(document.querySelectorAll<HTMLAnchorElement>(`a[data-gallery="${link.dataset.gallery}"]`));
     const thumb = link.getBoundingClientRect();
     show(items.indexOf(link));
     dialog!.dataset.state = "opening";
     dialog!.showModal();
+    refreshLiquidGlass();
     close.focus();
     if (flipping()) {
       dialog!.dataset.state = "open";

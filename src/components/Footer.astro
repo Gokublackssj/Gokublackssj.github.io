@@ -8,6 +8,7 @@ interface Props {
 
 const { lang } = Astro.props;
 const t = dicts[lang];
+const languagePaths = Astro.url.pathname.includes("/projects/") ? {en:"/projects/",es:"/es/projects/"} : paths;
 const f = t.footer;
 const m = f.motion;
 // The footer links the CV in the page's own language.
@@ -34,7 +35,7 @@ const cv = cvByLanguage[lang];
       <div class="lang-switch footer-lang" role="group" aria-label={t.a11y.langLabel}>
         {
           (Object.keys(paths) as Lang[]).map((l) => (
-            <a href={paths[l]} hreflang={l} lang={l} aria-current={l === lang ? "true" : undefined}>
+            <a href={languagePaths[l]} hreflang={l} lang={l} aria-current={l === lang ? "true" : undefined}>
               {l.toUpperCase()}<span class="visually-hidden"> ({langNames[l]})</span>
             </a>
           ))

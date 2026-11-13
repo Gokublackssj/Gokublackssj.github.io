@@ -1,7 +1,7 @@
 ---
 import { packageIds, type PackageId } from "../data/demos";
 import { dicts, paths, type Lang } from "../i18n";
-import { cvByLanguage } from "../data/links";
+import {localizedPath,legacyHref} from "../data/routes";
 
 interface Props {
   lang: Lang;
@@ -10,7 +10,6 @@ interface Props {
 const { lang } = Astro.props;
 const t = dicts[lang];
 const s = t.services;
-const cv = cvByLanguage[lang];
 const pk = s.packages;
 // The rows the packages are compared on, in reading order; price comes last.
 const rows = ["best", "size", "design", "interactions", "motion", "contact"] as const;
@@ -23,8 +22,7 @@ const planHref = (id: PackageId) => `${paths[lang]}?plan=${id}#contact`;
     <div class="section-head">
       <h2 id="services-title" class="display" data-reveal>{s.heading}</h2>
       <p data-reveal>
-        {s.text}<br />
-        <a class="text-link category-link" href={cv.freelance} download data-cv="freelance">{t.contact.cvFreelanceDownload}</a>
+        <a class="text-link category-link" href={`${paths[lang]}#contact`}>{lang === "es" ? "CV y contacto" : "CV & contact"}</a>
       </p>
     </div>
 
@@ -65,7 +63,7 @@ const planHref = (id: PackageId) => `${paths[lang]}?plan=${id}#contact`;
               {
                 packageIds.map((id) => (
                   <td>
-                    <a class="button" href={planHref(id)} data-plan={id}>
+                    <a class="lg lg--frost interior-button" data-lg-press href={planHref(id)} data-plan={id}>
                       {pk.cta}<span class="visually-hidden">: {pk.items[id].name}</span>
                     </a>
                   </td>
@@ -76,12 +74,13 @@ const planHref = (id: PackageId) => `${paths[lang]}?plan=${id}#contact`;
         </table>
       </div>
 
-      <!-- Phones: the same content, one block per package. -->
+      <!-- Phones: each package expands on request; no comparison detail is lost. -->
       <ul class="plans-stack">
         {
           packageIds.map((id) => (
             <li data-reveal>
-              <h4 class="display">{pk.items[id].name}</h4>
+              <details>
+              <summary><h4 class="display">{pk.items[id].name}</h4><span>{lang === "es" ? "Ver alcance +" : "View scope +"}</span></summary>
               <dl>
                 {rows.map((row) => (
                   <div>
@@ -94,9 +93,10 @@ const planHref = (id: PackageId) => `${paths[lang]}?plan=${id}#contact`;
                   <dd>{pk.price}</dd>
                 </div>
               </dl>
-              <a class="button" href={planHref(id)} data-plan={id}>
+              <a class="lg lg--frost interior-button" data-lg-press href={planHref(id)} data-plan={id}>
                 {pk.cta}<span class="visually-hidden">: {pk.items[id].name}</span>
               </a>
+              </details>
             </li>
           ))
         }
@@ -108,7 +108,7 @@ const planHref = (id: PackageId) => `${paths[lang]}?plan=${id}#contact`;
       </div>
 
       <!-- The work itself (my site and the package demos) is in Projects. -->
-      <a class="text-link category-link" href="#web" data-reveal>{pk.see}</a>
+      <a class="text-link category-link" href={localizedPath(lang,"/projects/websites/")} data-reveal>{pk.see}</a>
     </section>
 
     <!-- Block B: Python, data and automation work, separate from the website
@@ -125,13 +125,13 @@ const planHref = (id: PackageId) => `${paths[lang]}?plan=${id}#contact`;
               <h4>{item.title}</h4>
               <p>{item.problem}</p>
               <p class="service-delivery"><strong>{s.data.delivery}</strong> {item.delivery}</p>
-              <a class="text-link service-evidence" href={item.evidence}>{item.proof}</a>
-              <a class="text-link service-contact" href={`${paths[lang]}?plan=${item.id}#contact`} data-plan={item.id}>{s.data.cta}<span class="visually-hidden">: {item.title}</span></a>
+              <a class="text-link service-evidence" href={legacyHref(lang,item.evidence.replace(/^#/,""))}>{item.proof}</a>
+              <a class="lg lg--frost interior-button service-contact" data-lg-press href={`${paths[lang]}?plan=${item.id}#contact`} data-plan={item.id}>{s.data.cta}<span class="visually-hidden">: {item.title}</span></a>
             </li>
           ))
         }
       </ul>
-      <a class="text-link category-link" href="#python" data-reveal>{s.data.see}</a>
+      <a class="text-link category-link" href={localizedPath(lang,"/projects/")} data-reveal>{s.data.see}</a>
     </section>
   </div>
 </section>
