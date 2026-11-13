@@ -53,7 +53,7 @@ export function labProjects(lang: Lang): { id: string; label: string; projects: 
       description: es
         ? "Para quien pasa registros de archivos a otro sistema: sube un CSV, Excel o PDF, revisa las filas señaladas, corrige valores y confirma qué se guarda."
         : "For anyone moving records from files into another system: upload a CSV, Excel or PDF, review flagged rows, fix values and confirm what gets saved.", technologies: ["Python", "FastAPI", "PostgreSQL"],
-      href: `${details}#quoteflow`, action: es ? "Leer la documentación" : "Read the docs",
+      href: `${details}quoteflow/`, action: es ? "Leer la documentación" : "Read the docs",
       repo: repos.quoteflow, image: shots.quoteflow.lead.src, alt: t.quoteflow.shots.review![1]!,
     },
     {
@@ -61,7 +61,7 @@ export function labProjects(lang: Lang): { id: string; label: string; projects: 
       description: es
         ? "Para negocios que reciben consultas desde su web: guarda cada contacto sin duplicados y sigue su estado, notas e historial en un panel sencillo."
         : "For businesses that get enquiries through their site: stores each lead without duplicates and tracks status, notes and history in a simple panel.", technologies: ["Python", "FastAPI", "Next.js"],
-      href: `${details}#leadflow`, action: es ? "Leer la documentación" : "Read the docs",
+      href: `${details}leadflow/`, action: es ? "Leer la documentación" : "Read the docs",
       repo: repos.leadflow, image: shots.leadflow.lead.src, alt: t.leadflow.shots.detail![1]!,
     },
     {
@@ -69,12 +69,11 @@ export function labProjects(lang: Lang): { id: string; label: string; projects: 
       description: es
         ? "Pasa un catálogo web paginado a Excel y CSV: extrae título, precio, disponibilidad y enlace, limpia los datos y elimina duplicados. Pensado para sitios de práctica como books.toscrape.com."
         : "Turns a paginated web catalog into Excel and CSV: extracts title, price, availability and link, cleans the data and removes duplicates. Built for practice sites such as books.toscrape.com.", technologies: ["Python", "Playwright", "openpyxl"],
-      href: `${details}#book-extractor`, action: es ? "Leer la documentación" : "Read the docs",
+      href: `${details}book-extractor/`, action: es ? "Leer la documentación" : "Read the docs",
       repo: repos.bookExtractor, alt: "",
     },
   ];
-  // Detail pages do not exist yet: software opens its real README on GitHub,
-  // demos open the published demo. No link points back to the old design.
+  // Software opens its bilingual case study; website demos keep their published URLs.
   return [
     { id: "websites", label: es ? "Sitios web" : "Websites", projects: websites },
     { id: "software", label: es ? "Automatización y software" : "Automation & Software", projects: software },

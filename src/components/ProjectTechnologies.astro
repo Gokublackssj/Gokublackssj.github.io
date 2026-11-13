@@ -1,0 +1,17 @@
+---
+import "../portfolio/technology-icons.css";
+import TechnologyIcon from "../portfolio/TechnologyIcon.astro";
+import IconCredits from "../portfolio/IconCredits.astro";
+import type {Lang} from "../i18n";
+interface Props {stack:string;lang:Lang}
+const {stack,lang}=Astro.props;
+const items=stack.split(",").map(text=>text.trim());
+---
+<ul class="project-tech-icons" aria-label={lang==="es"?"Tecnologías del proyecto":"Project technologies"}>
+  {items.map(text=><li>
+    <TechnologyIcon name={text} lang={lang} />
+    <span>{text}</span>
+  </li>)}
+</ul>
+
+<IconCredits lang={lang} />

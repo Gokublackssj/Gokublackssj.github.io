@@ -1,0 +1,80 @@
+---
+import ProjectTechnologies from "./ProjectTechnologies.astro";
+import RunSteps from "./RunSteps.astro";
+import {dicts,type Lang} from "../i18n";
+import {repos} from "../data/links";
+import {testCommands} from "../data/commands";
+interface Props {lang:Lang}
+const {lang}=Astro.props;
+const t=dicts[lang],b=t.bookExtractor;
+---
+          <article class="case case--compact" id="book-extractor" aria-labelledby="book-extractor-title">
+            <header class="case-head">
+              <h1 id="book-extractor-title" class="display">{b.name}</h1>
+              <p class="case-kind" data-reveal>{b.kind}</p>
+              <p class="case-useful" data-reveal><strong>{t.labels.usefulIf}</strong> {b.usefulIf}</p>
+              <p class="case-status" data-reveal>{b.status}</p>
+            </header>
+            <div class="case-story">
+              <div class="case-problem" data-reveal>
+                <h3>{t.labels.problem}</h3>
+                <p>{b.problem}</p>
+              </div>
+              <div class="case-solution" data-reveal>
+                <h3>{t.labels.solution}</h3>
+                <p>{b.summary}</p>
+              </div>
+            </div>
+            <div class="case-visual">
+              <figure class="case-run" data-reveal>
+                <h3>{b.preview}</h3>
+                <table class="sample-output">
+                  <caption class="visually-hidden">{b.preview}</caption>
+                  <thead><tr>{b.columns.map((column) => <th scope="col">{column}</th>)}</tr></thead>
+                  <tbody>
+                    <tr><th scope="row">A Light in the Attic</th><td>51.77</td><td>£</td></tr>
+                    <tr><th scope="row">Tipping the Velvet</th><td>53.74</td><td>£</td></tr>
+                    <tr><th scope="row">Soumission</th><td>50.10</td><td>£</td></tr>
+                  </tbody>
+                </table>
+                <figcaption class="small muted"><a href={`${repos.bookExtractor}/blob/main/examples/sample_books.csv`} target="_blank" rel="noopener">{b.sample}<span class="visually-hidden"> {t.a11y.newTab}</span></a></figcaption>
+              </figure>
+              <div class="case-cando" data-reveal>
+                <h3>{t.labels.canDo}</h3>
+                <ul class="check-list">
+                  {b.canDo.map((item) => <li>{item}</li>)}
+                </ul>
+                <a class="lg lg--frost interior-button" data-lg-press href={repos.bookExtractor} target="_blank" rel="noopener">
+                  {t.labels.repo}<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg><span class="visually-hidden"> {t.a11y.newTab}</span>
+                </a>
+              </div>
+            </div>
+            <details class="case-details">
+              <summary>
+                <span class="case-details-title">{t.labels.details}</span>
+                <span class="case-details-hint">{t.labels.detailsHint}</span>
+                <svg class="case-details-chevron" aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M5 7.5 10 12.5 15 7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </summary>
+              <div class="case-details-body">
+                <div class="case-block">
+                  <h3>{t.labels.builtWith}</h3>
+                  <ProjectTechnologies lang={lang} stack={b.stack} />
+                </div>
+                <div class="case-block">
+                  <h3>{t.labels.features}</h3>
+                  <ul class="case-limits">{b.features.map((f) => <li>{f}</li>)}</ul>
+                </div>
+                <RunSteps lang={lang} id="bookExtractor" />
+                <div class="case-block">
+                  <h3>{t.labels.tests}</h3>
+                  <pre class="code" tabindex="0"><code>{testCommands.bookExtractor}</code></pre>
+                </div>
+                <div class="case-block">
+                  <h3>{t.labels.limits}</h3>
+                  <p>{b.limits}</p>
+                </div>
+              </div>
+            </details>
+          </article>

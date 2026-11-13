@@ -257,8 +257,21 @@ function imageLuminance(img: HTMLImageElement, x: number, y: number): number | n
   }
   if (!data) return null;
   const box = img.getBoundingClientRect();
-  const px = Math.min(31, Math.max(0, Math.floor(((x - box.left) / box.width) * 32)));
-  const py = Math.min(31, Math.max(0, Math.floor(((y - box.top) / box.height) * 32)));
+  let left = box.left, top = box.top, width = box.width, height = box.height;
+  // A compact screenshot is contained, not stretched: its letterbox belongs
+  // to the surrounding surface. Sampling the image there could hide a clear
+  // control's icon against a dark gutter beside a light screenshot.
+  const style = getComputedStyle(img);
+  if (style.objectFit === "contain" && style.objectPosition === "50% 50%") {
+    const scale = Math.min(width / img.naturalWidth, height / img.naturalHeight);
+    const paintedWidth = img.naturalWidth * scale, paintedHeight = img.naturalHeight * scale;
+    left += (width - paintedWidth) / 2; top += (height - paintedHeight) / 2;
+    width = paintedWidth; height = paintedHeight;
+    if (x < left || x > left + width || y < top || y > top + height) return null;
+  }
+  if (!width || !height) return null;
+  const px = Math.min(31, Math.max(0, Math.floor(((x - left) / width) * 32)));
+  const py = Math.min(31, Math.max(0, Math.floor(((y - top) / height) * 32)));
   const i = (py * 32 + px) * 4;
   return luminance(data.data[i]!, data.data[i + 1]!, data.data[i + 2]!);
 }
@@ -478,6 +491,13 @@ export function initLiquidGlass() {
     if (!motionAllowed()) scope.cancelAnimations();
     lenses.forEach((lens) => setScale(lens, 1));
   });
+}
+
+/** Existing controls can become visible in a dialog or change their backdrop. */
+export function refreshLiquidGlass() {
+  if (!initialized || scope.disposed) return;
+  lenses.forEach(lens => { if (lens.el.getClientRects().length) rebuild(lens); });
+  scheduleAdapt();
 }
 
 export function disposeLiquidGlass() { scope.dispose(); }

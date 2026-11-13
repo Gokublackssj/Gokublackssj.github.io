@@ -1,4 +1,5 @@
 ---
+import TechnologyIcon from "./TechnologyIcon.astro";
 import { contact, cvByLanguage } from "../data/links";
 import { dicts, type Lang } from "../i18n";
 import { portfolioCopy } from "../i18n/portfolio";
@@ -55,8 +56,8 @@ const mailto = 'mailto:' + contact.email + '?subject=' + encodeURIComponent(c.ma
         <p id="composer-message-error" class="field-error" hidden>{f.messageError}</p>
       </div>
       <div class="composer-actions">
-        <button class="button" type="submit">{f.prepare}</button>
-        <button class="button button--ghost" type="button" data-copy hidden>{f.copy}</button>
+        <button class="button lg lg--clear pf-glass-cta" data-lg data-lg-depth="4" data-lg-bezel="10" data-lg-press type="submit">{f.prepare}</button>
+        <button class="button button--ghost lg lg--frost pf-glass-secondary" data-lg-press type="button" data-copy hidden>{f.copy}</button>
       </div>
       <p class="composer-status" data-status role="status"></p>
       <!-- Shown only when the browser does not let the page copy. -->
@@ -69,8 +70,8 @@ const mailto = 'mailto:' + contact.email + '?subject=' + encodeURIComponent(c.ma
     <div class="contact-direct">
       <a class="pf-direct-email" href={mailto}>{contact.email}</a>
       <nav class="pf-contact-profiles" aria-label={p.social}>
-        <a href={contact.github} target="_blank" rel="noopener me">GitHub<span class="lab-sr"> {t.a11y.newTab}</span></a>
-        <a href={contact.upwork} target="_blank" rel="noopener me">Upwork<span class="lab-sr"> {t.a11y.newTab}</span></a>
+        <a class="lg lg--clear pf-profile-button" data-lg data-lg-depth="4" data-lg-bezel="10" data-lg-press href={contact.github} target="_blank" rel="noopener me"><TechnologyIcon name="GitHub" lang={lang} />GitHub<span class="lab-sr"> {t.a11y.newTab}</span></a>
+        <a class="lg lg--clear pf-profile-button" data-lg data-lg-depth="4" data-lg-bezel="10" data-lg-press href={contact.upwork} target="_blank" rel="noopener me"><span class="pf-profile-symbol" aria-hidden="true"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17 17 7M7 7h10v10M5 11H3v10h10v-2"/></svg></span>Upwork<span class="lab-sr"> {t.a11y.newTab}</span></a>
       </nav>
       <details class="pf-cv"><summary>{c.cv}</summary><p>{c.cvGuide}</p><a href={cv.developer} download data-cv="developer">{c.cvDeveloperDownload}</a><a href={cv.freelance} download data-cv="freelance">{c.cvFreelanceDownload}</a>{cv.developerWord && <a href={cv.developerWord} download data-cv="developer-word">{c.cvWordDownload}</a>}</details>
       <div class="contact-notes"><p>{c.privacy}</p><p>{c.upworkNote}</p></div>

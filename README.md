@@ -17,10 +17,15 @@ services, junior-role availability and contact details. Public site: https://gok
 
 - `/` and `/es/` render the approved petroleum/mint portfolio: compact radial
   projects, Clear glass, circular theme reveal, effects preference and contact.
-- `/projects/` and `/es/projects/` retain the full case studies, galleries,
-  videos, run/test commands, website demos, detailed services, process and FAQ.
-  Historic homepage project fragments forward there; no-JavaScript visitors
-  receive equivalent documentation links.
+- `/projects/` and `/es/projects/` are compact software indexes. Each project
+  has its own bilingual route under `projects/quoteflow/`, `projects/leadflow/`
+  or `projects/book-extractor/`, retaining all technical evidence and commands.
+  Screenshot galleries show one image at a time with native touch scrolling,
+  keyboard navigation and the existing full-screen viewer.
+- `projects/websites/` preserves the website demos and portfolio evidence;
+  `/services/` and `/es/services/` retain detailed scope, process and FAQ.
+  Historic fragments resolve to the relevant page. The editorial header,
+  footer, theme, effects and motion systems are shared with the homepage.
 - `src/portfolio/` is the single shared implementation of the interactive
   components and controllers. `src/i18n/portfolio.ts` holds their bilingual copy.
   `Base.astro` retains SEO and safe JSON-LD; theme and motion preferences reuse

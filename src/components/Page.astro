@@ -1,176 +1,23 @@
 ---
-import "../styles/global.css";
-import Base from "../layouts/Base.astro";
-import Header from "./Header.astro";
-import CaseStudy from "./CaseStudy.astro";
-import WebProjects from "./WebProjects.astro";
-import RunSteps from "./RunSteps.astro";
-import { websites, pythonProjects } from "../data/projects";
-import { demos, isPublished } from "../data/demos";
-import { testCommands } from "../data/commands";
-import Lightbox from "./Lightbox.astro";
-import Services from "./Services.astro";
-import Process from "./Process.astro";
-import Faq from "./Faq.astro";
-import About from "./About.astro";
-import Contact from "./Contact.astro";
-import Footer from "./Footer.astro";
-import { shots } from "../data/shots";
-import videoPoster from "../assets/shots/leadflow/video-poster.png";
-import { repos } from "../data/links";
-import { dicts, type Lang } from "../i18n";
-
-interface Props {
-  lang: Lang;
-}
-
-const { lang } = Astro.props;
-const t = dicts[lang];
-const b = t.bookExtractor;
-const ix = t.projectsIntro.index;
-const categories = [
-  { id: "python", name: t.families.software.heading, text: t.families.software.index, count: ix.python(pythonProjects.length) },
-  {
-    id: "web",
-    name: t.families.websites.heading,
-    text: t.families.websites.index,
-    count: ix.web(websites.length, demos.filter(isPublished).length, demos.filter((d) => !isPublished(d)).length),
-  },
-];
+import Layout from "../portfolio/InteriorLayout.astro";
+import {dicts,type Lang} from "../i18n";
+import {labProjects} from "../portfolio/projects";
+interface Props {lang:Lang}
+const {lang}=Astro.props,t=dicts[lang],es=lang==="es";
+const software=labProjects(lang)[1]!.projects;
 ---
+<Layout lang={lang} title={es ? "Automatización y software" : "Automation & Software"} description={t.families.software.text}>
+  <header class="interior-intro" id="projects">
+    <p class="interior-eyebrow">{es ? "Proyectos personales · Código público" : "Personal projects · Public code"}</p>
+    <h1 id="projects-title">{es ? "Automatización" : "Automation"}<br /><em>{es ? "y software." : "& software."}</em></h1>
+    <p id="python">{t.families.software.text}</p><span id="python-title"></span>
+  </header>
+  <ol class="project-rows" aria-label={t.families.software.heading}>
+    {software.map((project,i)=><li id={project.id} class="project-tile lg-rim lg--frost">
+      <span class="project-number" aria-hidden="true">0{i+1}</span>
+      <div><h2 id={`${project.id}-title`}><a href={project.href}>{project.name}</a></h2><p>{project.description}</p><p class="project-state">{es?"Proyecto personal · Código público · Ejecución local":"Personal project · Public code · Runs locally"}</p></div>
+      <a class="lg lg--clear lg-round project-explore" data-lg data-lg-depth="5" data-lg-bezel="9" href={project.href} data-lg-press aria-label={`${es?"Explorar":"Explore"} ${project.name}`}><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a>
+    </li>)}
+  </ol>
 
-<Base lang={lang} title={lang === "es" ? "Proyectos, servicios y documentación · Luis Pimentel" : "Projects, services and documentation · Luis Pimentel"}>
-  <Header lang={lang} />
-
-  <main id="main">
-    <section class="section"><div class="container">
-      <h1 class="display">{lang === "es" ? "Proyectos y documentación" : "Projects and documentation"}</h1>
-      <p class="lead">{t.projectsIntro.text}</p>
-      <a class="button button--ghost" href={lang === "es" ? "/es/" : "/"}>{lang === "es" ? "Volver al portafolio" : "Back to the portfolio"}</a>
-    </div></section>
-
-    <section class="section" id="projects" aria-labelledby="projects-title">
-      <div class="container">
-        <div class="section-head">
-          <h2 id="projects-title" class="display" data-reveal>{t.projectsIntro.heading}</h2>
-          <p data-reveal>{t.projectsIntro.text}</p>
-        </div>
-
-        <!-- The two categories, side by side: what each holds and how many,
-             counted from src/data. Each link leads to its category below. -->
-        <nav class="project-index" aria-label={t.projectsIntro.index.label}>
-          {
-            categories.map((c) => (
-              <a class="project-index-link" href={`#${c.id}`} data-reveal>
-                <span class="project-index-name display">{c.name}</span>
-                <span class="project-index-text">{c.text}</span>
-                <span class="project-index-count">{c.count}</span>
-                <svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <path d="M10 4v12M5 11l5 5 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-              </a>
-            ))
-          }
-        </nav>
-
-        <!-- Lead with Python tools in pythonProjects order; web demos remain below. -->
-        <section class="family" id="python" aria-labelledby="python-title">
-          <div class="family-head">
-            <h3 id="python-title" class="display" data-reveal>{t.families.software.heading}</h3>
-            <p data-reveal>{t.families.software.text}</p>
-          </div>
-
-          <CaseStudy lang={lang} id="quoteflow" project={t.quoteflow} shots={shots.quoteflow} repo={repos.quoteflow} />
-          <CaseStudy lang={lang} id="leadflow" project={t.leadflow} shots={shots.leadflow} repo={repos.leadflow} mirror video={{ base: "/media/leadflow-flow", poster: videoPoster }} />
-
-          <!-- Show the scraper's real sample output; run commands stay in details. -->
-          <article class="case case--compact" id="book-extractor" aria-labelledby="book-extractor-title">
-            <header class="case-head">
-              <h4 id="book-extractor-title" class="display" data-reveal>{b.name}</h4>
-              <p class="case-kind" data-reveal>{b.kind}</p>
-              <p class="case-useful" data-reveal><strong>{t.labels.usefulIf}</strong> {b.usefulIf}</p>
-              <p class="case-status" data-reveal>{b.status}</p>
-            </header>
-            <div class="case-story">
-              <div class="case-problem" data-reveal>
-                <h5>{t.labels.problem}</h5>
-                <p>{b.problem}</p>
-              </div>
-              <div class="case-solution" data-reveal>
-                <h5>{t.labels.solution}</h5>
-                <p>{b.summary}</p>
-              </div>
-            </div>
-            <div class="case-visual">
-              <figure class="case-run" data-reveal>
-                <h5>{b.preview}</h5>
-                <table class="sample-output">
-                  <caption class="visually-hidden">{b.preview}</caption>
-                  <thead><tr>{b.columns.map((column) => <th scope="col">{column}</th>)}</tr></thead>
-                  <tbody>
-                    <tr><th scope="row">A Light in the Attic</th><td>51.77</td><td>£</td></tr>
-                    <tr><th scope="row">Tipping the Velvet</th><td>53.74</td><td>£</td></tr>
-                    <tr><th scope="row">Soumission</th><td>50.10</td><td>£</td></tr>
-                  </tbody>
-                </table>
-                <figcaption class="small muted"><a href={`${repos.bookExtractor}/blob/main/examples/sample_books.csv`} target="_blank" rel="noopener">{b.sample}<span class="visually-hidden"> {t.a11y.newTab}</span></a></figcaption>
-              </figure>
-              <div class="case-cando" data-reveal>
-                <h5>{t.labels.canDo}</h5>
-                <ul class="check-list">
-                  {b.canDo.map((item) => <li>{item}</li>)}
-                </ul>
-                <a class="button button--ghost" href={repos.bookExtractor} target="_blank" rel="noopener">
-                  {t.labels.repo}<span class="visually-hidden"> {t.a11y.newTab}</span>
-                </a>
-              </div>
-            </div>
-            <details class="case-details">
-              <summary>
-                <span class="case-details-title">{t.labels.details}</span>
-                <span class="case-details-hint">{t.labels.detailsHint}</span>
-                <svg class="case-details-chevron" aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <path d="M5 7.5 10 12.5 15 7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-              </summary>
-              <div class="case-details-body">
-                <div class="case-block">
-                  <h5>{t.labels.builtWith}</h5>
-                  <p>{b.stack}</p>
-                </div>
-                <div class="case-block">
-                  <h5>{t.labels.features}</h5>
-                  <ul class="case-limits">{b.features.map((f) => <li>{f}</li>)}</ul>
-                </div>
-                <RunSteps lang={lang} id="bookExtractor" />
-                <div class="case-block">
-                  <h5>{t.labels.tests}</h5>
-                  <pre class="code" tabindex="0"><code>{testCommands.bookExtractor}</code></pre>
-                </div>
-                <div class="case-block">
-                  <h5>{t.labels.limits}</h5>
-                  <p>{b.limits}</p>
-                </div>
-              </div>
-            </details>
-          </article>
-        </section>
-        <WebProjects lang={lang} />
-      </div>
-    </section>
-
-    <Services lang={lang} />
-    <Process lang={lang} />
-    <About lang={lang} />
-    <Faq lang={lang} />
-    <Contact lang={lang} />
-  </main>
-
-  <Footer lang={lang} />
-
-  <Lightbox lang={lang} />
-</Base>
-
-<script>
-  import "../scripts/reveal";
-</script>
+</Layout>

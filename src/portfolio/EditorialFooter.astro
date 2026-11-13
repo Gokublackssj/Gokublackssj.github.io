@@ -1,0 +1,24 @@
+---
+import {dicts, paths, type Lang} from "../i18n";
+import {portfolioCopy} from "../i18n/portfolio";
+import {localizedPath} from "../data/routes";
+interface Props {lang:Lang; inner?:boolean}
+const {lang, inner=false}=Astro.props;
+const t=dicts[lang],p=portfolioCopy[lang];
+---
+    <footer class="pf-footer pf-container">
+      <p>© 2026 Luis Alvaro Pimentel Tacuri</p>
+      <button class={inner ? "pf-effects lg lg--frost interior-button" : "pf-effects"} data-lg-press={inner || undefined} type="button" data-effects-control hidden aria-pressed="false"
+        data-system={lang === "es" ? "Efectos: sistema" : "Effects: system"}
+        data-full={lang === "es" ? "Efectos: completos" : "Effects: full"}
+        data-enable={lang === "es" ? "Activar animaciones y cristal transparente" : "Enable animations and clear glass"}
+        data-reset={lang === "es" ? "Volver a las preferencias del sistema" : "Return to system preferences"}>
+        {lang === "es" ? "Efectos: sistema" : "Effects: system"}
+      </button>
+      <nav aria-label={p.social}>
+        <a href={localizedPath(lang, "/projects/")}>{t.nav.projects}</a>
+        <a href={localizedPath(lang, "/services/")}>{lang === "es" ? "Servicios y FAQ" : "Services & FAQ"}</a>
+        <a href={inner ? `${paths[lang]}#contact` : "#contact"}>{t.nav.contact}</a>
+        <a href="#top">{p.back}</a>
+      </nav>
+    </footer>

@@ -4,6 +4,7 @@ import "@fontsource-variable/source-serif-4/wght-italic.css";
 import "@fontsource-variable/public-sans/wght.css";
 
 import { getImage } from "astro:assets";
+import {languagePair} from "../data/routes";
 import { dicts, paths, type Lang } from "../i18n";
 import ogSource from "../assets/shots/quoteflow/correction-highlighted.png";
 // The latin fonts the first screen uses (the headline is set in both the
@@ -28,9 +29,7 @@ const description = Astro.props.description ?? t.meta.description;
 
 const site = Astro.site!;
 const canonical = new URL(Astro.url.pathname, site).href;
-const alternates = Astro.url.pathname.includes("/projects/")
-  ? { en: "/projects/", es: "/es/projects/" }
-  : paths;
+const alternates = languagePair(Astro.url.pathname);
 const og = await getImage({ src: ogSource, width: 1200, height: 630, fit: "cover", position: "top", format: "png" });
 const ogUrl = new URL(og.src, site).href;
 

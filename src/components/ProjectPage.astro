@@ -1,0 +1,21 @@
+---
+import Layout from "../portfolio/InteriorLayout.astro";
+import CaseStudy from "../components/CaseStudy.astro";
+import BookStudy from "../components/BookStudy.astro";
+import Lightbox from "../components/Lightbox.astro";
+import {dicts} from "../i18n";
+import {shots} from "../data/shots";
+import {repos} from "../data/links";
+import {localizedPath,projectIds} from "../data/routes";
+import videoPoster from "../assets/shots/leadflow/video-poster.png";
+import type {Lang} from "../i18n";
+interface Props {lang:Lang; project: typeof projectIds[number]}
+const {lang,project:id}=Astro.props;
+const t=dicts[lang],project=id==="quoteflow"?t.quoteflow:id==="leadflow"?t.leadflow:t.bookExtractor;
+---
+<Layout lang={lang} title={project.name} description={project.summary}>
+  <nav class="interior-breadcrumb" aria-label={lang==="es"?"Ubicación":"Breadcrumb"}><a class="lg lg--frost interior-button" data-lg-press href={localizedPath(lang,"/projects/")}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M19 12H5m6-6-6 6 6 6"/></svg>{lang==="es"?"Automatización y software":"Automation & Software"}</a></nav>
+  {id==="book-extractor"?<BookStudy lang={lang} />:<CaseStudy lang={lang} id={id} project={id==="quoteflow"?t.quoteflow:t.leadflow} shots={shots[id]} repo={repos[id]} video={id==="leadflow"?{base:"/media/leadflow-flow",poster:videoPoster}:undefined} />}
+  <nav class="interior-related" aria-label={lang==="es"?"Más proyectos":"More projects"}><h2>{lang==="es"?"Más proyectos":"More projects"}</h2>{projectIds.filter(slug=>slug!==id).map(slug=><a class="lg lg--frost interior-button" data-lg-press href={localizedPath(lang,`/projects/${slug}/`)}>{slug==="quoteflow"?"QuoteFlow":slug==="leadflow"?"LeadFlow":"Book Data Extractor"}<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a>)}</nav>
+  <Lightbox lang={lang} />
+</Layout>

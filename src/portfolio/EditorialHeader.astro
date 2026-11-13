@@ -1,0 +1,68 @@
+---
+import { dicts, paths, type Lang } from "../i18n";
+import { portfolioCopy } from "../i18n/portfolio";
+import { localizedPath, languagePair } from "../data/routes";
+interface Props {lang: Lang; inner?: boolean}
+const {lang, inner = false} = Astro.props;
+const t = dicts[lang], p = portfolioCopy[lang], home = paths[lang];
+const alternates = languagePair(Astro.url.pathname);
+const destinations = inner
+  ? {work: localizedPath(lang, "/projects/"), services: localizedPath(lang, "/services/"), about: `${home}#about`, contact: `${home}#contact`}
+  : {work: "#work", services: "#services", about: "#about", contact: "#contact"};
+---
+    <header class="pf-header">
+      <div class="pf-bar lg lg--frost" data-lg data-lg-bar data-lg-depth="10" data-lg-bezel="20" data-lg-frost="3">
+        <a class="lab-wordmark" href={inner ? home : "#top"} aria-label={t.a11y.home}>luisdataworks<span aria-hidden="true">.</span></a>
+        <nav class="pf-nav" aria-label={p.nav}>
+          <a href={destinations.work}>{t.nav.projects}</a><a href={destinations.services}>{t.nav.services}</a><a href={destinations.about}>{t.nav.about}</a><a href={destinations.contact}>{t.nav.contact}</a>
+        </nav>
+        <div class="pf-bar-tools">
+          <nav class="lab-language pf-lang lg-well" aria-label={t.a11y.langLabel}>
+            <a href={alternates.es} lang="es" aria-current={lang === "es" ? "page" : undefined}>ES</a>
+            <a href={alternates.en} lang="en" aria-current={lang === "en" ? "page" : undefined}>EN</a>
+          </nav>
+          <button class="lg-inset pf-theme" type="button" aria-label={p.theme} aria-pressed="false" data-lab-theme data-lg-press hidden>
+            <svg class="lab-moon" aria-hidden="true" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.5 14A8.5 8.5 0 0 1 10 3.5 8.5 8.5 0 1 0 20.5 14Z" /></svg>
+            <svg class="lab-sun" aria-hidden="true" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="4" /><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5" /></svg>
+          </button>
+          <a class="lg-cta lg-cta--glass pf-cta" href={destinations.contact} data-lg-press>
+            <svg class="pf-cta-icon" aria-hidden="true" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4V5Z" /></svg>
+            <span class="pf-cta-label">{p.cta.full}</span>
+            <span class="pf-cta-short" aria-hidden="true">{p.cta.short}</span>
+          </a>
+          <details class="pf-menu">
+            <summary class="lg-inset" data-lg-press>
+              <svg aria-hidden="true" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M5 8h14M5 16h14" /></svg>
+              <span class="lab-sr">{p.menu}</span>
+            </summary>
+            <div class="pf-menu-panel">
+              <nav aria-label={p.menu}>
+                <a href={destinations.work}>{t.nav.projects}</a><a href={destinations.services}>{t.nav.services}</a><a href={destinations.about}>{t.nav.about}</a><a href={destinations.contact}>{t.nav.contact}</a>
+              </nav>
+              <div class="pf-menu-lang" role="group" aria-label={t.a11y.langLabel}>
+                <a href={alternates.es} lang="es" aria-current={lang === "es" ? "page" : undefined}>Español</a>
+                <a href={alternates.en} lang="en" aria-current={lang === "en" ? "page" : undefined}>English</a>
+              </div>
+            </div>
+          </details>
+        </div>
+      </div>
+    </header>
+<script>
+      // Phone menu: close after choosing a link, on Escape, or on an outside tap.
+      const menu = document.querySelector<HTMLDetailsElement>(".pf-menu");
+      if (menu) {
+        menu.addEventListener("click", (event) => {
+          if ((event.target as Element).closest("a")) menu.open = false;
+        });
+        document.addEventListener("keydown", (event) => {
+          if (event.key === "Escape" && menu.open) {
+            menu.open = false;
+            menu.querySelector("summary")?.focus();
+          }
+        });
+        document.addEventListener("pointerdown", (event) => {
+          if (menu.open && !menu.contains(event.target as Node)) menu.open = false;
+        });
+      }
+</script>

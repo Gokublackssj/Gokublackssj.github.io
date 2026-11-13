@@ -1,20 +1,15 @@
-import python from "./assets/simple-icons/python.svg?url";
-import typescript from "./assets/simple-icons/typescript.svg?url";
-import react from "./assets/simple-icons/react.svg?url";
-import astro from "./assets/simple-icons/astro.svg?url";
-import fastapi from "./assets/simple-icons/fastapi.svg?url";
-import postgresql from "./assets/simple-icons/postgresql.svg?url";
-import git from "./assets/simple-icons/git.svg?url";
+import python from "./assets/devicon/python.svg?url";
+import typescript from "./assets/devicon/typescript.svg?url";
+import react from "./assets/devicon/react.svg?url";
+import astro from "./assets/devicon/astro.svg?url";
+import fastapi from "./assets/devicon/fastapi.svg?url";
+import postgresql from "./assets/devicon/postgresql.svg?url";
+import git from "./assets/devicon/git.svg?url";
 import { repos } from "../data/links";
 import { websites } from "../data/projects";
 
-// Brand colours are the official hex values from Simple Icons' metadata at the
-// pinned commit (see assets/simple-icons/sources.json). The SVG shapes are the
-// unmodified files, painted through a CSS mask on a dark tile; every colour
-// measures at least 3.5:1 against that tile. Docker is not shown as a logo
-// (its trademark guidelines require authorization); it stays as text where
-// projects describe their stack. Links go to the real repositories while the
-// project detail pages do not exist yet.
+// Original Devicon SVGs, pinned to v2.18.0 (assets/devicon/sources.json).
+// TechnologyIcon renders the shared catalog; project links stay factual.
 const portfolioRepo = websites[0]!.repo!;
 
 export type Technology = { name: string; icon: string; color: string; project: string; href: string };

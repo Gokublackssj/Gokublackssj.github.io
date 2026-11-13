@@ -1,0 +1,13 @@
+---
+import Layout from "../portfolio/InteriorLayout.astro";
+import WebProjects from "../components/WebProjects.astro";
+import Lightbox from "../components/Lightbox.astro";
+import {dicts} from "../i18n";
+import type {Lang} from "../i18n";
+interface Props {lang:Lang}
+const {lang}=Astro.props,t=dicts[lang];
+---
+<Layout lang={lang} title={t.families.websites.heading} description={t.families.websites.text}>
+<header class="interior-intro"><p class="interior-eyebrow">{lang==="es"?"Sitios y demos conceptuales":"Websites & concept demos"}</p><h1>{t.families.websites.heading}</h1><p>{t.demos.text}</p></header>
+<WebProjects lang={lang} /><Lightbox lang={lang} />
+</Layout>

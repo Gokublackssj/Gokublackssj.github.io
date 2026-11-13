@@ -1,8 +1,9 @@
 import type { APIRoute } from "astro";
 import { paths } from "../i18n";
+import {projectIds} from "../data/routes";
 
 export const GET: APIRoute = ({ site }) => {
-  const groups = [paths, { en: "/projects/", es: "/es/projects/" }];
+  const groups = [paths, ...["/projects/", "/projects/websites/", "/services/", ...projectIds.map(id=>`/projects/${id}/`)].map(path=>({en:path,es:`/es${path}`}))];
   const urls = groups.flatMap((group) => Object.values(group)
     .map((p) => {
       const alternates = Object.entries(group)

@@ -1,5 +1,5 @@
 ---
-import { Picture } from "astro:assets";
+import Gallery from "./Gallery.astro";
 import type { Website } from "../data/projects";
 import { dicts, type Lang } from "../i18n";
 
@@ -17,33 +17,7 @@ const copy = t.websites[site.id];
 <!-- One finished website: its screenshot, what it is for, what it has, and
      the links to see it. The screenshot follows the theme, like the previews. -->
 <article class="site-card" aria-labelledby={`site-${site.id}`}>
-  <figure class="site-shot" data-reveal>
-    <Picture
-      class="shot-light"
-      src={site.light}
-      formats={["avif", "webp"]}
-      fallbackFormat="webp"
-      widths={[720, 1080, 1440]}
-      sizes="(max-width: 1023px) 100vw, 760px"
-      alt={copy.alt}
-      loading="lazy"
-      decoding="async"
-      quality={80}
-    />
-    <Picture
-      class="shot-dark"
-      src={site.dark}
-      formats={["avif", "webp"]}
-      fallbackFormat="webp"
-      widths={[720, 1080, 1440]}
-      sizes="(max-width: 1023px) 100vw, 760px"
-      alt={copy.altDark}
-      loading="lazy"
-      decoding="async"
-      quality={80}
-    />
-    <figcaption class="small muted">{f.shotNote}</figcaption>
-  </figure>
+  <Gallery lang={lang} group={`site-${site.id}`} title={copy.name} desktop={[{id:"light",src:site.light},{id:"dark",src:site.dark}]} mobile={[]} captions={{light:[f.shotNote,copy.alt],dark:[f.shotNote,copy.altDark]}} />
   <div class="site-body">
     <h4 id={`site-${site.id}`} class="site-name display" data-reveal>{copy.name}</h4>
     <div data-reveal>
@@ -57,10 +31,10 @@ const copy = t.websites[site.id];
       </ul>
     </div>
     <div class="site-actions" data-reveal>
-      <a class="button" href={site.url}>{f.live}</a>
+      <a class="lg lg--frost interior-button" data-lg-press href={site.url}>{f.live}</a>
       {
         site.repo && (
-          <a class="button button--ghost" href={site.repo} target="_blank" rel="noopener">
+          <a class="lg lg--frost interior-button" data-lg-press href={site.repo} target="_blank" rel="noopener">
             {t.labels.repo}<span class="visually-hidden"> {t.a11y.newTab}</span>
           </a>
         )

@@ -1,0 +1,17 @@
+---
+import Layout from "../portfolio/InteriorLayout.astro";
+import Services from "../components/Services.astro";
+import Process from "../components/Process.astro";
+import About from "../components/About.astro";
+import Faq from "../components/Faq.astro";
+import {dicts} from "../i18n";
+import type {Lang} from "../i18n";
+interface Props {lang:Lang}
+const {lang}=Astro.props,t=dicts[lang];
+---
+<Layout lang={lang} title={lang==="es"?"Servicios, proceso y FAQ":"Services, process & FAQ"} description={t.services.text}>
+<header class="interior-intro"><p class="interior-eyebrow">{lang==="es"?"Alcance y forma de trabajar":"Scope & working together"}</p><h1>{lang==="es"?"De la idea":"From the idea"}<br/><em>{lang==="es"?"a una propuesta clara.":"to a clear proposal."}</em></h1><p>{t.services.text}</p></header>
+<Services lang={lang} /><Process lang={lang} />
+<details class="interior-background"><summary>{lang==="es"?"Sobre mí y herramientas de los proyectos":"About me & project tools"}</summary><About lang={lang} /></details>
+<Faq lang={lang} />
+</Layout>

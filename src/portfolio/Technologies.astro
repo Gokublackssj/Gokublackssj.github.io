@@ -1,5 +1,7 @@
 ---
 import "./technology-icons.css";
+import TechnologyIcon from "./TechnologyIcon.astro";
+import IconCredits from "./IconCredits.astro";
 import { technologyGroups } from "./technologies";
 import type { Lang } from "../i18n";
 interface Props { lang: Lang }
@@ -24,9 +26,7 @@ let index = 0;
             return (
               <li data-reveal data-reveal-step={index}>
                 <a href={technology.href} class="lab-tech" target="_blank" rel="noopener">
-                  <span class={`lab-tech-mark tech-${technology.name.toLowerCase()}`} aria-hidden="true">
-                    <span class="lab-tech-glyph"></span>
-                  </span>
+                  <TechnologyIcon name={technology.name} lang={lang} />
                   <span class="lab-tech-copy">
                     <span class="lab-tech-name">{technology.name}</span>
                     <span class="lab-tech-project">{project}<span class="lab-sr"> ({newTab})</span></span>
@@ -39,11 +39,5 @@ let index = 0;
       </div>
     ))}
   </div>
-  <p class="lab-tech-credit">
-    {es ? "Iconos de Simple Icons (CC0) en los colores oficiales de cada marca. Git: " : "Icons by Simple Icons (CC0) in each brand's official colour. Git: "}
-    <a href="https://git-scm.com/community/logos">Jason Long</a>,
-    {es ? " adaptación de Simple Icons, " : " adapted by Simple Icons, "}
-    <a href="https://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.
-    {es ? " Las marcas pertenecen a sus titulares." : " Trademarks belong to their respective owners."}
-  </p>
+  <IconCredits lang={lang} />
 </section>
