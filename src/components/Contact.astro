@@ -2,13 +2,17 @@
 import { contact, cvByLanguage } from "../data/links";
 import { dicts, type Lang } from "../i18n";
 
+type ContactCopy = (typeof dicts)[Lang]["contact"];
+
 interface Props {
   lang: Lang;
+  /** Optional wording for a draft page (the lab); the site passes nothing. */
+  copy?: Partial<Pick<ContactCopy, "heading" | "text">> & { form?: Partial<Pick<ContactCopy["form"], "prepare" | "messageHint">> };
 }
 
-const { lang } = Astro.props;
+const { lang, copy } = Astro.props;
 const t = dicts[lang];
-const c = t.contact;
+const c = { ...t.contact, ...copy, form: { ...t.contact.form, ...copy?.form } };
 const f = c.form;
 const cv = cvByLanguage[lang];
 const cvFiles = [

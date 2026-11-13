@@ -13,7 +13,25 @@ services, junior-role availability and contact details. Public site: https://gok
 - No trackers, cookies, analytics or third-party requests. `localStorage` keeps the visitor's
   animation and theme choices, if they make them
 
-## Commands
+## Approved editorial integration
+
+- `/` and `/es/` render the approved petroleum/mint portfolio: compact radial
+  projects, Clear glass, circular theme reveal, effects preference and contact.
+- `/projects/` and `/es/projects/` retain the full case studies, galleries,
+  videos, run/test commands, website demos, detailed services, process and FAQ.
+  Historic homepage project fragments forward there; no-JavaScript visitors
+  receive equivalent documentation links.
+- `src/portfolio/` is the single shared implementation of the interactive
+  components and controllers. `src/i18n/portfolio.ts` holds their bilingual copy.
+  `Base.astro` retains SEO and safe JSON-LD; theme and motion preferences reuse
+  the original shared scripts and storage keys.
+- Optional local experiments under `src/lab/` are not committed or built.
+  Development route injection checks for their presence so clean clones work.
+- Strict CSP was exercised against the production output, including SVG glass
+  displacement maps, colored masks, theme changes and the screenshot viewer.
+  Deployment CSP is intentionally not enabled by this integration.
+
+### Local commands
 
 ```bash
 npm ci            # use the existing lockfile

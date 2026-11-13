@@ -1,0 +1,83 @@
+---
+import { contact, cvByLanguage } from "../data/links";
+import { dicts, type Lang } from "../i18n";
+import { portfolioCopy } from "../i18n/portfolio";
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = dicts[lang], c = t.contact, p = portfolioCopy[lang];
+const f = { ...c.form, ...p.contact.form };
+const es = lang === "es";
+const services: [string, string][] = [
+  ["other", es ? "Todavía no estoy seguro" : "I'm not sure yet"],
+  ["website", es ? "Una web para mi negocio" : "A website for my business"],
+  ["catalog", es ? "Un catálogo de productos o servicios" : "A product or service catalog"],
+  ["automation", es ? "Automatización con Python" : "Python automation"],
+  ["opportunity", es ? "Puesto junior o colaboración" : "Junior role or collaboration"],
+];
+// Previous URLs retain their original selected label and email context. These
+// entries do not clutter the choices offered to new enquiries.
+const legacy = c.form.services.filter(([id]) => !services.some(([key]) => key === id));
+const cv = cvByLanguage[lang];
+const mailto = 'mailto:' + contact.email + '?subject=' + encodeURIComponent(c.mailSubject);
+---
+<section id="contact" aria-labelledby="contact-title">
+  <div class="container contact-grid">
+    <div class="contact-head"><h2 id="contact-title">{p.contact.heading}</h2><p>{p.contact.text}</p></div>
+    <form
+      class="composer"
+      action={`mailto:${contact.email}`}
+      method="get"
+      data-composer
+      data-email={contact.email}
+      data-subject={f.subject}
+      data-body-service={f.bodyService}
+      data-body-name={f.bodyName}
+      data-opened={f.opened}
+      data-copied={f.copied}
+      data-copy-failed={f.copyFailed}
+      data-reveal
+    >
+      <div class="field">
+        <label for="composer-service">{f.service}</label>
+        <select id="composer-service" name="subject">
+          {services.map(([id, label]) => <option value={label} data-plan={id}>{label}</option>)}
+          {legacy.map(([id, label]) => <option value={label} data-plan={id} hidden>{label}</option>)}
+        </select>
+      </div>
+      <div class="field">
+        <label for="composer-name">{f.name} <span class="field-optional">({f.optional})</span></label>
+        <input id="composer-name" type="text" autocomplete="name" />
+      </div>
+      <div class="field">
+        <label for="composer-message">{f.message}</label>
+        <p id="composer-message-hint" class="field-hint">{f.messageHint}</p>
+        <textarea id="composer-message" name="body" rows="6" required aria-describedby="composer-message-hint composer-message-error"></textarea>
+        <p id="composer-message-error" class="field-error" hidden>{f.messageError}</p>
+      </div>
+      <div class="composer-actions">
+        <button class="button" type="submit">{f.prepare}</button>
+        <button class="button button--ghost" type="button" data-copy hidden>{f.copy}</button>
+      </div>
+      <p class="composer-status" data-status role="status"></p>
+      <!-- Shown only when the browser does not let the page copy. -->
+      <div class="composer-preview" data-preview-wrap hidden>
+        <label for="composer-preview">{f.preview}</label>
+        <textarea id="composer-preview" rows="8" readonly data-preview></textarea>
+      </div>
+      <p class="composer-how">{f.how}</p>
+    </form>
+    <div class="contact-direct">
+      <a class="pf-direct-email" href={mailto}>{contact.email}</a>
+      <nav class="pf-contact-profiles" aria-label={p.social}>
+        <a href={contact.github} target="_blank" rel="noopener me">GitHub<span class="lab-sr"> {t.a11y.newTab}</span></a>
+        <a href={contact.upwork} target="_blank" rel="noopener me">Upwork<span class="lab-sr"> {t.a11y.newTab}</span></a>
+      </nav>
+      <details class="pf-cv"><summary>{c.cv}</summary><p>{c.cvGuide}</p><a href={cv.developer} download data-cv="developer">{c.cvDeveloperDownload}</a><a href={cv.freelance} download data-cv="freelance">{c.cvFreelanceDownload}</a>{cv.developerWord && <a href={cv.developerWord} download data-cv="developer-word">{c.cvWordDownload}</a>}</details>
+      <div class="contact-notes"><p>{c.privacy}</p><p>{c.upworkNote}</p></div>
+    </div>
+  </div>
+</section>
+<script>
+  import { initContact } from "../scripts/contact";
+  initContact();
+</script>

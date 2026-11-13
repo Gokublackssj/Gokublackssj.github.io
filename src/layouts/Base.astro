@@ -2,7 +2,6 @@
 import "@fontsource-variable/source-serif-4/wght.css";
 import "@fontsource-variable/source-serif-4/wght-italic.css";
 import "@fontsource-variable/public-sans/wght.css";
-import "../styles/global.css";
 
 import { getImage } from "astro:assets";
 import { dicts, paths, type Lang } from "../i18n";
@@ -19,15 +18,19 @@ interface Props {
   title?: string;
   description?: string;
   noindex?: boolean;
+  editorial?: boolean;
 }
 
-const { lang, noindex = false } = Astro.props;
+const { lang, noindex = false, editorial = false } = Astro.props;
 const t = dicts[lang];
 const title = Astro.props.title ?? t.meta.title;
 const description = Astro.props.description ?? t.meta.description;
 
 const site = Astro.site!;
 const canonical = new URL(Astro.url.pathname, site).href;
+const alternates = Astro.url.pathname.includes("/projects/")
+  ? { en: "/projects/", es: "/es/projects/" }
+  : paths;
 const og = await getImage({ src: ogSource, width: 1200, height: 630, fit: "cover", position: "top", format: "png" });
 const ogUrl = new URL(og.src, site).href;
 
@@ -44,7 +47,7 @@ const person = {
 ---
 
 <!doctype html>
-<html lang={lang}>
+<html lang={lang} data-portfolio={editorial ? true : undefined}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -53,8 +56,8 @@ const person = {
     <meta name="color-scheme" content="light dark" />
     <!-- Both values match --canvas in global.css; the inline script below keeps
          the one in use when the visitor has chosen a theme. -->
-    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#16181b" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content={editorial ? "#f5faf8" : "#ffffff"} media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content={editorial ? "#071014" : "#16181b"} media="(prefers-color-scheme: dark)" />
     {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonical} />
     <link rel="preload" href={displayFont} as="font" type="font/woff2" crossorigin />
@@ -63,10 +66,10 @@ const person = {
     {
       !noindex &&
         (Object.keys(paths) as Lang[]).map((l) => (
-          <link rel="alternate" hreflang={l} href={new URL(paths[l], site).href} />
+          <link rel="alternate" hreflang={l} href={new URL(alternates[l], site).href} />
         ))
     }
-    {!noindex && <link rel="alternate" hreflang="x-default" href={new URL(paths.en, site).href} />}
+    {!noindex && <link rel="alternate" hreflang="x-default" href={new URL(alternates.en, site).href} />}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="sitemap" href="/sitemap.xml" />
 
@@ -97,7 +100,7 @@ const person = {
         // The hero's entrance plays on this first paint only (global.css reads
         // .intro). Turning animations on later never replays it: the class is
         // removed after the entrance and on any change of the setting.
-        if (m === "on") document.documentElement.classList.add("intro");
+        if (m === "on" && !document.documentElement.hasAttribute("data-portfolio")) document.documentElement.classList.add("intro");
       })();
       // Theme before the first paint, the same way: the visitor's choice from
       // the header switch (localStorage, key shared with src/scripts/theme.ts),
@@ -114,22 +117,24 @@ const person = {
         // A chosen theme overrides the system one in the browser's own chrome too.
         if (chosen) {
           document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) {
-            m.setAttribute("content", t === "dark" ? "#16181b" : "#ffffff");
+            var editorial = document.documentElement.hasAttribute("data-portfolio");
+            m.setAttribute("content", t === "dark" ? (editorial ? "#071014" : "#16181b") : (editorial ? "#f5faf8" : "#ffffff"));
             m.removeAttribute("media");
           });
         }
       })();
       // Hides content for the entrance animation. If the page script never runs,
       // the class is removed again so nothing stays hidden.
-      document.documentElement.classList.add("js");
+      if (!document.documentElement.hasAttribute("data-portfolio")) document.documentElement.classList.add("js");
       setTimeout(function () {
         if (!window.__revealReady) document.documentElement.classList.remove("js");
       }, 2500);
     </script>
-    <script type="application/ld+json" set:html={JSON.stringify(person)} />
+    <script type="application/ld+json" set:html={JSON.stringify(person).replace(/</g, "\\u003c")} />
+    <slot name="head" />
   </head>
-  <body>
-    <a class="skip-link" href="#main">{t.a11y.skip}</a>
+  <body class={editorial ? "pf-shell" : undefined} id={editorial ? "top" : undefined}>
+    <a class={editorial ? "lab-skip" : "skip-link"} href="#main">{t.a11y.skip}</a>
     <slot />
   </body>
 </html>

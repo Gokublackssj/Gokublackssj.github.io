@@ -1,0 +1,536 @@
+/* Approved editorial portfolio identity and layout. */
+:root[data-portfolio] {
+  --lab-paper: #f5faf8;
+  --lab-sand: #dcebe6;
+  --lab-ink: #071014;
+  --lab-accent: #1c6b6a;
+  --lab-display-accent: #175b5c;
+  --lab-link-ink: #155554;
+  --lab-muted: #405d5b;
+  --lab-card: #fff;
+  --lab-shadow-rgb: 7 32 33;
+  --lab-glass: rgb(255 255 255 / .62);
+  --lab-glass-rim: rgb(255 255 255 / .98);
+  --lab-glass-glint: rgb(255 255 255 / .78);
+  --lab-pill: rgb(255 255 255 / .94);
+  --lab-edge: rgb(15 58 63 / .2);
+  --lab-control-shadow: 0 12px 20px -13px rgb(7 32 33 / .38), 0 3px 6px -3px rgb(7 32 33 / .18);
+  --lab-shadow: 0 24px 36px -22px rgb(7 32 33 / .35), 0 3px 8px rgb(7 32 33 / .06);
+  --pf-field: #e9f2ee;
+  --pf-rim-low: rgb(28 107 106 / .16);
+  --pf-glass-light: rgb(184 242 230 / .26);
+  --pf-glass-floor: rgb(15 58 63 / .09);
+  --pf-input-border: #6a8279;
+}
+:root[data-portfolio][data-theme="dark"] {
+  --lab-paper: #071014; --lab-sand: #0f3a3f; --lab-ink: #edf6f3;
+  --lab-accent: #b8f2e6; --lab-display-accent: #b8f2e6; --lab-link-ink: #b8f2e6;
+  --lab-muted: #adc8c2; --lab-card: #0a1f24; --lab-shadow-rgb: 0 0 0;
+  --lab-glass: rgb(10 31 36 / .8); --lab-glass-rim: rgb(184 242 230 / .44);
+  --lab-glass-glint: rgb(184 242 230 / .09); --lab-pill: rgb(28 107 106 / .48);
+  --lab-edge: rgb(184 242 230 / .21);
+  --lab-shadow: 0 24px 36px -20px rgb(0 0 0 / .6), 0 3px 8px rgb(0 0 0 / .2);
+  --pf-field: #0a1f24; --pf-rim-low: rgb(184 242 230 / .06);
+  --pf-glass-light: rgb(28 107 106 / .34); --pf-glass-floor: rgb(0 0 0 / .22);
+  --pf-input-border: #547e77;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-portfolio]:not([data-theme]) {
+    --lab-paper: #071014; --lab-sand: #0f3a3f; --lab-ink: #edf6f3;
+    --lab-accent: #b8f2e6; --lab-display-accent: #b8f2e6; --lab-link-ink: #b8f2e6;
+    --lab-muted: #adc8c2; --lab-card: #0a1f24; --lab-shadow-rgb: 0 0 0;
+    --lab-glass: rgb(10 31 36 / .8); --lab-glass-rim: rgb(184 242 230 / .44);
+    --lab-glass-glint: rgb(184 242 230 / .09); --lab-pill: rgb(28 107 106 / .48);
+    --lab-edge: rgb(184 242 230 / .21);
+    --lab-shadow: 0 24px 36px -20px rgb(0 0 0 / .6), 0 3px 8px rgb(0 0 0 / .2);
+    --pf-field: #0a1f24; --pf-rim-low: rgb(184 242 230 / .06);
+    --pf-glass-light: rgb(28 107 106 / .34); --pf-glass-floor: rgb(0 0 0 / .22);
+    --pf-input-border: #547e77;
+  }
+}
+.pf-shell { overflow-wrap: break-word; }
+.pf-container,.pf-contact .container { width: min(1160px, 100% - 80px); margin-inline: auto; }
+.pf-shell :is(#work,#services,#about,#contact) { scroll-margin-top: 104px; }
+/* The header keeps its 92px in the flow (same layout as before); the bar
+   inside floats over the page as Liquid Glass (liquid-glass.css). */
+.pf-header { height: 92px; }
+.pf-bar {
+  position: fixed;
+  z-index: 50;
+  top: max(14px, env(safe-area-inset-top));
+  left: 50%;
+  translate: -50% 0;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  width: min(1192px, 100% - 48px);
+  min-height: 62px;
+  padding: 0 9px 0 22px;
+}
+.pf-bar .lab-wordmark { flex-shrink: 0; }
+.pf-nav { display: flex; gap: 26px; margin-left: auto; }
+.pf-nav a { display: grid; place-items: center; min-height: 44px; text-decoration: none; font-size: 14px; }
+.pf-bar-tools { display: flex; align-items: center; gap: 8px; }
+.pf-lang { display: flex; padding: 3px; }
+.pf-bar .pf-lang a { min-width: 38px; min-height: 34px; border-radius: 999px; font-size: 13px; font-weight: 600; letter-spacing: .04em; color: var(--lab-muted); }
+.pf-bar .pf-lang a[aria-current] { color: var(--lab-ink); text-decoration: none; text-shadow: none; background: linear-gradient(180deg, rgb(255 255 255 / .3), transparent 70%), var(--lg-cap); box-shadow: inset 0 1px 0 var(--lg-rim-hi), inset 0 -1px 1.5px rgb(0 0 0 / .1), 0 3px 8px -5px rgb(7 32 33 / .4); }
+.pf-theme .lab-sun { display: none; }
+.pf-theme[aria-pressed="true"] .lab-moon { display: none; }
+.pf-theme[aria-pressed="true"] .lab-sun { display: block; }
+.pf-cta { gap: 9px; }
+.pf-cta-icon { display: none; }
+.pf-cta-short { display: none; }
+/* The hero's primary action uses the same brand-tinted material as the bar CTA. */
+.pf-hero .pf-cta-hero { min-height: 48px; padding: 0 22px; gap: 14px; font-size: 15px; }
+.pf-cta-hero svg, .pf-service-cta svg { transition: translate 260ms var(--spring); }
+.pf-service-cta { margin-top: 16px; gap: 8px; font-size: 14px; }
+@media (hover: hover) and (pointer: fine) {
+  .pf-cta-hero:hover svg, .pf-service-cta:hover svg { translate: 3px 0; }
+}
+:root[data-motion="off"] :is(.pf-cta-hero, .pf-service-cta) svg { transition: none; translate: none; }
+.pf-menu { display: none; position: relative; }
+.pf-menu > summary { list-style: none; }
+.pf-menu > summary::-webkit-details-marker { display: none; }
+/* Solid on purpose: a child of the glass cannot blur the page behind it,
+   and a menu needs reliable legibility. */
+.pf-menu-panel {
+  position: absolute;
+  top: calc(100% + 14px);
+  right: -9px;
+  display: grid;
+  gap: 6px;
+  width: min(290px, calc(100vw - 24px));
+  padding: 10px;
+  border: 1px solid var(--lab-edge);
+  border-radius: 22px;
+  background: var(--lab-card);
+  box-shadow: inset 0 1px 0 var(--lg-rim-hi), var(--lg-shadow-up);
+  text-shadow: none;
+}
+.pf-menu-panel nav { display: grid; }
+.pf-menu-panel a { display: flex; align-items: center; min-height: 48px; padding: 0 14px; border-radius: 14px; font-size: 16px; text-decoration: none; }
+.pf-menu-lang { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding-top: 6px; border-top: 1px solid var(--lab-edge); }
+.pf-menu-lang a { justify-content: center; font-size: 14px; color: var(--lab-muted); }
+.pf-menu-lang a[aria-current] { color: var(--lab-ink); background: var(--lab-sand); }
+.pf-edge { position: fixed; z-index: 40; inset: 0 0 auto; height: 96px; background: linear-gradient(var(--lab-paper) 10%, transparent); opacity: .5; pointer-events: none; }
+:root[data-portfolio][data-theme="dark"] .pf-edge { background: linear-gradient(rgb(0 0 0 / .45), transparent); opacity: 1; }
+.pf-shell .lab-skip:focus { z-index: 70; }
+.pf-hero { display: grid; grid-template-columns: 1.9fr 1fr; gap: 48px; align-items: end; padding-block: 76px 84px; }
+.pf-hero h1 { font-size: clamp(48px, 5.1vw, 74px); line-height: 1.055; letter-spacing: -.035em; }
+.pf-hero h1 em { color: var(--lab-display-accent); }
+.pf-signature { margin-top: 28px; font: 22px/1.3 var(--lab-serif); }
+.pf-signature span { display: block; font: 12px/1.6 var(--lab-sans); color: var(--lab-muted); margin-top: 5px; }
+.pf-hero-aside { padding-bottom: 4px; }
+.pf-hero-aside > p { max-width: 35ch; color: var(--lab-muted); font-size: 15px; line-height: 1.75; }
+.pf-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; margin-top: 25px; }
+.pf-button,.pf-contact .button { display: inline-flex; align-items: center; justify-content: center; gap: 25px; min-height: 48px; padding: 12px 20px; border: 1px solid var(--lab-ink); border-radius: 12px; background: var(--lab-ink); color: var(--lab-paper); font-size: 12px; line-height: 1.5; text-decoration: none; transition: transform 150ms var(--lab-control-ease); }
+.pf-button:active,.pf-contact .button:active { transform: scale(.98); }
+.pf-text-link { display: inline-flex; gap: 12px; align-items: center; min-height: 44px; font-size: 13px; color: var(--lab-link-ink); }
+.pf-section-head { display: grid; grid-template-columns: 1.5fr 1fr; gap: 60px; align-items: end; }
+.pf-section-head h2,.pf-about h2 { font-size: clamp(32px, 3.25vw, 43px); line-height: 1.15; letter-spacing: -.025em; }
+.pf-section-head > p { max-width: 40ch; color: var(--lab-muted); font-size: 14px; line-height: 1.75; }
+.pf-work { padding-bottom: 64px; }
+.pf-work .radial { margin-top: 30px; }
+.pf-work .radial-composition { margin-top: 14px; }
+.pf-work .radial-note { margin-top: 25px; }
+/* Carousel controls in Liquid Glass. Size, position and behaviour stay those
+   of radial.css/radial.ts; only the material changes. The cards stay solid. */
+.pf-shell .radial-categories.lg { border: 0; }
+.pf-shell .radial-categories.lg::before {
+  background-image: linear-gradient(180deg, rgb(255 255 255 / .3), transparent 70%);
+  background-color: var(--lg-cap);
+  box-shadow: inset 0 1px 0 var(--lg-rim-hi), inset 0 -1px 1.5px rgb(0 0 0 / .1), 0 0 0 .5px rgb(0 0 0 / .1), 0 4px 12px -6px rgb(7 32 33 / .4);
+  transform-origin: var(--capsule-origin, 50%) 50%;
+  transition: clip-path 250ms var(--lab-control-ease), opacity 160ms ease, background-color 260ms ease;
+}
+/* While the selection travels it turns clearer, then settles (WWDC25 "lift"). */
+.pf-shell .radial-categories.lg[data-moving]::before { background-color: var(--lg-cap-moving); }
+.pf-shell .radial-arrow.lg { border: 0; }
+.pf-shell .radial-arrow.lg:active { transform: none; }
+.pf-shell .radial-arrow.lg:disabled { text-shadow: none; }
+.pf-shell .radial-detail { min-height: 344px; }
+.pf-shell .radial-detail h2 { margin-bottom: 12px; }
+.pf-services { padding-block: 65px; background: var(--pf-field); }
+.pf-service-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 45px; margin-top: 36px; }
+.pf-service-list h3 { font-size: 26px; line-height: 1.2; letter-spacing: -.015em; }
+.pf-service-list p { margin-top: 16px; color: var(--lab-muted); font-size: 14px; line-height: 1.75; }
+.pf-service-list span { display: block; margin-top: 18px; color: var(--lab-link-ink); font-size: 11px; }
+.pf-about { display: grid; grid-template-columns: 1fr 1.4fr; gap: 100px; padding-block: 78px 62px; }
+.pf-location { margin-top: 22px; font-size: 13px; color: var(--lab-muted); }
+.pf-about .pf-text-link { margin-top: 15px; }
+.pf-bio { max-width: 65ch; }
+.pf-bio > p + p { margin-top: 17px; }
+.pf-bio > p { font-size: 14px; color: var(--lab-muted); line-height: 1.75; }
+.pf-bio .pf-about-lead { font: 25px/1.4 var(--lab-serif); color: var(--lab-ink); }
+.pf-bio .pf-availability { color: var(--lab-link-ink); font-size: 12px; }
+.pf-tools { padding-bottom: 68px; }
+.pf-tools .lab-technologies { margin: 0; }
+.pf-tools .lab-technologies-head h2 { font-size: 32px; }
+.pf-tools .lab-tech-credit { max-width: 95ch; line-height: 1.7; }
+.pf-contact #contact { padding-block: 65px; background: var(--pf-field); }
+.pf-contact .contact-grid { display: grid; grid-template-columns: .85fr 1.15fr; gap: 34px 80px; }
+.pf-contact .contact-head h2 { font-size: 51px; line-height: 1.1; letter-spacing: -.025em; }
+.pf-contact .contact-head > p { color: var(--lab-muted); font-size: 15px; margin-top: 22px; max-width: 37ch; }
+.pf-contact .contact-head .contact-availability { color: var(--lab-link-ink); font-size: 12px; }
+.pf-contact .composer { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; min-width: 0; }
+.pf-contact .field { min-width: 0; }
+.pf-contact .field:nth-child(3) { grid-column: 1 / -1; }
+.pf-contact label { display: block; margin-bottom: 8px; font-size: 12px; }
+.pf-contact .field-optional { color: var(--lab-muted); }
+.pf-contact :is(input,select,textarea) { display: block; width: 100%; min-width: 0; min-height: 46px; padding: 11px 12px; border: 1px solid var(--pf-input-border); border-radius: 10px; color: var(--lab-ink); background: var(--lab-card); font: 16px/1.5 var(--lab-sans); }
+.pf-contact textarea { min-height: 126px; height: 126px; resize: vertical; }
+.pf-contact :is(.field-hint,.composer-how,.composer-status) { color: var(--lab-muted); font-size: 11px; line-height: 1.6; }
+.pf-contact .field-hint { margin-block: -2px 10px; }
+.pf-contact .field-error { color: var(--lab-ink); font-size: 12px; margin-top: 8px; }
+.pf-contact [aria-invalid="true"] { border-width: 2px; }
+.pf-contact :is(.composer-actions,.composer-status,.composer-how,.composer-preview) { grid-column: 1 / -1; }
+.pf-contact .composer-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.pf-contact .button--ghost { background: transparent; color: var(--lab-ink); border-color: var(--lab-edge); }
+.pf-contact .composer-status:empty { display: none; }
+.pf-contact .contact-direct { grid-column: 1 / -1; display: grid; grid-template-columns: .85fr 1.15fr; gap: 20px 80px; margin-top: 6px; }
+.pf-contact .contact-next { grid-column: 2; grid-row: 1 / 3; }
+.pf-contact .contact-direct > .contact-direct-title { grid-column: 1; grid-row: 1; }
+.pf-contact .contact-direct-title { font-size: 23px; line-height: 1.25; }
+.pf-contact .next-steps { color: var(--lab-muted); font-size: 12px; padding-left: 18px; margin: 16px 0 0; }
+.pf-contact .next-steps li { padding-left: 5px; margin-top: 8px; }
+.pf-contact .contact-meta { color: var(--lab-muted); font-size: 11px; margin-top: 18px; }
+.pf-contact .contact-list { grid-column: 1; grid-row: 2; display: grid; grid-template-columns: 1fr 1fr; gap: 16px 22px; margin: 0; }
+.pf-contact .contact-list > div:first-child,.pf-contact .contact-list > div:last-child { grid-column: 1 / -1; }
+.pf-contact dt { font-size: 11px; color: var(--lab-muted); margin-bottom: 4px; }
+.pf-contact dd { margin: 0; font-size: 13px; }
+.pf-contact .contact-list a { min-height: 34px; display: inline-flex; align-items: center; }
+.pf-contact .contact-list a[href^="mailto:"] { max-width: 100%; padding: 11px 16px; min-height: 46px; color: var(--lab-paper); background: var(--lab-ink); border: 1px solid var(--lab-ink); border-radius: 10px; font-size: 12px; overflow-wrap: anywhere; }
+.pf-contact .cv-links { display: grid; justify-items: start; }
+.pf-contact .cv-guide { max-width: 46ch; font-size: 11px; color: var(--lab-muted); }
+.pf-contact .cv-links a { font-size: 12px; }
+.pf-contact .contact-notes { grid-column: 1 / -1; display: grid; grid-template-columns: .85fr 1.15fr; gap: 80px; color: var(--lab-muted); font-size: 10px; line-height: 1.7; }
+.pf-footer { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-block: 27px; font-size: 11px; color: var(--lab-muted); }
+.pf-footer nav { display: flex; flex-wrap: wrap; gap: 22px; }
+.pf-footer a { display: inline-flex; align-items: center; min-height: 44px; }
+.pf-shell .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+/* Only the temporary browser-owned snapshots are animated. No DOM overlay. */
+:root[data-portfolio]::view-transition-group(root) { animation: none; }
+:root[data-portfolio]::view-transition-image-pair(root) { isolation: isolate; }
+:root[data-portfolio]::view-transition-old(root),:root[data-portfolio]::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+:root[data-portfolio]::view-transition-old(root) { z-index: 1; }
+:root[data-portfolio]::view-transition-new(root) { z-index: 2; }
+:root[data-portfolio]::view-transition { pointer-events: none; }
+@media (hover: hover) and (pointer: fine) {
+  .pf-nav a:hover,.pf-footer a:hover { color: var(--lab-link-ink); text-decoration: underline; }
+  /* Beats radial.css's opaque hover; the shared glass hover does the rest. */
+  .pf-shell .radial-arrow.lg:not(:disabled):hover { background: radial-gradient(130% 100% at var(--lg-hx, 32%) -30%, var(--lg-sheen), transparent 58%), var(--lg-hover); }
+  .pf-shell .radial-arrow[data-previous]:not(:disabled):hover svg { translate: -2px 0; }
+  .pf-shell .radial-arrow[data-next]:not(:disabled):hover svg { translate: 2px 0; }
+  .pf-bar .pf-lang a:not([aria-current]):hover { color: var(--lab-ink); background: var(--lg-cap-moving); }
+  .pf-theme:hover svg { rotate: 18deg; }
+  .pf-menu-panel a:hover { background: var(--lab-sand); }
+  .pf-button:hover svg { transform: translateX(2px); }
+  .pf-button svg { transition: transform 150ms var(--lab-control-ease); }
+}
+@media (max-width: 1050px) {
+  .pf-bar { gap: 20px; }
+  .pf-nav { gap: 18px; }
+  .pf-hero { grid-template-columns: 1.7fr 1fr; gap: 36px; padding-block: 54px 64px; }
+  .pf-hero h1 { font-size: 59px; }
+  .pf-section-head { gap: 40px; }
+  .pf-about { gap: 60px; }
+  .pf-contact :is(.contact-grid,.contact-direct,.contact-notes) { column-gap: 48px; }
+}
+@media (max-width: 850px) {
+  .pf-container,.pf-contact .container { width: calc(100% - 48px); }
+  /* Phones and small tablets: links and languages move into the menu. */
+  .pf-nav, .pf-bar .pf-lang { display: none; }
+  .pf-bar-tools { margin-left: auto; }
+  .pf-menu { display: block; }
+  .pf-hero { display: block; padding-block: 44px 62px; }
+  .pf-hero h1 { font-size: clamp(49px, 7.8vw, 65px); }
+  .pf-hero-aside { margin-top: 28px; }
+  .pf-hero-aside > p { max-width: 57ch; }
+  .pf-section-head { grid-template-columns: 1.2fr 1fr; gap: 32px; }
+  .pf-service-list { gap: 24px; }
+  .pf-service-list h3 { font-size: 23px; }
+  .pf-service-list p { font-size: 13px; }
+  .pf-about { grid-template-columns: 1fr 1.35fr; gap: 40px; }
+  .pf-contact :is(.contact-grid,.contact-direct,.contact-notes) { column-gap: 30px; grid-template-columns: 1fr 1.2fr; }
+  .pf-contact .composer { display: block; }
+  .pf-contact .field + .field { margin-top: 16px; }
+  .pf-contact .composer-actions { margin-top: 18px; }
+  .pf-contact :is(.composer-how,.composer-status) { margin-top: 14px; }
+  .pf-contact .composer-preview { margin-top: 18px; }
+}
+@media (max-width: 600px) {
+  .pf-container,.pf-contact .container { width: calc(100% - 40px); }
+  .pf-bar { width: calc(100% - 24px); min-height: 58px; gap: 10px; padding-left: 16px; padding-right: 8px; }
+  .pf-bar .lab-wordmark { font-size: 21px; }
+  .pf-cta { padding: 0 16px; font-size: 14px; }
+  /* The full label stays in the accessible name; only its tail is hidden. */
+
+  .pf-hero { padding-block: 35px 52px; }
+  .pf-hero h1 { font-size: clamp(40px, 10.9vw, 59px); line-height: 1.08; }
+  .pf-signature { font-size: 21px; margin-top: 22px; }
+  .pf-signature span { font-size: 11px; }
+  .pf-hero-aside { margin-top: 23px; }
+  .pf-hero-aside > p { font-size: 14px; max-width: 36ch; }
+  .pf-actions { margin-top: 21px; }
+  .pf-section-head { display: block; }
+  .pf-section-head h2,.pf-about h2 { font-size: 33px; }
+  .pf-section-head > p { font-size: 13px; margin-top: 17px; }
+  .pf-work { padding-bottom: 43px; }
+  .pf-work .radial { margin-top: 23px; }
+  .pf-work .radial-detail { min-height: 328px; }
+  .pf-services { padding-block: 43px; }
+  .pf-service-list { grid-template-columns: 1fr; gap: 30px; margin-top: 30px; }
+  .pf-service-list h3 { font-size: 26px; }
+  .pf-service-list p { margin-top: 12px; font-size: 14px; }
+  .pf-service-list span { margin-top: 10px; }
+  .pf-about { display: block; padding-block: 48px; }
+  .pf-location { margin-top: 16px; }
+  .pf-about .pf-text-link { margin-top: 10px; }
+  .pf-bio { margin-top: 27px; }
+  .pf-bio .pf-about-lead { font-size: 24px; }
+  .pf-tools { padding-bottom: 44px; }
+  .pf-tools .lab-technologies-head h2 { font-size: 30px; }
+  .pf-tools .lab-tech-credit { margin-top: 22px; }
+  .pf-contact #contact { padding-block: 43px; }
+  .pf-contact :is(.contact-grid,.contact-direct,.contact-notes) { display: block; }
+  .pf-contact .contact-head h2 { font-size: 43px; }
+  .pf-contact .contact-head > p { margin-top: 16px; font-size: 14px; }
+  .pf-contact .composer { margin-top: 28px; }
+  .pf-contact .contact-direct { margin-top: 35px; }
+  .pf-contact .contact-next { margin-bottom: 30px; }
+  .pf-contact .contact-list { margin-top: 18px; }
+  .pf-contact .contact-notes { margin-top: 23px; }
+  .pf-contact .contact-notes p + p { margin-top: 12px; }
+  .pf-footer { display: block; padding-block: 18px; }
+  .pf-footer nav { margin-top: 4px; }
+}
+@media (min-width: 380px) and (max-width: 420px) {
+  .pf-bar .pf-cta { padding: 0 12px; }
+}
+@media (max-width: 379px) {
+  .pf-cta-short { display: none !important; }
+  .pf-cta { width: 40px; min-height: 40px; padding: 0; justify-content: center; }
+  .pf-cta-icon { display: block; }
+  .pf-cta-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+}
+@media (max-width: 350px) {
+  .pf-container,.pf-contact .container { width: calc(100% - 32px); }
+  .pf-bar { gap: 6px; padding-left: 14px; }
+  .pf-bar .lab-wordmark { font-size: 19px; }
+  .pf-hero h1 { font-size: 38px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-effects-full]) :is(.pf-button,.pf-button svg,.pf-contact .button) { transition: none; transform: none; }
+}
+html:has(.radial[data-reduced]) :is(.pf-button,.pf-button svg,.pf-contact .button) { transition: none; transform: none; }
+@media (forced-colors: active) {
+  .pf-shell .pf-button { border: 1px solid ButtonText; box-shadow: none; }
+}
+
+/* ---------- Microinteractions, focus and theme flips ---------- */
+
+.pf-shell .radial-arrow svg, .pf-theme svg { transition: translate 280ms var(--spring), rotate 420ms var(--spring); }
+.pf-bar .pf-lang a { transition: color 160ms ease, background-color 200ms ease; }
+/* A clear ring on every glass control, outside the rim. */
+.pf-shell :is(.lg, .lg-inset, .lg-cta, .pf-lang a):focus-visible { outline: 2px solid var(--lab-accent-ink); outline-offset: 3px; }
+.pf-shell .radial-categories button:focus-visible { outline: 2px solid var(--lab-accent-ink); outline-offset: 1px; }
+:root[data-motion="off"] .pf-shell :is(.radial-arrow, .pf-theme) svg { transition: none; translate: none; rotate: none; }
+
+/* Circular theme reveal timing, read by theme-reveal.ts (was 600ms expo-out). */
+:root[data-portfolio] { --theme-reveal-duration: 400ms; --theme-reveal-ease: cubic-bezier(.4, 0, .2, 1); }
+/* No colour transitions while the theme flips: the new snapshot must already
+   hold the final colours, and nothing may keep fading after the circle. */
+:root[data-theme-transition] :is(*, *::before, *::after) { transition: none !important; }
+
+/* ---------- Project cards: glass finish (data-cards="glass") ---------- */
+
+:root[data-portfolio] { --pf-card-glass: rgb(250 253 252 / .6); --pf-card-sheen: rgb(255 255 255 / .75); --pf-card-inner: inset 0 1px 1px rgb(255 255 255 / .95), inset 0 -1px 2px rgb(15 58 63 / .14), inset 0 14px 22px -18px rgb(255 255 255 / .9); }
+:root[data-portfolio][data-theme="dark"] { --pf-card-glass: rgb(10 31 36 / .62); --pf-card-sheen: rgb(184 242 230 / .14); --pf-card-inner: inset 0 1px 1px rgb(184 242 230 / .26), inset 0 -1px 2px rgb(0 0 0 / .45), inset 0 14px 22px -18px rgb(184 242 230 / .2); }
+:root[data-cards="glass"] .radial-card {
+  border-color: transparent;
+  /* No backdrop-filter: the cards turn in 3D and a live blur on each frame
+     would cost more than it adds. Translucency, rim and depth do the work. */
+  background: linear-gradient(165deg, var(--pf-card-sheen), transparent 40%), var(--pf-card-glass);
+  box-shadow: var(--pf-card-inner), var(--lab-shadow);
+}
+:root[data-cards="glass"] .radial-card > * { position: relative; z-index: 3; }
+/* The screenshot sits in the glass like an inlay. */
+:root[data-cards="glass"] .radial-cover { box-shadow: 0 0 0 .5px rgb(15 58 63 / .18), 0 8px 16px -12px rgb(7 32 33 / .5); }
+/* The protagonist is fully lit; the cards behind it are quieter. */
+:root[data-cards="glass"] .radial-item:not([data-active]) .radial-card { box-shadow: var(--lab-shadow); }
+:root[data-cards="glass"] .radial-item:not([data-active]) .radial-card::before { opacity: .4; }
+:root[data-cards="solid"] .radial-card.lg-rim::before { display: none; }
+
+/* ---------- Editorial entrances (html.pf-reveal, set only when motion is on) ---------- */
+
+/* Hidden only while the inline script's class is present: without
+   JavaScript, with motion reduced, or if entrance.ts fails, nothing hides. */
+html.pf-reveal [data-reveal]:not(.is-in) { opacity: 0; translate: 0 var(--reveal-y, 14px); }
+html.pf-reveal [data-reveal] {
+  transition: opacity 560ms ease, translate 720ms cubic-bezier(.2, .8, .2, 1);
+  transition-delay: calc(var(--reveal-i, 0) * var(--reveal-step, 80ms));
+}
+html.pf-reveal [data-reveal="fade"] { --reveal-y: 0px; }
+html.pf-reveal .lab-tech-list [data-reveal] { --reveal-y: 8px; --reveal-step: 40ms; }
+
+/* The bar CTA keeps its full accessible name; where the full label does not
+   fit, a short visible label takes its place (aria-hidden, decorative). */
+@media (max-width: 1080px) {
+  .pf-cta-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .pf-cta-short { display: inline; }
+}
+
+/* Clear selector on a pale page: a faint neutral track (still colourless)
+   so the white selection capsule reads, as in system segmented controls. */
+:root[data-portfolio]:not([data-theme="dark"]) .pf-shell .radial-categories.lg--clear { --lg-tint: rgb(0 0 0 / .05); --lg-tint-up: rgb(0 0 0 / .06); }
+:root[data-portfolio]:not([data-theme="dark"]) .pf-shell .radial-categories.lg--clear::before { box-shadow: inset 0 1px 0 #fff, 0 0 0 .5px rgb(0 0 0 / .12), 0 2px 6px -1px rgb(0 0 0 / .18); }
+/* Reduced motion (system or the visitor's choice): the capsule jumps, no slide. */
+:root[data-motion="off"] .pf-shell .radial-categories.lg::before,
+.pf-shell .radial[data-reduced] .radial-categories.lg::before { transition: none; }
+
+/* ======================================================================
+   Professional polish (audit priorities 1-5). Scoped to the mockup with
+   .pf-shell so it overrides the shared lab styles without touching them.
+   ====================================================================== */
+
+:root[data-portfolio] { --pf-line: rgb(15 58 63 / .32); }
+:root[data-portfolio][data-theme="dark"] { --pf-line: rgb(184 242 230 / .32); }
+
+/* ---------- 1. Type scale: 13px minimum for secondary text, 15-16px body ---------- */
+.pf-shell .pf-signature span { font-size: 14px; }
+.pf-shell .pf-hero-aside > p { font-size: 17px; line-height: 1.7; max-width: 36ch; }
+.pf-shell .pf-section-head > p { font-size: 16px; line-height: 1.7; }
+.pf-shell .pf-service-list p { font-size: 16px; line-height: 1.7; }
+.pf-shell .pf-service-list span { font-size: 13px; line-height: 1.5; }
+.pf-shell .pf-bio > p { font-size: 16px; line-height: 1.75; }
+.pf-shell .pf-bio .pf-about-lead { font-size: 26px; line-height: 1.4; }
+.pf-shell .radial-kind { font-size: 13px; }
+.pf-shell .radial-description { font-size: 16px; line-height: 1.7; }
+.pf-shell .radial-technologies { font-size: 13px; gap: 6px 16px; }
+.pf-shell .radial-position { font-size: 13px; }
+.pf-shell .radial-note { font-size: 14px; line-height: 1.6; }
+.pf-shell .radial-categories button { font-size: 14px; }
+.pf-shell .lab-technologies-head > p { font-size: 15px; }
+.pf-shell .pf-text-link { font-size: 15px; }
+.pf-shell .radial-code { font-size: 14px; }
+.pf-shell .pf-contact label { font-size: 14px; }
+.pf-shell .pf-contact :is(.field-hint, .composer-status, .contact-meta, .cv-guide, dt) { font-size: 13px; line-height: 1.55; }
+.pf-shell .pf-contact dd { font-size: 15px; }
+.pf-shell .pf-contact .contact-head > p { font-size: 16px; line-height: 1.7; }
+.pf-shell .pf-contact .contact-head .contact-availability { font-size: 14px; }
+.pf-shell .pf-contact .next-steps { font-size: 14px; line-height: 1.6; }
+.pf-shell .pf-contact .contact-notes { font-size: 13px; line-height: 1.6; }
+.pf-shell .pf-footer { font-size: 13px; }
+
+/* ---------- 2. One button system: primary, secondary, link ---------- */
+/* Primary: the brand-tinted material already used by the hero/bar CTA. */
+.pf-shell :is(.radial-explore, .pf-contact .button:not(.button--ghost)) {
+  display: inline-flex; align-items: center; justify-content: center; gap: 14px;
+  min-height: 48px; padding: 0 22px; border: 0; border-radius: 999px;
+  background: linear-gradient(180deg, rgb(255 255 255 / .2), transparent 62%), var(--lg-cta);
+  color: var(--lg-cta-ink);
+  box-shadow: inset 0 -1px 1.5px rgb(0 0 0 / .22), 0 0 0 1px var(--lg-cta-ring, rgb(7 16 20 / .14)), 0 6px 14px -8px rgb(7 32 33 / .55);
+  font-size: 15px; font-weight: 500; line-height: 1.2; text-decoration: none;
+  transition: translate 320ms var(--spring), background-color 200ms ease, box-shadow 200ms ease;
+}
+/* Secondary: outlined, same height and radius. */
+.pf-shell :is(.pf-contact .button--ghost, .pf-contact .contact-list a[href^="mailto:"]) {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 46px; padding: 0 20px; border: 1px solid var(--pf-line); border-radius: 999px;
+  background: transparent; color: var(--lab-ink);
+  font-size: 15px; font-weight: 500; line-height: 1.2; text-decoration: none;
+  transition: background-color 200ms ease, border-color 200ms ease;
+}
+.pf-shell .pf-contact .contact-list a[href^="mailto:"] { overflow-wrap: anywhere; }
+/* Link: text with an arrow (pf-text-link); the GitHub link joins it. */
+.pf-shell .radial-code { color: var(--lab-link-ink); text-underline-offset: .25em; }
+@media (hover: hover) and (pointer: fine) {
+  .pf-shell :is(.radial-explore, .pf-contact .button:not(.button--ghost)):hover { background-color: var(--lg-cta-hover); translate: 0 -1px; }
+  .pf-shell :is(.pf-contact .button--ghost, .pf-contact .contact-list a[href^="mailto:"]):hover { background: var(--lab-sand); border-color: var(--lab-ink); }
+}
+.pf-shell :is(.radial-explore, .pf-contact .button):active { scale: .97; }
+:root[data-motion="off"] .pf-shell :is(.radial-explore, .pf-contact .button) { transition: none; translate: none; scale: none; }
+
+/* ---------- 3. Hero, services and About: calmer proportions ---------- */
+.pf-shell .pf-hero h1 { font-size: clamp(44px, 4.6vw, 66px); line-height: 1.06; text-wrap: balance; }
+.pf-shell .pf-hero h1 em { text-wrap: balance; }
+/* Services: details and actions line up at the bottom of each column. */
+.pf-shell .pf-service-list li { display: flex; flex-direction: column; }
+.pf-shell .pf-service-list li > span { margin-top: auto; padding-top: 18px; }
+.pf-shell .pf-service-list .pf-service-cta { margin-top: 12px; }
+/* About: facts and links on the left, the personal text on the right. */
+.pf-shell .pf-facts { display: grid; gap: 16px; margin: 26px 0 0; }
+.pf-shell .pf-facts dt { font-size: 13px; letter-spacing: .06em; text-transform: uppercase; color: var(--lab-muted); }
+.pf-shell .pf-facts dd { margin: 3px 0 0; font-size: 16px; line-height: 1.5; }
+.pf-shell .pf-about-links { display: grid; justify-items: start; gap: 2px; margin-top: 20px; }
+
+/* ---------- 4. Carousel: less noise, same geometry ---------- */
+/* The help text still describes the scene to screen readers. */
+.pf-shell .radial-help { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; margin: 0; }
+.pf-shell .category-count { display: none; }
+
+/* ---------- 5. Contact: two zones, all information kept ---------- */
+@media (min-width: 851px) {
+  .pf-shell .pf-contact .contact-grid { grid-template-columns: .9fr 1.1fr; column-gap: 72px; row-gap: 0; align-items: start; }
+  .pf-shell .pf-contact .contact-head { grid-column: 1; grid-row: 1; }
+  .pf-shell .pf-contact .composer { grid-column: 2; grid-row: 1 / 4; }
+  .pf-shell .pf-contact .contact-direct { display: contents; }
+  .pf-shell .pf-contact .contact-direct > .contact-direct-title { grid-column: 1; grid-row: 2; margin-top: 36px; }
+  .pf-shell .pf-contact .contact-list { grid-column: 1; grid-row: 3; margin-top: 16px; }
+  .pf-shell .pf-contact .contact-next { grid-column: 1 / -1; grid-row: 4; margin-top: 48px; padding-top: 28px; border-top: 1px solid var(--lab-edge); }
+  .pf-shell .pf-contact .next-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; padding-left: 18px; }
+  .pf-shell .pf-contact .contact-notes { grid-column: 1 / -1; grid-row: 5; margin-top: 24px; }
+}
+/* The head text already says the form only prepares an email. */
+.pf-shell .pf-contact .composer-how { display: none; }
+.pf-shell .pf-contact .contact-list a:not([href^="mailto:"]) { font-size: 15px; color: var(--lab-link-ink); }
+
+/* ---------- Mobile ---------- */
+@media (max-width: 600px) {
+  .pf-shell .pf-hero-aside > p, .pf-shell .pf-section-head > p, .pf-shell .pf-service-list p, .pf-shell .pf-bio > p, .pf-shell .radial-description, .pf-shell .pf-contact .contact-head > p { font-size: 15px; }
+  .pf-shell .pf-bio .pf-about-lead { font-size: 23px; }
+  .pf-shell .radial-categories button { font-size: 13px; }
+}
+@media (max-width: 420px) {
+  /* Long category names may take two lines rather than shrink below 13px. */
+  .pf-shell .radial-categories button { white-space: normal; line-height: 1.25; text-align: center; padding-block: 8px; }
+}
+/* Bar controls at the 44px touch size. */
+.pf-shell .pf-bar .lg-inset { width: 44px; height: 44px; }
+
+/* Focused lab refinements: existing palette, controller and materials retained. */
+.pf-demo-links { display:flex; flex-wrap:wrap; align-items:center; gap:8px 22px; margin-top:20px; font-size:13px; color:var(--lab-muted); }
+.pf-demo-links a { display:inline-flex; align-items:center; min-height:44px; color:var(--lab-link-ink); }
+.pf-process { padding-block:54px 12px; }
+.pf-process h2 { font-size:clamp(30px,3vw,40px); line-height:1.2; }
+.pf-process ol { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:34px; list-style:decimal; padding-left:20px; margin:28px 0 0; }
+.pf-process li { padding-left:6px; }
+.pf-process li::marker { color:var(--lab-link-ink); }
+.pf-process h3 { font-size:23px; line-height:1.25; }
+.pf-process li p { margin-top:12px; font-size:14px; line-height:1.7; color:var(--lab-muted); }
+.pf-contact-compact .contact-grid { grid-template-areas:"intro form" "direct form"; row-gap:24px; }
+.pf-contact-compact .contact-head { grid-area:intro; }
+.pf-contact-compact .composer { grid-area:form; align-self:start; }
+.pf-contact-compact .contact-direct { grid-area:direct; display:block; margin:0; }
+.pf-contact-compact .pf-direct-email { display:inline-flex; align-items:center; min-height:44px; max-width:100%; font-size:14px; overflow-wrap:anywhere; }
+.pf-contact-profiles { display:flex; gap:24px; }
+.pf-contact-profiles a,.pf-cv summary,.pf-cv a { display:inline-flex; align-items:center; min-height:44px; font-size:14px; }
+.pf-cv summary { display:list-item; align-content:center; cursor:pointer; width:fit-content; }
+.pf-cv p { color:var(--lab-muted); font-size:12px; margin-block:6px; }
+.pf-cv a { display:flex; width:fit-content; }
+.pf-contact-compact .contact-notes { display:block; margin-top:16px; font-size:11px; }
+.pf-contact-compact .contact-notes p + p { margin-top:10px; }
+.pf-contact-compact .composer { row-gap:14px; }
+.pf-contact-compact .composer textarea { height:110px; min-height:110px; }
+@media(max-width:600px) {
+  .pf-process { padding-block:40px 0; }
+  .pf-process ol { grid-template-columns:1fr; gap:24px; }
+  .pf-contact-compact #contact { padding-block:36px; }
+  .pf-contact-compact .composer { margin-top:22px; }
+  .pf-contact-compact .contact-direct { margin-top:24px; }
+  .pf-contact-compact .field + .field { margin-top:13px; }
+}
+
+.pf-footer { flex-wrap: wrap; }
+.pf-effects { min-height:44px; padding:8px 10px; font-size:12px; line-height:1.4; color:var(--lab-muted); border:1px solid var(--lab-edge); border-radius:8px; background:transparent; }
+.pf-effects[aria-pressed="true"] { color:var(--lab-link-ink); border-color:currentColor; }

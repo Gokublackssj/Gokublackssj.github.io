@@ -1,0 +1,49 @@
+---
+import "./technology-icons.css";
+import { technologyGroups } from "./technologies";
+import type { Lang } from "../i18n";
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const es = lang === "es";
+const newTab = es ? "se abre en una pestaña nueva" : "opens in a new tab";
+let index = 0;
+---
+<section class="lab-technologies" aria-labelledby="technologies-title">
+  <div class="lab-technologies-head" data-reveal>
+    <h2 id="technologies-title">{es ? "Tecnología, con propósito." : "Technology, with purpose."}</h2>
+    <p>{es ? "Las herramientas detrás de estos proyectos. Cada una enlaza al repositorio donde la uso." : "The tools behind these projects. Each one links to the repository where I use it."}</p>
+  </div>
+  <div class="lab-tech-groups">
+    {technologyGroups.map((group) => (
+      <div class="lab-tech-group">
+        <h3 class="lab-tech-group-title">{group.label[lang]}</h3>
+        <ul class="lab-tech-list" role="list">
+          {group.items.map((technology) => {
+            const project = technology.project === "portfolio" ? (es ? "Este portafolio" : "This portfolio") : technology.project;
+            index += 1;
+            return (
+              <li data-reveal data-reveal-step={index}>
+                <a href={technology.href} class="lab-tech" target="_blank" rel="noopener">
+                  <span class={`lab-tech-mark tech-${technology.name.toLowerCase()}`} aria-hidden="true">
+                    <span class="lab-tech-glyph"></span>
+                  </span>
+                  <span class="lab-tech-copy">
+                    <span class="lab-tech-name">{technology.name}</span>
+                    <span class="lab-tech-project">{project}<span class="lab-sr"> ({newTab})</span></span>
+                  </span>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    ))}
+  </div>
+  <p class="lab-tech-credit">
+    {es ? "Iconos de Simple Icons (CC0) en los colores oficiales de cada marca. Git: " : "Icons by Simple Icons (CC0) in each brand's official colour. Git: "}
+    <a href="https://git-scm.com/community/logos">Jason Long</a>,
+    {es ? " adaptación de Simple Icons, " : " adapted by Simple Icons, "}
+    <a href="https://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.
+    {es ? " Las marcas pertenecen a sus titulares." : " Trademarks belong to their respective owners."}
+  </p>
+</section>

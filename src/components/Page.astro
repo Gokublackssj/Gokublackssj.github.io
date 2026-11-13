@@ -1,7 +1,7 @@
 ---
+import "../styles/global.css";
 import Base from "../layouts/Base.astro";
 import Header from "./Header.astro";
-import Hero from "./Hero.astro";
 import CaseStudy from "./CaseStudy.astro";
 import WebProjects from "./WebProjects.astro";
 import RunSteps from "./RunSteps.astro";
@@ -39,11 +39,15 @@ const categories = [
 ];
 ---
 
-<Base lang={lang}>
+<Base lang={lang} title={lang === "es" ? "Proyectos, servicios y documentación · Luis Pimentel" : "Projects, services and documentation · Luis Pimentel"}>
   <Header lang={lang} />
 
   <main id="main">
-    <Hero lang={lang} />
+    <section class="section"><div class="container">
+      <h1 class="display">{lang === "es" ? "Proyectos y documentación" : "Projects and documentation"}</h1>
+      <p class="lead">{t.projectsIntro.text}</p>
+      <a class="button button--ghost" href={lang === "es" ? "/es/" : "/"}>{lang === "es" ? "Volver al portafolio" : "Back to the portfolio"}</a>
+    </div></section>
 
     <section class="section" id="projects" aria-labelledby="projects-title">
       <div class="container">

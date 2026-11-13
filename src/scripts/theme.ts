@@ -30,20 +30,21 @@ function stored(): Theme | null {
 }
 
 function setChrome(theme: Theme, chosen: boolean) {
+  const chrome = root.hasAttribute("data-portfolio") ? {light:"#f5faf8",dark:"#071014"} : CHROME;
   document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]').forEach((meta, i) => {
     if (chosen) {
-      meta.content = CHROME[theme];
+      meta.content = chrome[theme];
       meta.removeAttribute("media");
     } else {
       // Back to one value per system scheme, as Base.astro writes them.
       const scheme: Theme = i === 0 ? "light" : "dark";
-      meta.content = CHROME[scheme];
+      meta.content = chrome[scheme];
       meta.media = `(prefers-color-scheme: ${scheme})`;
     }
   });
 }
 
-function apply(theme: Theme, chosen: boolean, button: HTMLButtonElement) {
+function apply(theme: Theme, chosen: boolean, button: HTMLButtonElement, animate = true) {
   const change = () => {
     root.dataset.theme = theme;
     button.setAttribute("aria-pressed", String(theme === "dark"));
@@ -51,30 +52,33 @@ function apply(theme: Theme, chosen: boolean, button: HTMLButtonElement) {
   };
   // A short crossfade of the whole page where the browser supports it and
   // motion is on; otherwise the switch is instant.
-  if (motionAllowed() && "startViewTransition" in document) {
+  if (animate && motionAllowed() && "startViewTransition" in document) {
     root.classList.add("theme-switching");
     const transition = document.startViewTransition(change);
-    transition.finished.finally(() => root.classList.remove("theme-switching"));
+    transition.finished.catch(() => {}).finally(() => root.classList.remove("theme-switching"));
   } else {
     change();
   }
 }
 
-export function initThemeToggle() {
-  const button = document.querySelector<HTMLButtonElement>("[data-theme-toggle]");
-  if (!button) return;
+export function initThemeToggle(selector = "[data-theme-toggle]", animate = true) {
+  const button = document.querySelector<HTMLButtonElement>(selector);
+  if (!button || button.dataset.themeReady) return;
+  button.dataset.themeReady = "true";
+  const controller = new AbortController();
+  const { signal } = controller;
   button.hidden = false;
   button.setAttribute("aria-pressed", String(current() === "dark"));
-  button.addEventListener("click", () => {
+  const toggle = () => {
     const next: Theme = current() === "dark" ? "light" : "dark";
-    try {
-      localStorage.setItem(KEY, next);
-    } catch {
-      // Private mode: the choice holds for this page only.
-    }
-    apply(next, true, button);
-  });
-  system.addEventListener("change", (event) => {
-    if (!stored()) apply(event.matches ? "dark" : "light", false, button);
-  });
+    try { localStorage.setItem(KEY, next); } catch {}
+    apply(next, true, button, animate);
+  };
+  button.addEventListener("click", toggle, { signal });
+  // The circular reveal invokes the same handler after taking its snapshot.
+  button.addEventListener("lab:theme-toggle", toggle, { signal });
+  system.addEventListener("change", event => { if (!stored()) apply(event.matches ? "dark" : "light", false, button, animate); }, { signal });
+  const cleanup = () => { controller.abort(); delete button.dataset.themeReady; };
+  document.addEventListener("astro:before-swap", cleanup, { once:true, signal });
+  window.addEventListener("pagehide", event => { if (!event.persisted) cleanup(); }, { signal });
 }

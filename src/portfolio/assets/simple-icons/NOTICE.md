@@ -1,0 +1,1 @@
+Seven unchanged Simple Icons SVGs, pinned upstream revision cd796c98565fc466923fc1128b962e133fa3c612. Collection: CC0-1.0 (LICENSE.md). Git Logo by Jason Long, monochrome adaptation by Simple Icons: CC BY 3.0, https://git-scm.com/community/logos and https://creativecommons.org/licenses/by/3.0/. Marks identify the technologies used; no affiliation or endorsement is implied.

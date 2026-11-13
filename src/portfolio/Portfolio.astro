@@ -1,0 +1,155 @@
+---
+import { legacyFragments } from "./legacy-fragments";
+import Base from "../layouts/Base.astro";
+import "./radial.css";
+import "./liquid-glass.css";
+import "./portfolio.css";
+import RadialGallery from "./RadialGallery.astro";
+import Technologies from "./Technologies.astro";
+import Contact from "./PortfolioContact.astro";
+import { dicts, type Lang } from "../i18n";
+import { contact, cvByLanguage } from "../data/links";
+import { portfolioCopy } from "../i18n/portfolio";
+import { labProjects } from "./projects";
+interface Props {lang:Lang}
+const {lang}=Astro.props;
+const t=dicts[lang],p=portfolioCopy[lang],cv=cvByLanguage[lang];
+const details=lang === "es"?"/es/projects/":"/projects/";
+---
+<Base lang={lang} editorial>
+  <script is:inline slot="head">
+    document.documentElement.dataset.cards="glass";
+    if(document.documentElement.dataset.motion==="on"){document.documentElement.classList.add("pf-reveal");setTimeout(()=>{if(!window.__pfRevealReady)document.documentElement.classList.remove("pf-reveal")},2500)}
+  </script>
+    <header class="pf-header">
+      <div class="pf-bar lg lg--frost" data-lg data-lg-bar data-lg-depth="10" data-lg-bezel="20" data-lg-frost="3">
+        <a class="lab-wordmark" href="#top" aria-label={t.a11y.home}>luisdataworks<span aria-hidden="true">.</span></a>
+        <nav class="pf-nav" aria-label={p.nav}>
+          <a href="#work">{t.nav.projects}</a><a href="#services">{t.nav.services}</a><a href="#about">{t.nav.about}</a><a href="#contact">{t.nav.contact}</a>
+        </nav>
+        <div class="pf-bar-tools">
+          <nav class="lab-language pf-lang lg-well" aria-label={t.a11y.langLabel}>
+            <a href="/es/" lang="es" aria-current={lang === "es" ? "page" : undefined}>ES</a>
+            <a href="/" lang="en" aria-current={lang === "en" ? "page" : undefined}>EN</a>
+          </nav>
+          <button class="lg-inset pf-theme" type="button" aria-label={p.theme} aria-pressed="false" data-lab-theme data-lg-press hidden>
+            <svg class="lab-moon" aria-hidden="true" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.5 14A8.5 8.5 0 0 1 10 3.5 8.5 8.5 0 1 0 20.5 14Z" /></svg>
+            <svg class="lab-sun" aria-hidden="true" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="4" /><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5" /></svg>
+          </button>
+          <a class="lg-cta pf-cta" href="#contact" data-lg-press>
+            <svg class="pf-cta-icon" aria-hidden="true" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4V5Z" /></svg>
+            <span class="pf-cta-label">{p.cta.full}</span>
+            <span class="pf-cta-short" aria-hidden="true">{p.cta.short}</span>
+          </a>
+          <details class="pf-menu">
+            <summary class="lg-inset" data-lg-press>
+              <svg aria-hidden="true" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M5 8h14M5 16h14" /></svg>
+              <span class="lab-sr">{p.menu}</span>
+            </summary>
+            <div class="pf-menu-panel">
+              <nav aria-label={p.menu}>
+                <a href="#work">{t.nav.projects}</a><a href="#services">{t.nav.services}</a><a href="#about">{t.nav.about}</a><a href="#contact">{t.nav.contact}</a>
+              </nav>
+              <div class="pf-menu-lang" role="group" aria-label={t.a11y.langLabel}>
+                <a href="/es/" lang="es" aria-current={lang === "es" ? "page" : undefined}>Español</a>
+                <a href="/" lang="en" aria-current={lang === "en" ? "page" : undefined}>English</a>
+              </div>
+            </div>
+          </details>
+        </div>
+      </div>
+    </header>
+    <main id="main">
+      <section class="pf-hero pf-container" aria-labelledby="intro-title">
+        <div>
+          <h1 id="intro-title">{p.title[0]}<br /><em>{p.title[1]}</em></h1>
+          <p class="pf-signature">Luis Pimentel<span>{p.role}</span></p>
+        </div>
+        <div class="pf-hero-aside" data-reveal data-reveal-step="1">
+          <p>{p.intro}</p>
+          <div class="pf-actions">
+            <a class="lg-cta pf-cta-hero" href="#contact" data-lg-press><span>{p.ctaHero}</span><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 12h16m-6-6 6 6-6 6" /></svg></a>
+            <a class="pf-text-link" href="#work">{p.projects}</a>
+          </div>
+        </div>
+      </section>
+      <div id="projects" class="pf-work pf-container">
+        <div class="pf-section-head" data-reveal><h2 id="projects-title">{p.work}</h2><p>{p.workText}</p></div>
+        <RadialGallery lang={lang} glass />
+        <nav class="pf-demo-links" aria-label={p.webDemos}>
+          <span>{p.webDemos}</span>
+          {labProjects(lang)[0]!.projects.map((project) => <a href={project.href} target="_blank" rel="noopener">{project.name}<span class="lab-sr"> {t.a11y.newTab}</span></a>)}
+        </nav>
+      </div>
+      <section id="services" class="pf-services" aria-labelledby="services-title">
+        <div class="pf-container">
+          <div class="pf-section-head" data-reveal><h2 id="services-title">{p.services}</h2><p>{p.servicesText}</p></div>
+          <ul class="pf-service-list">
+            {p.serviceItems.map((service, index) => <li data-reveal data-reveal-step={index + 1}><h3>{service.title}</h3><p>{service.text}</p><span>{service.detail}</span><a class="pf-text-link pf-service-cta" href={`?${lang === "en" ? "lang=en&" : ""}plan=${service.plan}#contact`} data-plan={service.plan}>{service.cta}<svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 12h16m-6-6 6 6-6 6" /></svg></a></li>)}
+          </ul>
+        </div>
+      </section>
+      <section id="process" class="pf-process pf-container" aria-labelledby="process-title">
+        <h2 id="process-title">{p.process.heading}</h2>
+        <ol>{p.process.steps.map((step) => <li data-reveal><h3>{step.title}</h3><p>{step.text}</p></li>)}</ol>
+      </section>
+      <section id="about" class="pf-about pf-container" aria-labelledby="about-title">
+        <div class="pf-about-side" data-reveal="fade">
+          <h2 id="about-title">{p.aboutTitle}</h2>
+          <dl class="pf-facts">
+            {p.facts.map(([term, value]) => <div><dt>{term}</dt><dd>{value}</dd></div>)}
+          </dl>
+          <div class="pf-about-links">
+            <a class="pf-text-link" href={cv.developer} data-cv="developer">{p.cv}<svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 12h16m-6-6 6 6-6 6" /></svg></a>
+            <a class="pf-text-link" href={contact.github} target="_blank" rel="noopener me">{p.github}<span class="lab-sr"> ({t.a11y.newTab})</span><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 17 17 7M8 7h9v9" /></svg></a>
+          </div>
+        </div>
+        <div class="pf-bio" data-reveal="fade" data-reveal-step="1"><p class="pf-about-lead">{p.aboutLead}</p><p>{p.aboutText}</p><p>{p.aboutMore}</p></div>
+      </section>
+      <div class="pf-container pf-tools"><Technologies lang={lang} /></div>
+      <div class="pf-contact pf-contact-compact"><Contact lang={lang} /></div>
+    </main>
+    <footer class="pf-footer pf-container">
+      <p>© 2026 Luis Alvaro Pimentel Tacuri</p>
+      <button class="pf-effects" type="button" data-effects-control hidden aria-pressed="false"
+        data-system={lang === "es" ? "Efectos: sistema" : "Effects: system"}
+        data-full={lang === "es" ? "Efectos: completos" : "Effects: full"}
+        data-enable={lang === "es" ? "Activar animaciones y cristal transparente" : "Enable animations and clear glass"}
+        data-reset={lang === "es" ? "Volver a las preferencias del sistema" : "Return to system preferences"}>
+        {lang === "es" ? "Efectos: sistema" : "Effects: system"}
+      </button>
+      <nav aria-label={p.social}><a href={contact.github} target="_blank" rel="noopener me">GitHub<span class="lab-sr"> {t.a11y.newTab}</span></a><a href={contact.upwork} target="_blank" rel="noopener me">Upwork<span class="lab-sr"> {t.a11y.newTab}</span></a><a href={details}>{lang === "es" ? "Detalles y FAQ" : "Details & FAQ"}</a><a href="#top">{p.back}</a></nav>
+    </footer>
+    <script>
+      import { initRadial } from "./radial";
+      import { initCircularThemeReveal } from "./theme-reveal";
+      import { initLiquidGlass } from "./liquid-glass";
+      import { initEffectsControl } from "./effects-control";
+      import { initEntrances } from "./entrance";
+      initRadial();
+      initCircularThemeReveal();
+      initEntrances();
+      // After the carousel has revealed its controls, so each lens is measured.
+      initLiquidGlass();
+      initEffectsControl();
+
+      // Phone menu: close after choosing a link, on Escape, or on an outside tap.
+      const menu = document.querySelector<HTMLDetailsElement>(".pf-menu");
+      if (menu) {
+        menu.addEventListener("click", (event) => {
+          if ((event.target as Element).closest("a")) menu.open = false;
+        });
+        document.addEventListener("keydown", (event) => {
+          if (event.key === "Escape" && menu.open) {
+            menu.open = false;
+            menu.querySelector("summary")?.focus();
+          }
+        });
+        document.addEventListener("pointerdown", (event) => {
+          if (menu.open && !menu.contains(event.target as Node)) menu.open = false;
+        });
+      }
+    </script>
+<noscript><nav class="pf-container" aria-label={lang === "es" ? "Casos de estudio" : "Case studies"}>{legacyFragments.map(id=><p id={id}><a href={`${details}#${id}`}>{id} · {lang === "es" ? "Ver documentación" : "Read documentation"}</a></p>)}</nav></noscript>
+<script>import "./legacy-links";</script>
+</Base>
