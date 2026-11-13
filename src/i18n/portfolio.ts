@@ -23,9 +23,7 @@ export const portfolioCopy = {
       { title: "Definimos alcance y propuesta", text: "Acordamos qué se incluye y una propuesta por escrito antes de comenzar." },
       { title: "Desarrollo y revisiones", text: "Construyo y comparto avances para revisar contigo los detalles acordados." },
     ] },
-    aboutTitle: "Sobre mí.", aboutLead: "Soy Luis, desarrollador web y Python. Creo webs para presentar tu negocio y herramientas para simplificar el trabajo con tus datos.",
-    aboutText: "Antes de construir, definimos qué necesitas y qué incluye el proyecto. Recibes una propuesta por escrito y avances que puedes revisar durante el desarrollo.",
-    aboutMore: "Puedes evaluar mi trabajo en las demos, los casos de estudio y el código público: qué resuelve cada proyecto, cómo está hecho y cuáles son sus límites.",
+    aboutTitle: "Desarrollo web y Python.", aboutLead: "Creo páginas web, catálogos y herramientas digitales para resolver necesidades reales. Combino programación, diseño y herramientas de IA para trabajar de forma más eficiente, cuidando la calidad y los detalles de cada proyecto.",
     facts: [
       ["Ubicación", "Potosí, Bolivia · Remoto (UTC−4)"],
       ["Idiomas", "Español; inglés principalmente por escrito"],
@@ -63,9 +61,7 @@ export const portfolioCopy = {
       { title: "We define scope and proposal", text: "We agree on what is included and a written proposal before work begins." },
       { title: "Development and reviews", text: "I build and share progress so we can review the agreed details together." },
     ] },
-    aboutTitle: "About me.", aboutLead: "I’m Luis, a web and Python developer. I build websites to present your business and tools to simplify working with your data.",
-    aboutText: "Before building, we define what you need and what the project includes. You get a written proposal and progress you can review throughout development.",
-    aboutMore: "You can assess my work through the demos, case studies and public code: what each project solves, how it is built and where its limits are.",
+    aboutTitle: "Web & Python Development.", aboutLead: "I build websites, digital catalogs, and practical tools to solve real needs. I combine programming, design, and AI tools to work more efficiently, with attention to quality and detail.",
     facts: [
       ["Location", "Potosí, Bolivia · Remote (UTC−4)"],
       ["Languages", "Spanish; English mainly in writing"],

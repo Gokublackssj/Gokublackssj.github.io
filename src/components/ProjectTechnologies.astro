@@ -2,16 +2,20 @@
 import "../portfolio/technology-icons.css";
 import TechnologyIcon from "../portfolio/TechnologyIcon.astro";
 import IconCredits from "../portfolio/IconCredits.astro";
+import { primaryStack, otherTools, type StackProject } from "../data/project-stack";
 import type {Lang} from "../i18n";
-interface Props {stack:string;lang:Lang}
-const {stack,lang}=Astro.props;
-const items=stack.split(",").map(text=>text.trim());
+interface Props {project:StackProject;stack:string;lang:Lang}
+const {project,stack,lang}=Astro.props;
+// The main technologies with their role in this project; the rest as one line.
+const main=primaryStack[project];
+const others=otherTools(project,stack);
 ---
-<ul class="project-tech-icons" aria-label={lang==="es"?"Tecnologías del proyecto":"Project technologies"}>
-  {items.map(text=><li>
-    <TechnologyIcon name={text} lang={lang} />
-    <span>{text}</span>
+<ul class="project-tech-icons project-tech-icons--roles" aria-label={lang==="es"?"Tecnologías principales del proyecto":"Main project technologies"}>
+  {main.map(item=><li>
+    <TechnologyIcon name={item.name} lang={lang} />
+    <span class="project-tech-copy"><span class="project-tech-name">{item.name}</span><span class="project-tech-role">{item.role[lang]}</span></span>
   </li>)}
 </ul>
+{others.length>0 && <p class="project-tech-others"><span>{lang==="es"?"Otras herramientas:":"Other tools:"}</span> {others.join(", ")}</p>}
 
 <IconCredits lang={lang} />

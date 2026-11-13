@@ -307,7 +307,9 @@
 /* The site's own motion setting (system or explicit choice): no elasticity. */
 :root[data-motion="off"] :is(.lg, .lg-cta, .lg-inset, .lg-capsule, .seg button) { transition: none !important; }
 :root[data-motion="off"] [data-pressed] { scale: none !important; }
-:root[data-motion="off"] :is(.lg, .lg-cta):hover { translate: none !important; }
+/* Only the controls that lift on hover; the floating bar (.lg) keeps its own
+   centring translate, which "none" would erase. */
+:root[data-motion="off"] :is(.lg:is(a, button), .lg-cta):hover { translate: none !important; }
 
 /* Reduce transparency: frostier, almost opaque, no lensing (as on Apple OSes). */
 @media (prefers-reduced-transparency: reduce) {

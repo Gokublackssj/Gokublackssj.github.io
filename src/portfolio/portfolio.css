@@ -167,6 +167,12 @@
 .pf-tools .lab-technologies { margin: 0; }
 .pf-tools .lab-technologies-head h2 { font-size: 32px; }
 .pf-tools .lab-tech-credit { max-width: 95ch; line-height: 1.7; }
+/* Frontend holds six of the twelve technologies: on wide screens it takes two
+   sub-columns so the three groups end at the same height. */
+@media (min-width: 851px) {
+  .pf-tools .lab-tech-groups { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr); }
+  .pf-tools .lab-tech-group:first-child .lab-tech-list { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 24px; }
+}
 .pf-contact #contact { padding-block: 65px; background: var(--pf-field); }
 .pf-contact .contact-grid { display: grid; grid-template-columns: .85fr 1.15fr; gap: 34px 80px; }
 .pf-contact .contact-head h2 { font-size: 51px; line-height: 1.1; letter-spacing: -.025em; }

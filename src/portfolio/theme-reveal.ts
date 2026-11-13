@@ -1,5 +1,12 @@
 import { motionAllowed } from "../scripts/motion-preference";
 
+/** A CSS <time> ("400ms" or ".4s") in milliseconds; NaN when unreadable. */
+const toMs = (value: string) => {
+  const time = value.trim();
+  const amount = parseFloat(time);
+  return /ms$/i.test(time) ? amount : /s$/i.test(time) ? amount * 1000 : amount;
+};
+
 // Wrap the existing lab theme click handler; it still owns application/storage.
 // No second theme state, storage key, palette catalogue or carousel controller.
 export function initCircularThemeReveal() {
@@ -67,7 +74,8 @@ export function initCircularThemeReveal() {
           animation = root.animate({ clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] }, {
             // Measured: capture ~25 ms, first frame ~50 ms; the old 600 ms with an
             // expo-out curve left the far corners crawling for ~400 ms.
-            duration: parseFloat(style.getPropertyValue("--theme-reveal-duration")) || 400,
+            // The CSS minifier rewrites 400ms as .4s, so read the unit too.
+            duration: toMs(style.getPropertyValue("--theme-reveal-duration")) || 400,
             easing: style.getPropertyValue("--theme-reveal-ease").trim() || "cubic-bezier(.4, 0, .2, 1)",
             pseudoElement: "::view-transition-new(root)",
             fill: "both",

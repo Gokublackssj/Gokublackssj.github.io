@@ -14,6 +14,8 @@ import eslint from "./assets/devicon/eslint.svg?url";
 import playwright from "./assets/devicon/playwright.svg?url";
 import githubactions from "./assets/devicon/githubactions.svg?url";
 import github from "./assets/devicon/github.svg?url";
+import html5 from "./assets/devicon/html5.svg?url";
+import javascript from "./assets/devicon/javascript.svg?url";
 import migrations from "./assets/functional/migrations.svg?url";
 import database from "./assets/functional/database.svg?url";
 import shield from "./assets/functional/shield.svg?url";
@@ -29,6 +31,8 @@ const functional=(src:string,es:string,en:string):TechnologyMark=>({src,kind:"fu
 const marks:Record<string,TechnologyMark>={
   python:brand(python),typescript:brand(typescript),react:brand(react,"dark"),astro:brand(astro),fastapi:brand(fastapi),postgresql:brand(postgresql),git:brand(git),sqlalchemy:brand(sqlalchemy),
   "next.js":brand(nextjs),pytest:brand(pytest),"node:test":brand(nodejs),eslint:brand(eslint),playwright:brand(playwright),"github actions":brand(githubactions),github:brand(github),
+  // HTML/CSS shows the W3C HTML5 logo (CC BY 3.0); the CSS3 shield's licence is unverified.
+  "html/css":brand(html5),javascript:brand(javascript),
   alembic:functional(migrations,"Migraciones de base de datos","Database migrations"),
   psycopg:functional(database,"Controlador de PostgreSQL","PostgreSQL driver"),
   argon2:functional(shield,"Protección de contraseñas","Password protection"),

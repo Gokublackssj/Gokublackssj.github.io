@@ -77,6 +77,16 @@
       "file": "github.svg",
       "source": "https://raw.githubusercontent.com/devicons/devicon/ff435a0fff0391aefbf70d63a3fe7cfe64f82df0/icons/github/github-original.svg",
       "sha256": "45262793de6292206a895ed63593cdb1eaed82074173f7f4b5bdb3e427ca805a"
+    },
+    {
+      "file": "html5.svg",
+      "source": "https://raw.githubusercontent.com/devicons/devicon/ff435a0fff0391aefbf70d63a3fe7cfe64f82df0/icons/html5/html5-original.svg",
+      "sha256": "34826e5b3315daadf4fa15f723a3c1d5ba4a89277bfd94e22ac4d7d3d54338c5"
+    },
+    {
+      "file": "javascript.svg",
+      "source": "https://raw.githubusercontent.com/devicons/devicon/ff435a0fff0391aefbf70d63a3fe7cfe64f82df0/icons/javascript/javascript-original.svg",
+      "sha256": "0656ff65fc8eeacda5c78d7f9ffe91ec1eb919db64f56e0b7dcd460af4bbd36c"
     }
   ]
 }
